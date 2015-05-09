@@ -95,7 +95,7 @@ Dijkstra.prototype = {
 					return openNodes[i];
 				}
 				openNodes.pop();
-			};
+			}
 		}
 	},
 
