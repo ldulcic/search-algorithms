@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="jquery-1.11.3.js"></script>
+
+
+
+</head>
+
+<body>
+<h2>London</h2>
+
+<p>London is the capital city of England. It is the most populous city in the United Kingdom, with a metropolitan area of over 13 million inhabitants.</p>
+
+<DIV id = "demo-canvas" style="background-color:black; height:400px; width:900px" >
+
+</DIV>
+<button type="button" onclick="func()">Click Me!</button>
+
+
+</body>
+<script src="jsnetworkx.js"></script>
+
+<script type="text/javascript">
+// -------------------------------------------
+//          OBJECTS
+// -------------------------------------------
+
+// ---------------- NODE ----------------
+function Node(x, y) {
+  this.x = x;
+  this.y = y;
+  this.links = [];
+}
+
+Node.prototype = {
+
+  value: 0,
+
+  constructor: Node,
+
+  addLink: function(link) {
+    this.links.push(link);
+  },
+
+  removeLink: function(link) {
+    var i = this.links.indexOf(link);
+    if (i > -1) {
+      this.links.splice(i, 1);
+    }
+  },
+
+  expand: function() {
+    var nodes = [];
+    var node;
+    for (var i = links.length - 1; i >= 0; i--) {
+      node = links[i].node;
+      node.value = this.value + link.value;
+      nodes.push(node);
+    }
+    return nodes;
+  }
+
+};
+
+// ---------------- LINK ----------------
+function Link(value, node) {
+  this.value = value;
+  this.node = node;
+}
+
+Link.prototype = {
+  constructor: Link
+};
+
+// ---------------- DIJKSTRA ----------------
+function Dijkstra (nodes) {
+  this.nodes = nodes;
+  this.openNodes = [];
+  this.visited = [];
+  this.path = [];
+}
+
+Dijkstra.prototype = {
+  constructor: Dijkstra,
+
+  getPath: function (start, end, nodes) {
+    start.value = 0;
+    openNodes.push(start);
+    var current;
+
+    while(openNodes.length > 0) {
+      current = getNext(openNodes);
+      if(current == end) {
+        path.push(current);
+        return path;
+      }
+
+      expand(current.expand());
+
+      visited.push(current);
+      path.push(current);
+    }
+    return [];
+  },
+
+  expand: function (nodes) {
+    for (var i = nodes.length - 1; i >= 0; i--) {
+      if(visited.indexOf(nodes[i]) > -1) {
+        openNodes.push(nodes[i]);
+      }
+    }
+  },
+
+  getNext: function () {
+    while(openNodes != []) {
+      for (var i = openNodes.length - 1; i >= 0; i--) {
+        if(visited.indexOf(openNodes[i]) == -1) {
+          return openNodes[i];
+        }
+        openNodes.pop();
+      }
+    }
+  },
+
+  addToOpen: function (node) {
+    for (var i = openNodes.length - 1; i >= 0; i--) {
+      if(openNodes[i].value > node.value) {
+        openNodes.splice(i, node);
+      }
+    }
+  }
+};
+
+// MAIN
+
+	var canv = d3.select("#demo-canvas").append("svg");
+	canv.attr("onclick", "addNode(event)")
+	var x, y;
+  var c = document.getElementById("demo-canvas");
+
+  var nodeFaze = true;
+  var linkFaze = false;
+  var lastFaze = false;
+  var nodes = [];
+
+  function func(){
+    linkFaze = true;
+    nodeFaze = false;
+    console.log(nodes);
+  }
+
+  function addNode(event){
+    if (nodeFaze == true) {
+       var relX = event.clientX - c.getBoundingClientRect().left;
+       var relY = event.clientY - c.getBoundingClientRect().top;
+  	   canv.append("svg:circle")
+       .attr("cx", relX)
+       .attr("cy", relY)
+       .attr("onclick", "changeCollor(this)")
+       .attr("r", "10px")
+       .attr("fill", "blue") 
+       // dodat node objekt koji se vec koristi
+       nodes.push(new Node(relX,relY)); 
+    }
+  }
+
+
+	var w = 900, h = 400;
+	canv.attr("width",w).attr("height",h);
+
+
+      var first = true;
+      var nodeStart;
+     function changeCollor(evt){
+      if (lastFaze == true) {
+        console.log(this);
+        evt.setAttribute("fill","green");
+      } else if(linkFaze == true){
+        evt.setAttribute("fill","red");
+        if (first == true) {
+          nodeStart = evt;
+          first = false;
+        }else{
+          var x1 = nodeStart.getAttribute("cx");
+          var y1 = nodeStart.getAttribute("cy");
+          var x2 = evt.getAttribute("cx");
+          var y2 = evt.getAttribute("cy");
+          console.log(x1+"---"+y1+",,"+x2+"---"+y2);
+          canv.append("svg:line")
+          .attr("x1", x1)
+          .attr("y1", y1)
+          .attr("x2", x2)
+          .attr("y2", y2)
+          .style("stroke", "rgb(6,120,155)");
+          window.alert("halo");
+          first = true;
+
+          nodeStart.addLink(new Link(10, evt));
+          evt.addLink(new Link(10, nodeStart));
+        }
+
+
+      }
+
+     }
+
+    /* canv.selectAll("circle.nodes")
+     .data(nodes).on("click",changeCollor);*/
+</script>
+</html>
