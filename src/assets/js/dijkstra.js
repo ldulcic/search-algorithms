@@ -1,3 +1,55 @@
+// -------------------------------------------
+// 					OBJECTS
+// -------------------------------------------
+
+// ---------------- NODE ----------------
+function Node(x, y) {
+	this.x = x;
+	this.y = y;
+	this.links = [];
+}
+
+Node.prototype = {
+
+	value: 0,
+
+	constructor: Node,
+
+	addLink: function(link) {
+		this.links.push(link);
+	},
+
+	removeLink: function(link) {
+		var i = this.links.indexOf(link);
+		if (i > -1) {
+			this.links.splice(i, 1);
+		}
+	},
+
+	expand: function() {
+		var nodes = [];
+		var node;
+		for (var i = links.length - 1; i >= 0; i--) {
+			node = links[i].node;
+			node.value = this.value + link.value;
+			nodes.push(node);
+		};
+		return nodes;
+	}
+
+};
+
+// ---------------- LINK ----------------
+function Link(value, node) {
+	this.value = value;
+	this.node = node;
+}
+
+Link.prototype = {
+	constructor: Link
+};
+
+// ---------------- DIJKSTRA ----------------
 function Dijkstra (nodes) {
 	this.nodes = nodes;
 	this.openNodes = [];
@@ -55,3 +107,8 @@ Dijkstra.prototype = {
 		};
 	}
 };
+
+// -------------------------------------------
+// 					MAIN
+// -------------------------------------------
+
