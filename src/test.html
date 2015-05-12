@@ -58,7 +58,7 @@ Node.prototype = {
     var node;
     for (var i = this.links.length - 1; i >= 0; i--) {
       node = this.links[i].node;
-      node.value = this.value + this.links[i].value;
+      node.value = parseInt(this.value) + parseInt(this.links[i].value);
       nodes.push(node);
     }
     return nodes;
@@ -93,15 +93,15 @@ Dijkstra.prototype = {
     var current;
 
     while(this.openNodes.length > 0) {
-    	console.log("asd");
-      current = this.getNext(this.openNodes);
+      current = this.getNext();
+      if(current == []) return [];
+
       if(current == end) {
         this.path.push(current);
         return this.path;
       }
 
       this.expand(current.expand());
-
       this.visited.push(current);
       this.path.push(current);
     }
@@ -110,17 +110,17 @@ Dijkstra.prototype = {
 
   expand: function (nodes) {
     for (var i = nodes.length - 1; i >= 0; i--) {
-      if(this.visited.indexOf(nodes[i]) > -1) {
+      if(this.visited.indexOf(nodes[i]) == -1) {
         this.addToOpen(nodes[i]);
       }
     }
   },
 
   getNext: function () {
-    while(this.openNodes != []) {
+    while(this.openNodes.length != 0) {
       for (var i = this.openNodes.length - 1; i >= 0; i--) {
         if(this.visited.indexOf(this.openNodes[i]) == -1) {
-          return this.openNodes[i];
+          return this.openNodes.splice(i, 1)[0];
         }
         this.openNodes.pop();
       }
@@ -128,6 +128,11 @@ Dijkstra.prototype = {
   },
 
   addToOpen: function (node) {
+  	if(this.openNodes.length == 0) {
+  		this.openNodes.push(node);
+  		return;
+  	}
+
     for (var i = this.openNodes.length - 1; i >= 0; i--) {
       if(this.openNodes[i].value > node.value) {
         this.openNodes.splice(i, node);
@@ -252,9 +257,7 @@ function changeMode() {
 }
 
 function startAlgorithm() {
-	console.log("počinjem s algoritmom");
 	var d = new Dijkstra(nodes);
-	console.log("hehe");
 	console.log(d.getPath(startNode, endNode));
 }
 
