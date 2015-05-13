@@ -6,8 +6,9 @@ var Blob = window.Blob;
 
 // TODO add user settings
 var consts = {
-  defaultTitle: "frane je legenda"
+  defaultTitle: ["A","B","C","D","E","F","G","H","I","J"]
 };
+var titleIndex = 0;
 var settings = {
   appendElSpec: "#graph"
 };
@@ -486,8 +487,11 @@ GraphCreator.prototype.svgMouseUp = function(){
     state.justScaleTransGraph = false;
   } else if (state.graphMouseDown && d3.event.shiftKey){
     // clicked not dragged from svg
+	if(titleIndex == consts.defaultTitle.length){
+		titleIndex = 0;
+	}
     var xycoords = d3.mouse(thisGraph.svgG.node()),
-        d = {id: thisGraph.idct++, title: consts.defaultTitle, x: xycoords[0], y: xycoords[1]};
+        d = {id: thisGraph.idct++, title: consts.defaultTitle[titleIndex++], x: xycoords[0], y: xycoords[1]};
     thisGraph.nodes.push(d);
     thisGraph.updateGraph();
     // make title of text immediently editable
