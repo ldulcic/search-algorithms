@@ -100,7 +100,7 @@ var GraphCreator = function(svg, nodes, edges){
   d3.select("#download-input").on("click", function(){
     var saveEdges = [];
     thisGraph.edges.forEach(function(val, i){
-      saveEdges.push({source: val.source.id, target: val.target.id, weight: val.weight});
+      saveEdges.push({source: val.source.id, target: val.target.id, id: val.id, weight: val.weight});
     });
     var blob = new Blob([window.JSON.stringify({"nodes": thisGraph.nodes, "edges": saveEdges})], {type: "text/plain;charset=utf-8"});
     saveAs(blob, "mygraph.json");
@@ -128,6 +128,7 @@ var GraphCreator = function(svg, nodes, edges){
           newEdges.forEach(function(e, i){
             newEdges[i] = {source: thisGraph.nodes.filter(function(n){return n.id == e.source;})[0],
                         target: thisGraph.nodes.filter(function(n){return n.id == e.target;})[0],
+                        id: e.id,
                         weight: e.weight};
           });
           thisGraph.edges = newEdges;
@@ -487,9 +488,9 @@ GraphCreator.prototype.svgMouseUp = function(){
     state.justScaleTransGraph = false;
   } else if (state.graphMouseDown && d3.event.shiftKey){
     // clicked not dragged from svg
-	if(titleIndex == consts.defaultTitle.length){
-		titleIndex = 0;
-	}
+  if(titleIndex == consts.defaultTitle.length){
+    titleIndex = 0;
+  }
     var xycoords = d3.mouse(thisGraph.svgG.node()),
         d = {id: thisGraph.idct++, title: consts.defaultTitle[titleIndex++], x: xycoords[0], y: xycoords[1]};
     thisGraph.nodes.push(d);
@@ -581,24 +582,23 @@ GraphCreator.prototype.updateGraph = function(){
       id = d.id;
       return d.id;
     })
-    .select(function () {
-      return this.parentNode;
-    })
-    .append("text")
-    .attr("text-anchor", "middle")
-    .attr("dy", "-10")
-    .append("textPath")
-    .attr("xlink:href", "#" + id)
-    .attr("startOffset", "50%")
-    .attr("id", "textId" + id.substring(6, 7))
-    .text(function (d) {
-      return d.weight;
+    .select(function (d) {
+      var path = this;
+      d3.select(path.parentNode)
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("dy", "-10")
+        .append("textPath")
+        .attr("xlink:href", "#" + path.getAttribute("id"))
+        .attr("startOffset", "50%")
+        .attr("id", "textId" + path.getAttribute("id").substring(6, 7))
+        .text(function () {
+          return d.weight;
+        });
     });
 
   // remove old links
   paths.exit().remove();
-
-  //console.log(document.querySelectorAll("[href=#pathId0]"));
 
   // update existing nodes
   thisGraph.circles = thisGraph.circles.data(thisGraph.nodes, function(d){ return d.id;});
