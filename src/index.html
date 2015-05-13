@@ -1,58 +1,25 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Dijkstra's algorithm</title>
-	<link rel="stylesheet" href="assets/stylesheets/main.css">
-	<link rel="stylesheet" href="assets/stylesheets/normalize.css">
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
-	<script src="assets/js/main.js"></script>
-</head>
-<body>
-	<div class="wrapper u-cf">
-		<div class="header">
-			<div class="header-left">
-				<img src="assets/img/caca.png" alt="">
-			</div>
-			<div class="header-right">
-				 <ul>
-				 	<a href="#about"><li>About</li></a>
-				 	<a href="#algorithm"><li>Vjezba</li></a>
-				 </ul>
-			</div>
-		</div>
-		<div class="about-wrapper u-cf" id="about">
-			<div class="about-hero"></div>
-			<div class="about u-cf">
-				<div class="about-title">
-					<h1>Caca se vraca</h1>
-				</div>
-				<div class="left">
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus et dignissim quam. Praesent vitae urna eu neque fringilla auctor at ut lacus. Integer viverra consectetur metus. Nam risus ante, gravida id accumsan a, facilisis et lectus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc lacinia erat eu condimentum sollicitudin. Ut sodales nunc non orci bibendum, tincidunt blandit leo tincidunt. Curabitur sed felis finibus, egestas erat congue, rhoncus velit. Mauris ultrices est eget metus vehicula faucibus.</p>
-				</div>
-				<div class="right">
-					<p>Vivamus vel facilisis risus. Aenean nec lacus elit. Morbi sed mollis mauris, et aliquet nunc. Curabitur luctus mi ac elit luctus convallis. Vivamus tristique maximus metus, eu ultricies metus consequat quis. Etiam dolor lorem, cursus in massa vel, tincidunt ultricies justo. Cras sagittis eros sit amet lacinia euismod. Vestibulum nisl eros, elementum sed mattis ut, efficitur lobortis velit. Proin bibendum leo sed mattis viverra.</p>
-				</div>
-			</div>
-		</div>
-		<div class="algorithm-wrapper u-cf" id="algorithm">
-			<div class="algorithm-left">
-				<p>Izaberite broj cvorova:</p>
-				<div class="submenu">
-					<ul>
-						<a href="#"><li>5</li></a>
-						<a href="#"><li>6</li></a>
-						<a href="#"><li>7</li></a>
-					</ul>
-				</div>
-			</div>
-			<div id="dijkstra" class="algorithm-right" style="height:500px;width:500px">
-				<!--div class="dijkstra"></div-->
-			</div>
-		</div>
-	</div>	
-</body>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="assets/stylesheets/graph-creator.css" />
+  </head>
+
+  <body>
+    <button type="button" id="enddrawing">Završi crtanje</button>
+    <button type="button" id="selectstart" disabled>Odaberite pocetak!</button>
+    <button type="button" id="selectend" disabled>Odaberite kraj!</button>
+    <button type="button" id="startgame" disabled>Pokreni igru!</button>
+    <button type="button" id="graph1">Pocetnicki graf</button>
+    <div id="graph">
+    <div id="toolbox">
+      <input type="file" id="hidden-file-upload"><input id="upload-input" type="image" title="upload graph" src="upload-icon.png" alt="upload graph"> <input type="image" id="download-input" title="download graph" src="download-icon.png" alt="download graph"> <input type="image" id="delete-graph" title="delete graph" src="trash-icon.png" alt="delete graph">
+    </div>
+    </div>
+    <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
+    <script src="http://cdn.jsdelivr.net/filesaver.js/0.1/FileSaver.min.js"></script>
+    <script src="assets/js/graph-creator.js"></script>
+    <script src="assets/js/dijkstra.js"></script>
+  </body>
+
 </html>
