@@ -333,7 +333,7 @@ GraphCreator.prototype.circleMouseDown = function(d3node, d){
         .enter()
         .append("foreignObject")
         .attr("x", nodeBCR.left)
-        .attr("y", nodeBCR.top)
+        .attr("y", nodeBCR.top - 20)
         .attr("height", 2*useHW)
         .attr("width", 20)
         .append("xhtml:p")
