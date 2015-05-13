@@ -12,7 +12,7 @@ function Node(x, y, id) {
 
 Node.prototype = {
 
-  value: null,
+  value: Number.MIN_VALUE,
 
   constructor: Node,
 
@@ -32,9 +32,8 @@ Node.prototype = {
     var node;
     for (var i = this.links.length - 1; i >= 0; i--) {
       node = this.links[i].node;
-      node.links = node.links;
       var value = parseInt(this.value) + parseInt(this.links[i].value);
-      if(node.value == null || node.value > value) {
+      if(node.value == Number.MIN_VALUE || node.value > value) {
       	node.value = value;
       }
       nodes.push(node);
@@ -65,7 +64,7 @@ Dijkstra.prototype = {
   constructor: Dijkstra,
 
   getPath: function (start, end) {
-    start.value = "0";
+    start.value = 0;
     this.openNodes.push(start);
     var current;
 
@@ -204,28 +203,37 @@ document.getElementById("startgame").addEventListener("click", function(){
   document.getElementById("selectstart").setAttribute("disabled", "");
   document.getElementById("selectend").setAttribute("disabled", "");
 
+  console.log(startNode);
+  console.log(endNode);
+
   var d = new Dijkstra();
   console.log(d.getPath(startNode, endNode));
 });
 
 document.getElementById("enddrawing").addEventListener("click", function(){
 
-  var g;
+  var n;
   for (var i = graph.nodes.length - 1; i >= 0; i--) {
-    g = graph.nodes[i];
-    nodes.push(new Node(g.x, g.y, g.id));
-  }
+    n = graph.nodes[i];
 
-  console.log(nodes);
+    console.log("creating node with id " + n.id)
+
+    nodes.push(new Node(n.x, n.y, n.id));
+  }
 
   var source, target, e;
   for (var i = graph.edges.length - 1; i >= 0; i--) {
     e = graph.edges[i];
+
+    console.log("connecting " + e.source.id + " with " + e.target.id);
+
     source = getNode(e.source.id);
     target = getNode(e.target.id);
     source.addLink(new Link(target, e.weight));
     target.addLink(new Link(source, e.weight));
   };
+
+  console.log(nodes);
 
   document.getElementById("enddrawing").setAttribute("disabled", "");
   document.getElementById("selectstart").removeAttribute("disabled");
