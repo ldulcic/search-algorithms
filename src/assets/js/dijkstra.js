@@ -232,8 +232,40 @@ document.getElementById("enddrawing").addEventListener("click", function(){
 
   document.getElementById("enddrawing").setAttribute("disabled", "");
   document.getElementById("selectstart").removeAttribute("disabled");
+  
 });
 
+document.getElementById("graph1").addEventListener("click",
+    function(){
+		   GraphCreator.prototype.svgKeyDown = function(){
+    
+  }
+  GraphCreator.prototype.svgMouseUp = function(){
+    
+  }
+  GraphCreator.prototype.circleMouseDown = function(){
+
+  }
+  GraphCreator.prototype.dragmove = function(d){
+
+  }
+  GraphCreator.prototype.pathMouseDown = function(){
+
+  }
+      graph.deleteGraph();
+      graph.updateGraph();
+      graph.nodes.push({"title":"a","x":"200","y":"300","id":1});
+      graph.nodes.push({"title":"b","x":"800","y":"300","id":2});
+      graph.nodes.push({"title":"c","x":"500","y":"100","id":3});
+      graph.nodes.push({"title":"d","x":"500","y":"500","id":4});
+      graph.updateGraph();
+      graph.edges.push({"source":graph.nodes[0],"target":graph.nodes[2]});
+      graph.edges.push({"source":graph.nodes[0],"target":graph.nodes[3]});
+      graph.edges.push({"source":graph.nodes[2],"target":graph.nodes[1]});
+      graph.edges.push({"source":graph.nodes[3],"target":graph.nodes[1]});
+      graph.updateGraph();
+    });
+	
 // FUNCTIONS
 
 function getNode(id) {
