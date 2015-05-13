@@ -228,18 +228,9 @@ GraphCreator.prototype.spliceLinksForNode = function(node) {
     return (l.source === node || l.target === node);
   });
   //novo
-  //console.log(d3.selectAll("text")).select("textPath");
-  /*for (var i = toSplice.length - 1; i >= 0; i--) {
-    d3.selectAll("text")
-      .filter(function (d) {
-        console.log(d);
-        //if(d.select("textPath") == "#" + toSplice[i].id) {
-          return d;
-        //}
-      })
-      .remove();
-  }*/
-  //console.log(toSplice);
+  for (var i = toSplice.length - 1; i >= 0; i--) {
+      d3.select("#textId" + toSplice[i].id.substring(6, 7)).remove();
+  }
   //novo
   toSplice.map(function(l) {
     thisGraph.edges.splice(thisGraph.edges.indexOf(l), 1);
