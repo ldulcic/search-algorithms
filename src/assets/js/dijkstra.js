@@ -215,25 +215,17 @@ document.getElementById("enddrawing").addEventListener("click", function(){
   var n;
   for (var i = graph.nodes.length - 1; i >= 0; i--) {
     n = graph.nodes[i];
-
-    console.log("creating node with id " + n.id)
-
     nodes.push(new Node(n.x, n.y, n.id));
   }
 
   var source, target, e;
   for (var i = graph.edges.length - 1; i >= 0; i--) {
     e = graph.edges[i];
-
-    console.log("connecting " + e.source.id + " with " + e.target.id);
-
     source = getNode(e.source.id);
     target = getNode(e.target.id);
     source.addLink(new Link(target, e.weight));
     target.addLink(new Link(source, e.weight));
   };
-
-  console.log(nodes);
 
   document.getElementById("enddrawing").setAttribute("disabled", "");
   document.getElementById("selectstart").removeAttribute("disabled");
