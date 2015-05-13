@@ -32,10 +32,12 @@ Node.prototype = {
     var node;
     for (var i = this.links.length - 1; i >= 0; i--) {
       node = this.links[i].node;
-      node.links = node.links;
+      //node.links = node.links;
       var value = parseInt(this.value) + parseInt(this.links[i].value);
       if(node.value == null || node.value > value) {
+        console.log(value);
       	node.value = value;
+        console.log(node.value);
       }
       nodes.push(node);
     }
@@ -78,6 +80,7 @@ Dijkstra.prototype = {
         return this.path;
       }
 
+      console.log(current.expand());
       this.expand(current.expand());
       this.visited.push(current);
       this.path.push(current);
@@ -216,7 +219,7 @@ document.getElementById("enddrawing").addEventListener("click", function(){
     nodes.push(new Node(g.x, g.y, g.id));
   }
 
-  console.log(nodes);
+  //console.log(nodes);
 
   var source, target, e;
   for (var i = graph.edges.length - 1; i >= 0; i--) {
