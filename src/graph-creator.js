@@ -245,6 +245,20 @@ document.onload = (function(d3, saveAs, Blob, undefined){
         toSplice = thisGraph.edges.filter(function(l) {
       return (l.source === node || l.target === node);
     });
+    //novo
+    //console.log(d3.selectAll("text")).select("textPath");
+    /*for (var i = toSplice.length - 1; i >= 0; i--) {
+      d3.selectAll("text")
+        .filter(function (d) {
+          console.log(d);
+          //if(d.select("textPath") == "#" + toSplice[i].id) {
+            return d;
+          //}
+        })
+        .remove();
+    }*/
+    //console.log(toSplice);
+    //novo
     toSplice.map(function(l) {
       thisGraph.edges.splice(thisGraph.edges.indexOf(l), 1);
     });
@@ -328,7 +342,6 @@ document.onload = (function(d3, saveAs, Blob, undefined){
         placePad  =  5*curScale,
         useHW = curScale > 1 ? nodeBCR.width*0.71 : consts.nodeRadius*1.42;
     // replace with editableconent text
-   // console.log(d3node, d);
     var d3txt = thisGraph.svg.selectAll("foreignObject")
           .data([d])
           .enter()
@@ -358,6 +371,7 @@ document.onload = (function(d3, saveAs, Blob, undefined){
     return d3txt;
   };
 
+  var counter = 0;
   // mouseup on nodes
   GraphCreator.prototype.circleMouseUp = function(d3node, d){
     var thisGraph = this,
@@ -372,10 +386,10 @@ document.onload = (function(d3, saveAs, Blob, undefined){
     if (!mouseDownNode) return;
 
     thisGraph.dragLine.classed("hidden", true);
-//console.log(d);
+
     if (mouseDownNode !== d){
       // we're in a different node: create new edge for mousedown edge and add to graph
-      var newEdge = {source: mouseDownNode, target: d, weight: 1};
+      var newEdge = {source: mouseDownNode, target: d, id: "pathId" + counter++, weight: 1};
       var filtRes = thisGraph.paths.filter(function(d){
         if (d.source === newEdge.target && d.target === newEdge.source){
           thisGraph.edges.splice(thisGraph.edges.indexOf(d), 1);
@@ -485,8 +499,6 @@ document.onload = (function(d3, saveAs, Blob, undefined){
     this.state.lastKeyDown = -1;
   };
 
-var counter = 0;
-
   // call to propagate changes to graph
   GraphCreator.prototype.updateGraph = function(){
 
@@ -507,8 +519,9 @@ var counter = 0;
         return "M" + d.source.x + "," + d.source.y + "L" + d.target.x + "," + d.target.y;
       });
 
-      console.log(thisGraph.edges);
+      //console.log(thisGraph.edges);
 
+      var id;
     // add new paths
     var text = paths.enter()
       .append("path")
@@ -524,7 +537,10 @@ var counter = 0;
       .on("mouseup", function(d){
         state.mouseDownLink = null;
       })
-      .attr("id", "pathId" + ++counter)
+      .attr("id", function (d) {
+        id = d.id;
+        return d.id;
+      })
       .select(function () {
         return this.parentNode;
       })
@@ -532,7 +548,7 @@ var counter = 0;
       .attr("text-anchor", "middle")
       .attr("dy", "-10")
       .append("textPath")
-      .attr("xlink:href", "#pathId" + counter)
+      .attr("xlink:href", "#" + id)
       .attr("startOffset", "50%")
       .text(function (d) {
         return d.weight;
@@ -540,6 +556,8 @@ var counter = 0;
 
     // remove old links
     paths.exit().remove();
+
+    //console.log(document.querySelectorAll("[href=#pathId0]"));
 
     // update existing nodes
     thisGraph.circles = thisGraph.circles.data(thisGraph.nodes, function(d){ return d.id;});
