@@ -369,7 +369,7 @@ GraphCreator.prototype.changeWeightOfLink = function(d3edge, d) {
         })
         .on("blur", function(d) {
             d.weight = parseInt(this.textContent);
-            if (isNaN(d.weight)) {
+            if (isNaN(d.weight) || d.weight < 0) {
                 d.weight = 1;
             }
 
