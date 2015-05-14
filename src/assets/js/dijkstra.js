@@ -94,13 +94,6 @@ Dijkstra.prototype = {
   },
 
   getNext: function () {
-    /*console.log(this.openNodes);
-    console.log(this.visited);*/
-    for (var i = this.openNodes.length - 1; i >= 0; i--) {
-      console.log(this.openNodes[i]);
-    }
-    console.log("\n\n");
-
     while(this.openNodes.length != 0) {
       var possibleNext = [];
       var tmp = this.openNodes.pop();
@@ -131,6 +124,10 @@ Dijkstra.prototype = {
   		this.openNodes.push(node);
   		return;
   	}
+
+    if(node.value > this.openNodes[0].value) {
+      this.openNodes.splice(0, 0, node);
+    }
 
     for (var i = this.openNodes.length - 1; i >= 0; i--) {
       if(this.openNodes[i].value >= node.value) {
@@ -216,9 +213,14 @@ document.getElementById("selectend").addEventListener("click", function(){
 document.getElementById("startgame").addEventListener("click", function(){
   GraphCreator.prototype.circleMouseUp = function(d3node, d){
      clickedNode = getNode(d.id);
-     console.log(dijkstra.inNextSteps(clickedNode));
-
-     
+     var result = dijkstra.inNextSteps(clickedNode);
+     if(result == "kraj") {
+        window.alert("dobro je, ne pritsci vise nista!");
+     } else if(result) {
+        window.alert("TOO KRALJUU!");
+     } else {
+        window.alert("DEBILU!");
+     }
   }
 
   document.getElementById("selectstart").setAttribute("disabled", "");
