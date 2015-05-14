@@ -165,7 +165,7 @@ GraphCreator.prototype.consts =  {
   BACKSPACE_KEY: 8,
   DELETE_KEY: 46,
   ENTER_KEY: 13,
-  nodeRadius: 50
+  nodeRadius: 40
 };
 
 /* PROTOTYPE FUNCTIONS */
