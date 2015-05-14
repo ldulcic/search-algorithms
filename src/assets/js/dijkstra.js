@@ -54,34 +54,35 @@ Link.prototype = {
 };
 
 // ---------------- DIJKSTRA ----------------
-function Dijkstra () {
+function Dijkstra (startNode, endNode) {
+  this.startNode = startNode;
+  this.startNode.value = 0;
+  this.endNode = endNode;
   this.openNodes = [];
-  this.visited = [];
-  this.path = [];
+  this.visited = [startNode];
+  this.expand(startNode.expand());
+  this.nextSteps = this.getNext();
 }
 
 Dijkstra.prototype = {
   constructor: Dijkstra,
 
-  getPath: function (start, end) {
-    start.value = 0;
-    this.openNodes.push(start);
-    var current;
-
-    while(this.openNodes.length > 0) {
-      current = this.getNext();
-      if(current == null) return this.path;
-
-      if(current == end) {
-        this.path.push(current);
-        return this.path;
-      }
-
-      this.expand(current.expand());
-      this.visited.push(current);
-      this.path.push(current);
+  inNextSteps: function(node) {
+    if (node == endNode && this.nextSteps.indexOf(endNode) != -1) {
+      return "kraj";
     }
-    return this.path;
+    var index = this.nextSteps.indexOf(node);
+    if (index == -1) {
+      return false;
+    }
+    this.expand(node.expand());
+    this.nextSteps.splice(index, 1);
+    for (var i = this.nextSteps.length - 1; i >= 0; i--) {
+      this.addToOpen(this.nextSteps[i]);
+    }
+    this.nextSteps = this.getNext();
+    this.visited.push(node);
+    return true;
   },
 
   expand: function (nodes) {
@@ -93,12 +94,33 @@ Dijkstra.prototype = {
   },
 
   getNext: function () {
+    /*console.log(this.openNodes);
+    console.log(this.visited);*/
+    for (var i = this.openNodes.length - 1; i >= 0; i--) {
+      console.log(this.openNodes[i]);
+    }
+    console.log("\n\n");
+
     while(this.openNodes.length != 0) {
-      for (var i = this.openNodes.length - 1; i >= 0; i--) {
-        if(this.visited.indexOf(this.openNodes[i]) == -1) {
-          return this.openNodes.splice(i, 1)[0];
+      var possibleNext = [];
+      var tmp = this.openNodes.pop();
+
+      if(this.visited.indexOf(tmp) == -1) { 
+        possibleNext.push(tmp);
+        for (var i = this.openNodes.length - 1; i >= 0; i--) {
+
+          if (this.visited.indexOf(this.openNodes[i]) != -1) {
+            continue;
+          }
+
+          if (this.openNodes[i].value == tmp.value) {
+            possibleNext.push(this.openNodes.pop());
+          } else {
+            break;
+          }
+
         }
-        this.openNodes.pop();
+        return possibleNext;
       }
     }
     return null;
@@ -111,7 +133,7 @@ Dijkstra.prototype = {
   	}
 
     for (var i = this.openNodes.length - 1; i >= 0; i--) {
-      if(this.openNodes[i].value > node.value) {
+      if(this.openNodes[i].value >= node.value) {
         this.openNodes.splice(i + 1, 0, node);
         break;
       }
@@ -130,6 +152,7 @@ var endNode = null;
 var d3startNode = null;
 var d3endNode = null;
 var nodes = [];
+var dijkstra = null;
 
 var docEl = document.documentElement,
     bodyEl = document.getElementsByTagName('body')[0];
@@ -192,22 +215,16 @@ document.getElementById("selectend").addEventListener("click", function(){
 
 document.getElementById("startgame").addEventListener("click", function(){
   GraphCreator.prototype.circleMouseUp = function(d3node, d){
-     if(d3node[0][0].getAttribute("fill") != "green"
-       && d3node[0][0].getAttribute("fill") != "blue"
-       && d3node[0][0].getAttribute("fill") != "red"){
-      d3node[0][0].setAttribute("fill","blue");
-      d3node[0][0].setAttribute("stroke","blue");
-     }
+     clickedNode = getNode(d.id);
+     console.log(dijkstra.inNextSteps(clickedNode));
+
+     
   }
 
   document.getElementById("selectstart").setAttribute("disabled", "");
   document.getElementById("selectend").setAttribute("disabled", "");
 
-  console.log(startNode);
-  console.log(endNode);
-
-  var d = new Dijkstra();
-  console.log(d.getPath(startNode, endNode));
+  dijkstra = new Dijkstra(startNode, endNode);
 });
 
 document.getElementById("enddrawing").addEventListener("click", function(){
@@ -225,7 +242,7 @@ document.getElementById("enddrawing").addEventListener("click", function(){
     target = getNode(e.target.id);
     source.addLink(new Link(target, e.weight));
     target.addLink(new Link(source, e.weight));
-  };
+  }
 
   document.getElementById("enddrawing").setAttribute("disabled", "");
   document.getElementById("selectstart").removeAttribute("disabled");
