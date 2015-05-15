@@ -78,6 +78,7 @@ Dijkstra.prototype = {
 
         this.expand(node.expand());
         this.nextSteps.splice(index, 1);
+        this.visited.push(node);
 
         if (this.nextSteps.length == 0) {
             for (var i = this.nextSteps.length - 1; i >= 0; i--) {
@@ -86,7 +87,6 @@ Dijkstra.prototype = {
             this.nextSteps = this.getNext();
         }
         
-        this.visited.push(node);
         return true;
     },
 
@@ -136,6 +136,7 @@ Dijkstra.prototype = {
 
         if (node.value > this.openNodes[0].value) {
             this.openNodes.splice(0, 0, node);
+            return;
         }
 
         for (var i = this.openNodes.length - 1; i >= 0; i--) {
