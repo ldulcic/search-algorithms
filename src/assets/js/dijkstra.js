@@ -73,10 +73,16 @@ function Dijkstra(startNode, endNode) {
     this.startNode = startNode;
     this.startNode.value = 0;
     this.endNode = endNode;
+    this.pathDoesntExist = false;
     this.openNodes = [];
     this.visited = [startNode];
     this.expand(startNode.expand());
-    this.nextSteps = this.getNext();
+    
+    if(this.openNodes.length == 0) {
+        this.pathDoesntExist = true;
+    } else {
+        this.nextSteps = this.getNext();
+    }
 }
 
 Dijkstra.prototype = {
@@ -100,7 +106,11 @@ Dijkstra.prototype = {
             for (var i = this.nextSteps.length - 1; i >= 0; i--) {
                 this.addToOpen(this.nextSteps[i]);
             }
+            
             this.nextSteps = this.getNext();
+            if(this.nextSteps == null) {
+                this.pathDoesntExist;
+            }
         }
         
         return true;
