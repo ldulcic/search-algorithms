@@ -18,6 +18,7 @@ function Node(x, y, id) {
     this.id = id;
     this.x = x;
     this.y = y;
+    this.cameFrom = null;
     this.links = [];
 }
 
@@ -46,6 +47,7 @@ Node.prototype = {
             var value = parseInt(this.value) + parseInt(this.links[i].value);
             if (node.value == Number.MIN_VALUE || node.value > value) {
                 node.value = value;
+                node.cameFrom = this;
             }
             nodes.push(node);
         }
@@ -82,7 +84,7 @@ Dijkstra.prototype = {
 
     inNextSteps: function(node) {
         if (node == endNode && this.nextSteps.indexOf(endNode) != -1) {
-            return "kraj";
+            return this.reconstructPath(node);
         }
 
         var index = this.nextSteps.indexOf(node);
@@ -175,6 +177,17 @@ Dijkstra.prototype = {
                 return aNode.links[i];
             }
         }
+    },
+
+    reconstructPath: function (node) {
+        var path = [node];
+        var tmp;
+        while((tmp = node.cameFrom) != null) {
+            path.splice(0, 0, tmp);
+            node = tmp;
+        }
+
+        return path;
     }
 
 };
@@ -259,19 +272,20 @@ document.getElementById("startgame").addEventListener("click", function() {
         var l;
         var e;
         var result = dijkstra.inNextSteps(clickedNode);
-        if (result == "kraj") {
-            l = dijkstra.findLink(clickedNode);
+
+        if (result instanceof Array) {
+            /*l = dijkstra.findLink(clickedNode);
             for (var i = graph.edges.length - 1; i >= 0; i--) {
                 e = graph.edges[i];
                 if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
                     edg = graph.edges[i];
                     break;
                 }
-
             }
             document.getElementById(edg.id).style.stroke = "green"; 
-            d3node.select("circle")[0][0].style.fill = "GreenYellow ";
+            d3node.select("circle")[0][0].style.fill = "GreenYellow ";*/
             window.alert("dobro je, ne pritsci vise nista!");
+            console.log(result);
         } else if (result) {
             l = dijkstra.findLink(clickedNode);
             for (var i = graph.edges.length - 1; i >= 0; i--) {
