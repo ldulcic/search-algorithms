@@ -1,25 +1,142 @@
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="assets/stylesheets/graph-creator.css" />
-  </head>
+<!DOCTYPE html>
+<html lang="en">
 
-  <body>
-    <button type="button" id="enddrawing">Završi crtanje</button>
-    <button type="button" id="selectstart" disabled>Odaberite pocetak!</button>
-    <button type="button" id="selectend" disabled>Odaberite kraj!</button>
-    <button type="button" id="startgame" disabled>Pokreni igru!</button>
-    <button type="button" id="graph1">Pocetnicki graf</button>
-    <div id="graph">
-    <div id="toolbox">
-      <input type="file" id="hidden-file-upload"><input id="upload-input" type="image" title="upload graph" src="upload-icon.png" alt="upload graph"> <input type="image" id="download-input" title="download graph" src="download-icon.png" alt="download graph"> <input type="image" id="delete-graph" title="delete graph" src="trash-icon.png" alt="delete graph">
-    </div>
-    </div>
-    <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
-    <script src="http://cdn.jsdelivr.net/filesaver.js/0.1/FileSaver.min.js"></script>
-    <script src="assets/js/graph-creator.js"></script>
-    <script src="assets/js/dijkstra.js"></script>
-  </body>
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Search algorithms</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Main css -->
+    <link href="assets/css/main.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<!-- The #page-top ID is part of the scrolling feature - the data-spy and data-target are part of the built-in Bootstrap scrollspy function -->
+
+<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand page-scroll" href="#page-top">Search algorithms</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+                    <li class="hidden">
+                        <a class="page-scroll" href="#page-top"></a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#dijkstra">Dijkstra's algorithm</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#algorithm2">Algorithm 2</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#algorithm3">Algorithm 3</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="help.html">Help</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Intro Section -->
+    <section id="intro" class="odd-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1>Search algorithms</h1>
+                    <p>Tu bi nam dobro došo neki pametan uvodni tekst, možda i neka slika</p>
+                    <a class="btn btn-default page-scroll" href="#dijkstra">Dijkstra's algorithm</a>
+                    <a class="btn btn-default page-scroll" href="#algorithm2">Algorithm 2</a>
+                    <a class="btn btn-default page-scroll" href="#algorithm3">Algorithm 3</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dijkstra Section -->
+    <section id="dijkstra" class="even-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1>Dijkstra's algorithm</h1>
+                    <div class="col-lg-8">
+                    <p>
+                        Dijkstra's algorithm is an algorithm for finding the shortest paths between nodes in a graph, which may represent, for example, road networks. It was conceived by computer scientist Edsger W. Dijkstra in 1956 and published three years later.[1][2] The algorithm exists in many variants; Dijkstra's original variant found the shortest path between two nodes,[2] but a more common variant fixes a single node as the "source" node and finds shortest paths from the source to all other nodes in the graph, producing a shortest path tree.
+                    </p>
+                    </div>
+                    <div class="col-lg-4">
+                        <a class="btn btn-default page-scroll" href="algorithm/dijkstra.html">Try it out</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Algoritam2 Section -->
+    <section id="algorithm2" class="odd-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1>Algorithm 2</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Algoritam3 Section -->
+    <section id="algorithm3" class="even-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1>Algorithm 3</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- jQuery -->
+    <script src="assets/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="assets/js/bootstrap.min.js"></script>
+
+    <!-- Scrolling Nav JavaScript -->
+    <script src="assets/js/jquery.easing.min.js"></script>
+    <script src="assets/js/scrolling-nav.js"></script>
+
+</body>
 
 </html>

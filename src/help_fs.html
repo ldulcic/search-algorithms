@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    
+    <!-- Graph creator CSS -->
+    <link href="assets/css/graph-creator.css" rel="stylesheet">
+
+    <!-- Bootstrap Core CSS -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <div id="graph">
+        <div id="toolbox">
+          <input type="file" id="hidden-file-upload">
+          <input id="upload-input" type="image" title="upload graph" src="assets/img/upload-icon.png" alt="upload graph">
+          <input type="image" id="download-input" title="download graph" src="assets/img/download-icon.png" alt="download graph">
+          <input type="image" id="delete-graph" title="delete graph" src="assets/img/trash-icon.png" alt="delete graph">
+        </div>
+    </div>
+
+    <!-- d3 JavaScript -->
+    <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
+    <!-- fileSaver JavaScript -->
+    <script src="http://cdn.jsdelivr.net/filesaver.js/0.1/FileSaver.min.js"></script>
+
+    <!-- Graph creator and help js -->
+    <script src="assets/js/graph-creator.js"></script>
+    <script src="assets/js/help.js"></script>
+
+</body>
+
+</html>
