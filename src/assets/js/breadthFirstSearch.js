@@ -8,7 +8,7 @@ function BreadthFirstSearch (startNode, endNode) {
 	if(this.openedNodes.length == 0) {
 		this.pathDoesntExist = true;
 	} else {
-		this.nextStep = openedNodes.pop();
+		this.nextStep = this.openedNodes.pop();
 	}
 }
 
@@ -16,35 +16,75 @@ BreadthFirstSearch.prototype = {
 	
 	constructor: BreadthFirstSearch,
 
-	nextStep: function (node) {
+	isNextStep: function (node) {
 		if(this.nextStep == endNode && node == endNode) {
 			return "end";
 		}
 
 		console.log(node);
-		console.log(nextStep);
+		console.log(this.nextStep);
 		console.log("\n");
-		if(nextStep != node) {
+		if(this.nextStep != node) {
 			return false;
 		}
+
+		this.visited.push(node);
 
 		this.expand(node.expand());
 		if(this.openedNodes.length == 0) {
 			this.pathDoesntExist = true;
 		} else {
-			this.nextStep = openedNodes.pop();
+			this.nextStep = this.getNext();
+			if(this.nextStep == null) return null;
 		}
 
 		return true;
 	},
 
 	expand: function (nodes) {
+		nodes.sort(function (a, b) {
+			if(a.id < b.id) {
+				return 1;
+			} else if(a.id > b.id) {
+				return -1;
+			} else {
+				return 0;
+			}
+		});
+
 		for (var i = nodes.length - 1; i >= 0; i--) {
 			if(this.visited.indexOf(nodes[i]) == -1) {
-				openedNodes.splice(0, 0, nodes[i]);
+				this.openedNodes.splice(0, 0, nodes[i]);
 			}
 		}
-	}	
+	},
+
+	getNext: function () {
+		var node;
+		while(this.openedNodes.length > 0) {
+			node = this.openedNodes.pop();
+			if(this.visited.indexOf(node) == -1) {
+				return node;
+			}
+		}
+		return null;
+	},
+
+    findLink: function(aNode) {
+        var prevNode;
+        var tempnode;
+        for (var i = aNode.links.length - 1; i >= 0; i--) {
+            tempnode = aNode.links[i].node;
+            if (  (this.visited.indexOf(tempnode) != -1) && (tempnode.value + aNode.links[i].value == aNode.value)) {
+                prevNode = tempnode;
+            }
+        }
+        for (var i = aNode.links.length - 1; i >= 0; i--) {
+            if(aNode.links[i].node === prevNode){
+                return aNode.links[i];
+            }
+        }
+    }	
 }
 
 // -------------------------------------------
@@ -58,7 +98,7 @@ var endNode = null;
 var d3startNode = null;
 var d3endNode = null;
 var nodes = [];
-var dijkstra = null;
+var search = null;
 
 var docEl = document.documentElement,
     bodyEl = document.getElementsByTagName('body')[0];
@@ -126,7 +166,7 @@ document.getElementById("startgame").addEventListener("click", function() {
         var edg;
         var l;
         var e;
-        var result = search.nextStep(clickedNode);
+        var result = search.isNextStep(clickedNode);
 
         if (result == "end") {
             /*l = dijkstra.findLink(clickedNode);
@@ -142,7 +182,7 @@ document.getElementById("startgame").addEventListener("click", function() {
             window.alert("dobro je, ne pritsci vise nista!");
             //console.log(result);
         } else if (result) {
-            l = dijkstra.findLink(clickedNode);
+           /* l = search.findLink(clickedNode);
             for (var i = graph.edges.length - 1; i >= 0; i--) {
                 e = graph.edges[i];
                 if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
@@ -151,7 +191,7 @@ document.getElementById("startgame").addEventListener("click", function() {
                 }
 
             }
-            document.getElementById(edg.id).style.stroke = "green"; 
+            document.getElementById(edg.id).style.stroke = "green";*/ 
             d3node.select("circle")[0][0].style.fill = "GreenYellow ";
         } else {
             wrongAnimation(d3node.select("circle"));

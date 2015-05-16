@@ -158,6 +158,7 @@ var GraphCreator = function(svg, nodes, edges) {
                     });
                     thisGraph.edges = newEdges;
                     thisGraph.updateGraph();
+                    this.setIdCt(thisGraph.nodes.length + 1);
                 } catch (err) {
                     window.alert("Error parsing uploaded file\nerror message: " + err.message);
                     return;
@@ -515,8 +516,8 @@ GraphCreator.prototype.svgMouseUp = function() {
         }
         var xycoords = d3.mouse(thisGraph.svgG.node()),
             d = {
-                id: thisGraph.idct++,
-                title: consts.defaultTitle[titleIndex++],
+                id: ++thisGraph.idct,
+                title: /*(thisGraph.idct - 1).toString()*/consts.defaultTitle[thisGraph.idct],
                 x: xycoords[0],
                 y: xycoords[1]
             };
@@ -632,6 +633,7 @@ GraphCreator.prototype.updateGraph = function() {
     // remove old links
     paths.exit().remove();
 
+//console.log(thisGraph.nodes);
     // update existing nodes
     thisGraph.circles = thisGraph.circles.data(thisGraph.nodes, function(d) {
         return d.id;
