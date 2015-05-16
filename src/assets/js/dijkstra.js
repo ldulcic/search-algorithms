@@ -269,21 +269,27 @@ document.getElementById("startgame").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         clickedNode = getNode(d.id);
         var edg;
-        var l;
+        var l1;
+        var l2;
         var e;
         var result = dijkstra.inNextSteps(clickedNode);
 
         if (result instanceof Array) {
-            /*l = dijkstra.findLink(clickedNode);
-            for (var i = graph.edges.length - 1; i >= 0; i--) {
-                e = graph.edges[i];
-                if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
-                    edg = graph.edges[i];
-                    break;
+            console.log("uso u kraj");
+            for(var j = result.length -1; j > 0; j--){
+                l1 = result[j];
+                l2 = result[j-1]
+                for (var i = graph.edges.length - 1; i >= 0; i--) {
+                    e = graph.edges[i];
+                    if( (e.source.id == l1.id && e.target.id == l2.id) || (e.target.id == l1.id && e.source.id == l2.id)){
+                        console.log("IF");
+                        edg = graph.edges[i];
+                        break;
+                    }
                 }
+                document.getElementById(edg.id).style.stroke = "red";
             }
-            document.getElementById(edg.id).style.stroke = "green"; 
-            d3node.select("circle")[0][0].style.fill = "GreenYellow ";*/
+            d3node.select("circle")[0][0].style.fill = "GreenYellow ";
             window.alert("dobro je, ne pritsci vise nista!");
             console.log(result);
         } else if (result) {

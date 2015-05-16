@@ -516,7 +516,7 @@ GraphCreator.prototype.svgMouseUp = function() {
         var xycoords = d3.mouse(thisGraph.svgG.node()),
             d = {
                 id: thisGraph.idct++,
-                title: consts.defaultTitle[titleIndex++],
+                title: thisGraph.idct.toString(),
                 x: xycoords[0],
                 y: xycoords[1]
             };
