@@ -1,6 +1,18 @@
 // -------------------------------------------
 //                 OBJECTS
 // -------------------------------------------
+// ---------------- VEZA ----------------
+// -------------------------------------------
+function Veza(first, second){
+    this.begin = first;
+    this.end = second;
+}
+
+Veza.prototype = {
+    constructor: Veza
+};
+
+var veze = null;
 // ---------------- NODE ----------------
 function Node(x, y, id) {
     this.id = id;
@@ -39,6 +51,8 @@ Node.prototype = {
         }
         return nodes;
     }
+
+
 
 };
 
@@ -145,7 +159,24 @@ Dijkstra.prototype = {
                 break;
             }
         }
+    },
+
+    findLink: function(aNode) {
+        var prevNode;
+        var tempnode;
+        for (var i = aNode.links.length - 1; i >= 0; i--) {
+            tempnode = aNode.links[i].node;
+            if (  (this.visited.indexOf(tempnode) != -1) && (tempnode.value + aNode.links[i].value == aNode.value)) {
+                prevNode = tempnode;
+            }
+        }
+        for (var i = aNode.links.length - 1; i >= 0; i--) {
+            if(aNode.links[i].node === prevNode){
+                return aNode.links[i];
+            }
+        }
     }
+
 };
 
 // -------------------------------------------
@@ -187,6 +218,7 @@ document.getElementById("selectstart").addEventListener("click", function() {
             d3startNode[0][0].setAttribute("stroke", "black");
         }
         d3node[0][0].setAttribute("stroke", "green");
+        d3node.select("circle")[0][0].style.fill = "GreenYellow ";
         d3startNode = d3node;
         document.getElementById("selectend").removeAttribute("disabled");
     }
@@ -223,13 +255,38 @@ document.getElementById("selectend").addEventListener("click", function() {
 document.getElementById("startgame").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         clickedNode = getNode(d.id);
+        var edg;
+        var l;
+        var e;
         var result = dijkstra.inNextSteps(clickedNode);
         if (result == "kraj") {
+            l = dijkstra.findLink(clickedNode);
+            for (var i = graph.edges.length - 1; i >= 0; i--) {
+                e = graph.edges[i];
+                if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
+                    edg = graph.edges[i];
+                    break;
+                }
+
+            }
+            document.getElementById(edg.id).style.stroke = "green"; 
+            d3node.select("circle")[0][0].style.fill = "GreenYellow ";
             window.alert("dobro je, ne pritsci vise nista!");
         } else if (result) {
-            window.alert("TOO KRALJUU!");
+            l = dijkstra.findLink(clickedNode);
+            for (var i = graph.edges.length - 1; i >= 0; i--) {
+                e = graph.edges[i];
+                if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
+                    edg = graph.edges[i];
+                    break;
+                }
+
+            }
+            document.getElementById(edg.id).style.stroke = "green"; 
+            d3node.select("circle")[0][0].style.fill = "GreenYellow ";
         } else {
-            window.alert("DEBILU!");
+            wrongAnimation(d3node.select("circle"));
+
         }
     }
 
@@ -333,4 +390,20 @@ function getNode(id) {
         }
     }
     return null;
+}
+
+function wrongAnimation(node){
+    node
+    .transition()
+    .style("fill","red")
+    .duration(125)
+    .transition()
+    .style("fill","#F6FBFF")
+    .duration(125)
+    .transition()
+    .style("fill","red")
+    .duration(125)
+    .transition()
+    .style("fill","#F6FBFF")
+    .duration(125);
 }
