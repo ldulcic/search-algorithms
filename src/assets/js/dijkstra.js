@@ -1,18 +1,6 @@
 // -------------------------------------------
 //                 OBJECTS
 // -------------------------------------------
-// ---------------- VEZA ----------------
-// -------------------------------------------
-function Veza(first, second){
-    this.begin = first;
-    this.end = second;
-}
-
-Veza.prototype = {
-    constructor: Veza
-};
-
-var veze = null;
 // ---------------- NODE ----------------
 function Node(x, y, id) {
     this.id = id;
@@ -51,8 +39,6 @@ Node.prototype = {
         }
         return nodes;
     }
-
-
 
 };
 
@@ -159,24 +145,7 @@ Dijkstra.prototype = {
                 break;
             }
         }
-    },
-
-    findLink: function(aNode) {
-        var prevNode;
-        var tempnode;
-        for (var i = aNode.links.length - 1; i >= 0; i--) {
-            tempnode = aNode.links[i].node;
-            if (  (this.visited.indexOf(tempnode) != -1) && (tempnode.value + aNode.links[i].value == aNode.value)) {
-                prevNode = tempnode;
-            }
-        }
-        for (var i = aNode.links.length - 1; i >= 0; i--) {
-            if(aNode.links[i].node === prevNode){
-                return aNode.links[i];
-            }
-        }
     }
-
 };
 
 // -------------------------------------------
@@ -218,7 +187,6 @@ document.getElementById("selectstart").addEventListener("click", function() {
             d3startNode[0][0].setAttribute("stroke", "black");
         }
         d3node[0][0].setAttribute("stroke", "green");
-        d3node.select("circle")[0][0].style.fill = "GreenYellow ";
         d3startNode = d3node;
         document.getElementById("selectend").removeAttribute("disabled");
     }
@@ -255,38 +223,13 @@ document.getElementById("selectend").addEventListener("click", function() {
 document.getElementById("startgame").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         clickedNode = getNode(d.id);
-        var edg;
-        var l;
-        var e;
         var result = dijkstra.inNextSteps(clickedNode);
         if (result == "kraj") {
-            l = dijkstra.findLink(clickedNode);
-            for (var i = graph.edges.length - 1; i >= 0; i--) {
-                e = graph.edges[i];
-                if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
-                    edg = graph.edges[i];
-                    break;
-                }
-
-            }
-            document.getElementById(edg.id).style.stroke = "green"; 
-            d3node.select("circle")[0][0].style.fill = "GreenYellow ";
             window.alert("dobro je, ne pritsci vise nista!");
         } else if (result) {
-            l = dijkstra.findLink(clickedNode);
-            for (var i = graph.edges.length - 1; i >= 0; i--) {
-                e = graph.edges[i];
-                if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
-                    edg = graph.edges[i];
-                    break;
-                }
-
-            }
-            document.getElementById(edg.id).style.stroke = "green"; 
-            d3node.select("circle")[0][0].style.fill = "GreenYellow ";
+            window.alert("TOO KRALJUU!");
         } else {
-            wrongAnimation(d3node.select("circle"));
-
+            window.alert("DEBILU!");
         }
     }
 
@@ -320,7 +263,25 @@ document.getElementById("enddrawing").addEventListener("click", function() {
 
 document.getElementById("graph1").addEventListener("click",
     function() {
-        GraphCreator.prototype.svgKeyDown = function() {
+		createGraph('{"nodes":[{"id":2,"title":"A","x":161,"y":327},{"id":3,"title":"B","x":462,"y":131},{"id":4,"title":"C","x":470,"y":507},{"id":5,"title":"D","x":759,"y":311}],"edges":[{"source":2,"target":3,"id":"pathId4","weight":8},{"source":2,"target":4,"id":"pathId5","weight":7},{"source":4,"target":5,"id":"pathId6","weight":11},{"source":3,"target":5,"id":"pathId7","weight":9}]}');
+		d3startNode = jsonObj.nodes[0];
+		d3endNode = jsonObj.nodes[3];
+	});
+
+document.getElementById("graph2").addEventListener("click",
+	function() {
+		createGraph('{"nodes":[{"id":2,"title":"A","x":69,"y":358},{"id":3,"title":"B","x":342,"y":141},{"id":4,"title":"C","x":305,"y":527},{"id":5,"title":"D","x":661,"y":151},{"id":6,"title":"E","x":652,"y":533},{"id":7,"title":"F","x":887,"y":355}],"edges":[{"source":6,"target":7,"id":"pathId5","weight":8},{"source":5,"target":7,"id":"pathId6","weight":11},{"source":2,"target":3,"id":"pathId7","weight":5},{"source":2,"target":4,"id":"pathId8","weight":6},{"source":4,"target":5,"id":"pathId9","weight":4},{"source":3,"target":6,"id":"pathId10","weight":9}]}');
+	});	
+	
+document.getElementById("graph3").addEventListener("click",
+	function(){
+		createGraph('{"nodes":[{"id":2,"title":"A","x":74.45531463623047,"y":322.34893798828125},{"id":3,"title":"B","x":341,"y":82},{"id":4,"title":"C","x":341.5149230957031,"y":546.2425537109375},{"id":5,"title":"D","x":583.5303344726562,"y":312.2580261230469},{"id":6,"title":"E","x":820.8936767578125,"y":96.4154281616211},{"id":7,"title":"F","x":818.5485229492188,"y":534.31884765625},{"id":8,"title":"G","x":578.7913818359375,"y":745.9552001953125},{"id":9,"title":"H","x":592.5692749023438,"y":-124.37584686279297},{"id":10,"title":"I","x":1048.2547607421875,"y":329.43511962890625}],"edges":[{"source":6,"target":10,"id":"pathId11","weight":1},{"source":2,"target":3,"id":"pathId12","weight":10},{"source":2,"target":4,"id":"pathId13","weight":5},{"source":3,"target":5,"id":"pathId14","weight":2},{"source":3,"target":9,"id":"pathId15","weight":14},{"source":4,"target":5,"id":"pathId16","weight":20},{"source":4,"target":8,"id":"pathId17","weight":9},{"source":8,"target":7,"id":"pathId18","weight":11},{"source":5,"target":7,"id":"pathId19","weight":8},{"source":7,"target":10,"id":"pathId20","weight":3},{"source":5,"target":6,"id":"pathId21","weight":12},{"source":9,"target":6,"id":"pathId22","weight":15}]}');
+	});
+	
+// FUNCTIONS
+
+function createGraph(json){
+	GraphCreator.prototype.svgKeyDown = function() {
 
         }
         GraphCreator.prototype.svgMouseUp = function() {
@@ -335,53 +296,27 @@ document.getElementById("graph1").addEventListener("click",
         GraphCreator.prototype.pathMouseDown = function() {
 
         }
-        graph.deleteGraph();
+		var starterGraph = JSON.parse(json);
+        graph.deleteGraph(true);
+		var jsonObj = starterGraph;
+        graph.nodes = jsonObj.nodes;
+        graph.setIdCt(jsonObj.nodes.length + 1);
+        var newEdges = jsonObj.edges;
+        newEdges.forEach(function(e, i) {
+        newEdges[i] = {
+            source: graph.nodes.filter(function(n) {
+                return n.id == e.source;
+                })[0],
+                target: graph.nodes.filter(function(n) {
+                return n.id == e.target;
+                })[0],
+                id: e.id,
+                weight: e.weight
+                };
+        });
+        graph.edges = newEdges;
         graph.updateGraph();
-        graph.nodes.push({
-            "title": "a",
-            "x": "200",
-            "y": "300",
-            "id": 1
-        });
-        graph.nodes.push({
-            "title": "b",
-            "x": "800",
-            "y": "300",
-            "id": 2
-        });
-        graph.nodes.push({
-            "title": "c",
-            "x": "500",
-            "y": "100",
-            "id": 3
-        });
-        graph.nodes.push({
-            "title": "d",
-            "x": "500",
-            "y": "500",
-            "id": 4
-        });
-        graph.updateGraph();
-        graph.edges.push({
-            "source": graph.nodes[0],
-            "target": graph.nodes[2]
-        });
-        graph.edges.push({
-            "source": graph.nodes[0],
-            "target": graph.nodes[3]
-        });
-        graph.edges.push({
-            "source": graph.nodes[2],
-            "target": graph.nodes[1]
-        });
-        graph.edges.push({
-            "source": graph.nodes[3],
-            "target": graph.nodes[1]
-        });
-        graph.updateGraph();
-    });
-
-// FUNCTIONS
+}
 
 function getNode(id) {
     for (var i = nodes.length - 1; i >= 0; i--) {
@@ -390,20 +325,4 @@ function getNode(id) {
         }
     }
     return null;
-}
-
-function wrongAnimation(node){
-    node
-    .transition()
-    .style("fill","red")
-    .duration(125)
-    .transition()
-    .style("fill","#F6FBFF")
-    .duration(125)
-    .transition()
-    .style("fill","red")
-    .duration(125)
-    .transition()
-    .style("fill","#F6FBFF")
-    .duration(125);
 }
