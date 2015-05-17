@@ -650,6 +650,9 @@ GraphCreator.prototype.updateGraph = function() {
         .attr("transform", function(d) {
             return "translate(" + d.x + "," + d.y + ")";
         })
+        .attr("id",function(d) {
+            return ("#"+d.id);
+        })
         .on("mouseover", function(d) {
             if (state.shiftNodeDrag) {
                 d3.select(this).classed(consts.connectClass, true);
