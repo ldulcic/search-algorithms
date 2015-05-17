@@ -10,6 +10,7 @@ var consts = {
     numOfLettersInTitle: 1
 };
 var titleIndex = 0;
+var counter = 0;
 var settings = {
     appendElSpec: "#graph"
 };
@@ -42,7 +43,6 @@ var GraphCreator = function(svg, nodes, edges) {
     thisGraph.dragLine = svgG.append('svg:path')
         .attr('class', 'link dragline hidden')
         .attr('d', 'M0,0L0,0');
-    //.style('marker-end', 'url(#mark-end-arrow)');
 
     // svg nodes and edges
     thisGraph.paths = svgG.append("g").attr("id", "paths").selectAll("g");
@@ -139,7 +139,7 @@ var GraphCreator = function(svg, nodes, edges) {
             filereader.onload = function() {
                 var txtRes = filereader.result;
                 // TODO better error handling
-                try {
+                //try {
                     var jsonObj = JSON.parse(txtRes);
                     thisGraph.deleteGraph(true);
                     thisGraph.nodes = jsonObj.nodes;
@@ -158,12 +158,12 @@ var GraphCreator = function(svg, nodes, edges) {
                         };
                     });
                     thisGraph.edges = newEdges;
+                    counter = thisGraph.edges.length;
                     thisGraph.updateGraph();
-                    this.setIdCt(thisGraph.nodes.length + 1);
-                } catch (err) {
+                /*} catch (err) {
                     window.alert("Error parsing uploaded file\nerror message: " + err.message);
                     return;
-                }
+                }*/
             };
             filereader.readAsText(uploadFile);
 
@@ -428,7 +428,6 @@ GraphCreator.prototype.changeTextOfNode = function(d3node, d) {
     return d3txt;
 };
 
-var counter = 0;
 // mouseup on nodes
 GraphCreator.prototype.circleMouseUp = function(d3node, d) {
     var thisGraph = this,
@@ -466,7 +465,7 @@ GraphCreator.prototype.circleMouseUp = function(d3node, d) {
             thisGraph.selectElementContents(txtNode);
             txtNode.focus();
         }
-    } else {
+    } else {5
         // we're in the same node
         if (state.justDragged) {
             // dragged, not clicked
@@ -647,7 +646,6 @@ GraphCreator.prototype.updateGraph = function() {
     // remove old links
     paths.exit().remove();
 
-//console.log(thisGraph.nodes);
     // update existing nodes
     thisGraph.circles = thisGraph.circles.data(thisGraph.nodes, function(d) {
         return d.id;
@@ -664,7 +662,7 @@ GraphCreator.prototype.updateGraph = function() {
         .attr("transform", function(d) {
             return "translate(" + d.x + "," + d.y + ")";
         })
-        .attr("id", function (d) {
+        .attr("id",function(d) {
             return "#" + d.id;
         })
         .on("mouseover", function(d) {
