@@ -4,7 +4,13 @@ function BreadthFirstSearch (startNode, endNode) {
 	this.openedNodes = [];
 	this.visited = [startNode];
 	this.pathDoesntExist = false;
-	this.expand(startNode.expand());
+	
+    var nodes = this.startNode.expand();
+    for (var i = nodes.length - 1; i >= 0; i--) {
+        nodes[i].cameFrom = this.startNode;
+    }
+    this.expand(nodes);
+
 	if(this.openedNodes.length == 0) {
 		this.pathDoesntExist = true;
 	} else {
@@ -27,8 +33,15 @@ BreadthFirstSearch.prototype = {
 
 		this.visited.push(node);
 
-		this.expand(node.expand());
-		if(this.openedNodes.length == 0) {
+        var nodes = node.expand();
+        for (var i = nodes.length - 1; i >= 0; i--) {
+            if(nodes[i].cameFrom == null && this.visited.indexOf(nodes[i]) == -1) {
+                nodes[i].cameFrom = node;
+            }
+        }
+		this.expand(nodes);
+		
+        if(this.openedNodes.length == 0) {
 			this.pathDoesntExist = true;
 		} else {
 			this.nextStep = this.getNext();

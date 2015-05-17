@@ -6,7 +6,12 @@ function Dijkstra(startNode, endNode) {
     this.pathDoesntExist = false;
     this.openNodes = [];
     this.visited = [startNode];
-    this.expand(startNode.expand());
+    
+    var nodes = this.startNode.expand();
+    for (var i = nodes.length - 1; i >= 0; i--) {
+        nodes[i].cameFrom = this.startNode;
+    }
+    this.expand(nodes);
     
     if(this.openNodes.length == 0) {
         this.pathDoesntExist = true;
@@ -28,7 +33,15 @@ Dijkstra.prototype = {
             return false;
         }
 
-        this.expand(node.expand());
+        
+        var nodes = node.expand();
+        for (var i = nodes.length - 1; i >= 0; i--) {
+            if(nodes[i].cameFrom == null && this.visited.indexOf(nodes[i]) == -1) {
+                nodes[i].cameFrom = node;
+            }
+        }
+        this.expand(nodes);
+
         this.nextSteps.splice(index, 1);
         this.visited.push(node);
 
