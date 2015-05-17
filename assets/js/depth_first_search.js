@@ -121,6 +121,8 @@ var d3endNode = null;
 var nodes = [];
 var search = null;
 
+graphType = GraphType.depth_first;
+
 var docEl = document.documentElement,
     bodyEl = document.getElementsByTagName('body')[0];
 
