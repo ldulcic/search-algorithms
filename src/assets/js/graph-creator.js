@@ -127,6 +127,29 @@ var GraphCreator = function(svg, nodes, edges) {
     });
 
 
+    function adjustTitle (graph) {
+        console.log(graph.nodes.length);
+        var titleFound = false;
+        while(true) {
+            for (var i = 0; i < graph.nodes.length; i++) {
+                if(graph.nodes[i].title == String.fromCharCode(consts.defaultTitle)) {
+                    consts.defaultTitle++;
+                    if(consts.defaultTitle == "Z".charCodeAt() + 1) {
+                       consts.defaultTitle = "A".charCodeAt();
+                        consts.numOfLettersInTitle++;
+                    }
+                    titleFound = true;
+                    break;
+                }
+            }
+
+            if(!titleFound) {
+                return;
+            }
+            titleFound = false;
+        }
+    }
+
     // handle uploaded data
     d3.select("#upload-input").on("click", function() {
         document.getElementById("hidden-file-upload").click();
@@ -139,7 +162,7 @@ var GraphCreator = function(svg, nodes, edges) {
             filereader.onload = function() {
                 var txtRes = filereader.result;
                 // TODO better error handling
-                //try {
+                try {
                     var jsonObj = JSON.parse(txtRes);
                     thisGraph.deleteGraph(true);
                     thisGraph.nodes = jsonObj.nodes;
@@ -160,10 +183,11 @@ var GraphCreator = function(svg, nodes, edges) {
                     thisGraph.edges = newEdges;
                     counter = thisGraph.edges.length;
                     thisGraph.updateGraph();
-                /*} catch (err) {
+                    adjustTitle(thisGraph);
+                } catch (err) {
                     window.alert("Error parsing uploaded file\nerror message: " + err.message);
                     return;
-                }*/
+                }
             };
             filereader.readAsText(uploadFile);
 
