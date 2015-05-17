@@ -141,10 +141,9 @@ document.getElementById("selectstart").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         startNode = getNode(d.id);
         if (d3startNode != null) {
-            d3startNode[0][0].setAttribute("stroke", "black");
+            d3startNode.select("circle")[0][0].style.fill = "#F6FBFF";
         }
-        d3node[0][0].setAttribute("stroke", "green");
-        d3node.select("circle")[0][0].style.fill = "GreenYellow ";
+        d3node.select("circle")[0][0].style.fill = "#9bafd7";
         d3startNode = d3node;
         document.getElementById("selectend").removeAttribute("disabled");
     }
@@ -170,9 +169,9 @@ document.getElementById("selectend").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         endNode = getNode(d.id);
         if (d3endNode != null) {
-            d3endNode[0][0].setAttribute("stroke", "black");
+            d3endNode.select("circle")[0][0].setAttribute("style", "stroke-width:2px");
         }
-        d3node[0][0].setAttribute("stroke", "red");
+        d3node.select("circle")[0][0].setAttribute("style", "stroke-width:5px");
         d3endNode = d3node;
         document.getElementById("startgame").removeAttribute("disabled");
     }
@@ -191,7 +190,7 @@ document.getElementById("startgame").addEventListener("click", function() {
             console.log("uso u kraj");
             for(var j = result.length -1; j > 0; j--){
                 l1 = result[j];
-                document.getElementById("#"+l1.id).getElementsByTagName("circle")[0].style.stroke = "GreenYellow";
+                document.getElementById("#"+l1.id).getElementsByTagName("circle")[0].style.fill = "#83d675";
                 l2 = result[j-1]
                 for (var i = graph.edges.length - 1; i >= 0; i--) {
                     e = graph.edges[i];
@@ -200,9 +199,10 @@ document.getElementById("startgame").addEventListener("click", function() {
                         break;
                     }
                 }
-                document.getElementById(edg.id).style.stroke = "#005200";
+                document.getElementById(edg.id).style.stroke = "#83d675";
             }
-            d3node.select("circle")[0][0].style.fill = "GreenYellow";
+            document.getElementById("#"+result[0].id).getElementsByTagName("circle")[0].style.fill = "#83d675";
+            d3node.select("circle")[0][0].style.fill = "#83d675";
             window.alert("dobro je, ne pritsci vise nista!");
             console.log(result);
         } else if (result) {
@@ -215,8 +215,8 @@ document.getElementById("startgame").addEventListener("click", function() {
                 }
 
             }
-            document.getElementById(edg.id).style.stroke = "#ff6d19"; 
-            d3node.select("circle")[0][0].style.fill = "##ff6d19";
+            document.getElementById(edg.id).style.stroke = "#9bafd7"; 
+            d3node.select("circle")[0][0].style.fill = "##9bafd7";
             d3node.on("mouseup",null);
         } else {
             wrongAnimation(d3node.select("circle"));
