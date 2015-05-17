@@ -1,26 +1,14 @@
-function BreadthFirstSearch (startNode, endNode) {
+function IterativeDepthFirstSearch (startNode, endNode) {
 	this.startNode = startNode;
 	this.endNode = endNode;
-	this.openedNodes = [];
-	this.visited = [startNode];
+    this.depth = 0;
+    this.search = new DepthFirstSearch(startNode, endNode, this.depth);
 	this.pathDoesntExist = false;
-	
-    var nodes = this.startNode.expand();
-    for (var i = nodes.length - 1; i >= 0; i--) {
-        nodes[i].cameFrom = this.startNode;
-    }
-    this.expand(nodes);
-
-	if(this.openedNodes.length == 0) {
-		this.pathDoesntExist = true;
-	} else {
-		this.nextStep = this.openedNodes.pop();
-	}
 }
 
-BreadthFirstSearch.prototype = {
+IterativeDepthFirstSearch.prototype = {
 	
-	constructor: BreadthFirstSearch,
+	constructor: IterativeDepthFirstSearch,
 
 	isNextStep: function (node) {
 		if(this.nextStep == endNode && node == endNode) {
@@ -45,65 +33,11 @@ BreadthFirstSearch.prototype = {
 			this.pathDoesntExist = true;
 		} else {
 			this.nextStep = this.getNext();
-			if(this.nextStep == null) 
-                return this.pathDoesntExist = true;
+			if(this.nextStep == null) return null;
 		}
 
 		return true;
-	},
-
-	expand: function (nodes) {
-		nodes.sort(function (a, b) {
-			if(a.id < b.id) {
-				return 1;
-			} else if(a.id > b.id) {
-				return -1;
-			} else {
-				return 0;
-			}
-		});
-
-		for (var i = nodes.length - 1; i >= 0; i--) {
-			if(this.visited.indexOf(nodes[i]) == -1) {
-				this.openedNodes.splice(0, 0, nodes[i]);
-			}
-		}
-	},
-
-	getNext: function () {
-		var node;
-		while(this.openedNodes.length > 0) {
-			node = this.openedNodes.pop();
-			if(this.visited.indexOf(node) == -1) {
-				return node;
-			}
-		}
-		return null;
-	},
-
-    findLink: function(aNode) {
-        var prevNode;
-        var tempnode;
-        for (var i = aNode.links.length - 1; i >= 0; i--) {
-            tempnode = aNode.links[i].node;
-            if (  (this.visited.indexOf(tempnode) != -1) && ( tempnode == aNode.cameFrom)) {
-                prevNode = aNode.links[i];
-                break;
-            }
-        }
-        return prevNode;
-    },
-
-    reconstructPath: function (node) {
-        var path = [node];
-        var tmp;
-        while((tmp = node.cameFrom) != null) {
-            path.splice(0, 0, tmp);
-            node = tmp;
-        }
-
-        return path;
-    }
+	}
 }
 
 // -------------------------------------------
@@ -118,6 +52,8 @@ var d3startNode = null;
 var d3endNode = null;
 var nodes = [];
 var search = null;
+
+graphType = GraphType.depth_first;
 
 var docEl = document.documentElement,
     bodyEl = document.getElementsByTagName('body')[0];
@@ -142,9 +78,10 @@ document.getElementById("selectstart").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         startNode = getNode(d.id);
         if (d3startNode != null) {
-            d3startNode.select("circle")[0][0].style.fill = "#F6FBFF";
+            d3startNode[0][0].setAttribute("stroke", "black");
         }
-        d3node.select("circle")[0][0].style.fill = "#9bafd7";
+        d3node[0][0].setAttribute("stroke", "green");
+        d3node.select("circle")[0][0].style.fill = "GreenYellow ";
         d3startNode = d3node;
         document.getElementById("selectend").removeAttribute("disabled");
     }
@@ -170,9 +107,9 @@ document.getElementById("selectend").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         endNode = getNode(d.id);
         if (d3endNode != null) {
-            d3endNode.select("circle")[0][0].setAttribute("style", "stroke-width:2px");
+            d3endNode[0][0].setAttribute("stroke", "black");
         }
-        d3node.select("circle")[0][0].setAttribute("style", "stroke-width:5px");
+        d3node[0][0].setAttribute("stroke", "red");
         d3endNode = d3node;
         document.getElementById("startgame").removeAttribute("disabled");
     }
@@ -182,32 +119,26 @@ document.getElementById("startgame").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         clickedNode = getNode(d.id);
         var edg;
-        var l1;
-        var l2;
+        var l;
         var e;
         var result = search.isNextStep(clickedNode);
 
         if (result instanceof Array) {
-            console.log("uso u kraj");
-            for(var j = result.length -1; j > 0; j--){
-                l1 = result[j];
-                document.getElementById("#"+l1.id).getElementsByTagName("circle")[0].style.fill = "#83d675";
-                l2 = result[j-1]
-                for (var i = graph.edges.length - 1; i >= 0; i--) {
-                    e = graph.edges[i];
-                    if( (e.source.id == l1.id && e.target.id == l2.id) || (e.target.id == l1.id && e.source.id == l2.id)){
-                        edg = graph.edges[i];
-                        break;
-                    }
+            /*l = dijkstra.findLink(clickedNode);
+            for (var i = graph.edges.length - 1; i >= 0; i--) {
+                e = graph.edges[i];
+                if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
+                    edg = graph.edges[i];
+                    break;
                 }
-                document.getElementById(edg.id).style.stroke = "#83d675";
             }
-            document.getElementById("#"+result[0].id).getElementsByTagName("circle")[0].style.fill = "#83d675";
-            d3node.select("circle")[0][0].style.fill = "#83d675";
+            document.getElementById(edg.id).style.stroke = "green"; 
+            d3node.select("circle")[0][0].style.fill = "GreenYellow ";*/
             window.alert("dobro je, ne pritsci vise nista!");
             console.log(result);
+            //console.log(result);
         } else if (result) {
-            var l = search.findLink(clickedNode);
+           /* l = search.findLink(clickedNode);
             for (var i = graph.edges.length - 1; i >= 0; i--) {
                 e = graph.edges[i];
                 if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
@@ -216,29 +147,18 @@ document.getElementById("startgame").addEventListener("click", function() {
                 }
 
             }
-            document.getElementById(edg.id).style.stroke = "#9bafd7"; 
-            d3node.select("circle")[0][0].style.fill = "#9bafd7";
-            d3node.on("mouseup",null);
-            if(search.pathDoesntExist){
-                window.alert("put ne postoji");
-                GraphCreator.prototype.circleMouseUp = function() {
-                }
-            }
+            document.getElementById(edg.id).style.stroke = "green";*/ 
+            d3node.select("circle")[0][0].style.fill = "GreenYellow ";
         } else {
             wrongAnimation(d3node.select("circle"));
-            
+
         }
-
     }
 
-    document.getElementById("selectstart").style.display = "none";
-    document.getElementById("selectend").style.display = "none";
+    document.getElementById("selectstart").setAttribute("disabled", "");
+    document.getElementById("selectend").setAttribute("disabled", "");
 
-    search = new BreadthFirstSearch(startNode, endNode);
-    if(search.pathDoesntExist){
-        window.alert("put ne postoji");
-        GraphCreator.prototype.circleMouseUp = function() {}
-    }
+    search = new IterativeDepthFirstSearch(startNode, endNode);
 });
 
 document.getElementById("enddrawing").addEventListener("click", function() {
@@ -258,10 +178,8 @@ document.getElementById("enddrawing").addEventListener("click", function() {
         target.addLink(new Link(source, e.weight));
     }
 
-    document.getElementById("enddrawing").style.display = "none";
-    document.getElementById("selectstart").style.display = "inline-block";
-    document.getElementById("selectend").style.display = "inline-block";
-    document.getElementById("startgame").style.display = "inline-block";
+    document.getElementById("enddrawing").setAttribute("disabled", "");
+    document.getElementById("selectstart").removeAttribute("disabled");
 
 });
 
