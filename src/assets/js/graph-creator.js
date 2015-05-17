@@ -465,7 +465,7 @@ GraphCreator.prototype.circleMouseUp = function(d3node, d) {
             thisGraph.selectElementContents(txtNode);
             txtNode.focus();
         }
-    } else {
+    } else {5
         // we're in the same node
         if (state.justDragged) {
             // dragged, not clicked
@@ -663,7 +663,7 @@ GraphCreator.prototype.updateGraph = function() {
             return "translate(" + d.x + "," + d.y + ")";
         })
         .attr("id",function(d) {
-            return ("#"+d.id);
+            return "#" + d.id;
         })
         .on("mouseover", function(d) {
             if (state.shiftNodeDrag) {
