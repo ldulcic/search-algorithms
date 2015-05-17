@@ -255,12 +255,19 @@ document.getElementById("startgame").addEventListener("click", function() {
                 }
 
             }
+<<<<<<< HEAD:src/assets/js/dijkstra.js
+            document.getElementById(edg.id).style.stroke = "#ff6d19"; 
+            d3node.select("circle")[0][0].style.fill = "##ff6d19";
+            d3node.on("mouseup",null);
+=======
             document.getElementById(edg.id).style.stroke = "#9bafd7"; 
             d3node.select("circle")[0][0].style.fill = "#9bafd7";
+>>>>>>> origin/master:assets/js/dijkstra.js
         } else {
             wrongAnimation(d3node.select("circle"));
 
         }
+
     }
 
     document.getElementById("selectstart").style.display = "none";
