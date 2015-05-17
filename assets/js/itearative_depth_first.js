@@ -1,35 +1,14 @@
-function DepthFirstSearch (startNode, endNode, depth) {
+function IterativeDepthFirstSearch (startNode, endNode) {
 	this.startNode = startNode;
-   // console.log(startNode);
-    if(depth !== undefined) this.startNode.depth = 0;
 	this.endNode = endNode;
-    this.maxDepth = depth;
-    this.maxDepthTooSmall = [];
-	this.openedNodes = [];
-	this.visited = [startNode];
+    this.depth = 0;
+    this.search = new DepthFirstSearch(startNode, endNode, this.depth);
 	this.pathDoesntExist = false;
-	
-    var nodes = this.startNode.expand();
-    for (var i = nodes.length - 1; i >= 0; i--) {
-        nodes[i].cameFrom = this.startNode;
-    }
-
-    if(depth !== undefined) {
-        this.expand(nodes, this.startNode.depth + 1);
-    } else {
-        this.expand(nodes);
-    }
-
-	if(this.openedNodes.length == 0) {
-		this.pathDoesntExist = true;
-	} else {
-		this.nextStep = this.openedNodes.pop();
-	}
 }
 
-DepthFirstSearch.prototype = {
+IterativeDepthFirstSearch.prototype = {
 	
-	constructor: DepthFirstSearch,
+	constructor: IterativeDepthFirstSearch,
 
 	isNextStep: function (node) {
 		if(this.nextStep == endNode && node == endNode) {
@@ -42,106 +21,23 @@ DepthFirstSearch.prototype = {
 
 		this.visited.push(node);
 
-        if(this.maxDepth === undefined || node.depth < this.maxDepth) {
-            var nodes = node.expand();
-            for (var i = nodes.length - 1; i >= 0; i--) {
-                if(this.visited.indexOf(nodes[i]) == -1) {
-                    nodes[i].cameFrom = node;
-                }
-            }
-
-            if(this.maxDepth !== undefined) {
-	           this.expand(nodes, node.depth + 1);
-            } else {
-                this.expand(nodes);
-            }
-        } else {
-            var nodes = node.expand();
-            for (var i = nodes.length - 1; i >= 0; i--) {
-                if(this.visited.indexOf(nodes[i]) == -1) {
-                    this.maxDepthTooSmall.push(nodes[i]);
-                }
+        var nodes = node.expand();
+        for (var i = nodes.length - 1; i >= 0; i--) {
+            if(nodes[i].cameFrom == null && this.visited.indexOf(nodes[i]) == -1) {
+                nodes[i].cameFrom = node;
             }
         }
+		this.expand(nodes);
 		
         if(this.openedNodes.length == 0) {
 			this.pathDoesntExist = true;
 		} else {
 			this.nextStep = this.getNext();
-			if(this.nextStep == null) {
-                this.pathDoesntExist = true;
-            }
+			if(this.nextStep == null) return null;
 		}
-        //console.log(this.nextStep);
-        
+
 		return true;
-	},
-
-	expand: function (nodes, depth) {
-		nodes.sort(function (a, b) {
-			if(a.id < b.id) {
-				return -1;
-			} else if(a.id > b.id) {
-				return 1;
-			} else {
-				return 0;
-			}
-		});
-
-		for (var i = nodes.length - 1; i >= 0; i--) {
-			if(this.visited.indexOf(nodes[i]) == -1) {
-                if(depth !== undefined) nodes[i].depth = depth;
-				this.openedNodes.push(nodes[i]); 
-			}
-		}
-	},
-
-	getNext: function () {
-		var node;
-		while(this.openedNodes.length > 0) {
-			node = this.openedNodes.pop();
-			if(this.visited.indexOf(node) == -1) {
-				return node;
-			}
-		}
-		return null;
-	},
-
-    findLink: function(aNode) {
-        var prevNode;
-        var tempnode;
-        for (var i = aNode.links.length - 1; i >= 0; i--) {
-            tempnode = aNode.links[i].node;
-            if (  (this.visited.indexOf(tempnode) != -1) && (tempnode.value + aNode.links[i].value == aNode.value)) {
-                prevNode = tempnode;
-            }
-        }
-        for (var i = aNode.links.length - 1; i >= 0; i--) {
-            if(aNode.links[i].node === prevNode){
-                return aNode.links[i];
-            }
-        }
-    },
-
-    reconstructPath: function (node) {
-        var path = [node];
-        var tmp;
-        while((tmp = node.cameFrom) != null) {
-            path.splice(0, 0, tmp);
-            node = tmp;
-        }
-
-        return path;
-    },
-
-    isDepthTooSmall: function () {
-        for (var i = this.maxDepthTooSmall.length - 1; i >= 0; i--) {
-            if(this.visited.indexOf(this.maxDepthTooSmall[i]) == -1) {
-                return true;
-            }
-        }
-        return false;
-    }
+	}
 }
 
 // -------------------------------------------
@@ -180,9 +76,7 @@ graph.updateGraph();
 // LISTENERS
 document.getElementById("selectstart").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
-        console.log(d3node.node());
         startNode = getNode(d.id);
-        console.log(startNode);
         if (d3startNode != null) {
             d3startNode[0][0].setAttribute("stroke", "black");
         }
@@ -255,23 +149,16 @@ document.getElementById("startgame").addEventListener("click", function() {
             }
             document.getElementById(edg.id).style.stroke = "green";*/ 
             d3node.select("circle")[0][0].style.fill = "GreenYellow ";
-            if(search.pathDoesntExist) {
-                if(search.isDepthTooSmall()) {
-                    window.alert("depth premali");
-                } else {
-                    window.alert("ne postoji put");
-                }
-            }
         } else {
-            console.log(result);
             wrongAnimation(d3node.select("circle"));
+
         }
     }
 
     document.getElementById("selectstart").setAttribute("disabled", "");
     document.getElementById("selectend").setAttribute("disabled", "");
 
-    search = new DepthFirstSearch(startNode, endNode, 3);
+    search = new IterativeDepthFirstSearch(startNode, endNode);
 });
 
 document.getElementById("enddrawing").addEventListener("click", function() {
