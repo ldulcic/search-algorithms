@@ -45,7 +45,8 @@ BreadthFirstSearch.prototype = {
 			this.pathDoesntExist = true;
 		} else {
 			this.nextStep = this.getNext();
-			if(this.nextStep == null) return null;
+			if(this.nextStep == null) 
+                return this.pathDoesntExist = true;
 		}
 
 		return true;
@@ -216,8 +217,13 @@ document.getElementById("startgame").addEventListener("click", function() {
 
             }
             document.getElementById(edg.id).style.stroke = "#9bafd7"; 
-            d3node.select("circle")[0][0].style.fill = "##9bafd7";
+            d3node.select("circle")[0][0].style.fill = "#9bafd7";
             d3node.on("mouseup",null);
+            if(search.pathDoesntExist){
+                window.alert("put ne postoji");
+                GraphCreator.prototype.circleMouseUp = function() {
+                }
+            }
         } else {
             wrongAnimation(d3node.select("circle"));
             
@@ -229,6 +235,10 @@ document.getElementById("startgame").addEventListener("click", function() {
     document.getElementById("selectend").style.display = "none";
 
     search = new BreadthFirstSearch(startNode, endNode);
+    if(search.pathDoesntExist){
+        window.alert("put ne postoji");
+        GraphCreator.prototype.circleMouseUp = function() {}
+    }
 });
 
 document.getElementById("enddrawing").addEventListener("click", function() {
