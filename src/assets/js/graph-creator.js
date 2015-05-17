@@ -664,13 +664,8 @@ GraphCreator.prototype.updateGraph = function() {
         .attr("transform", function(d) {
             return "translate(" + d.x + "," + d.y + ")";
         })
-<<<<<<< HEAD
-        .attr("id",function(d) {
-            return ("#"+d.id);
-=======
         .attr("id", function (d) {
             return "#" + d.id;
->>>>>>> origin/master
         })
         .on("mouseover", function(d) {
             if (state.shiftNodeDrag) {
