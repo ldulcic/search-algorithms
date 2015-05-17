@@ -1,16 +1,25 @@
-var d3 = window.d3;
 var saveAs = window.saveAs;
+var d3 = window.d3;
 var Blob = window.Blob;
 
 "use strict";
 
 // TODO add user settings
+var GraphType = Object.freeze(
+    {
+        dijkstra : "Dijkstra",
+        breadth_first : "BreadthFirst",
+        depth_first : "DepthFirst",
+        none : "none"
+    });
+
 var consts = {
     defaultTitle: "A".charCodeAt(),
     numOfLettersInTitle: 1
 };
 var titleIndex = 0;
 var counter = 0;
+var graphType = GraphType.none;
 var settings = {
     appendElSpec: "#graph"
 };
@@ -128,7 +137,6 @@ var GraphCreator = function(svg, nodes, edges) {
 
 
     function adjustTitle (graph) {
-        console.log(graph.nodes.length);
         var titleFound = false;
         while(true) {
             for (var i = 0; i < graph.nodes.length; i++) {
@@ -184,6 +192,10 @@ var GraphCreator = function(svg, nodes, edges) {
                     counter = thisGraph.edges.length;
                     thisGraph.updateGraph();
                     adjustTitle(thisGraph);
+
+                    if(graphType == GraphType.depth_first || graphType == GraphType.breadth_first) {
+                        d3.select("#paths").selectAll("text").attr("visibility", "hidden");
+                    }
                 } catch (err) {
                     window.alert("Error parsing uploaded file\nerror message: " + err.message);
                     return;
@@ -484,19 +496,22 @@ GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         if (!filtRes[0].length) {
             thisGraph.edges.push(newEdge);
             thisGraph.updateGraph();
-            var d3text = this.changeWeightOfLink(d3.select("#pathId" + (counter - 1)), newEdge);
-            var txtNode = d3text.node();
-            thisGraph.selectElementContents(txtNode);
-            txtNode.focus();
+            
+            if(graphType != GraphType.depth_first && graphType != GraphType.breadth_first) {
+                var d3text = this.changeWeightOfLink(d3.select("#pathId" + (counter - 1)), newEdge);
+                var txtNode = d3text.node();
+                thisGraph.selectElementContents(txtNode);
+                txtNode.focus();
+            }
         }
-    } else {5
+    } else {
         // we're in the same node
         if (state.justDragged) {
             // dragged, not clicked
             state.justDragged = false;
         } else {
             // clicked, not dragged
-            if (d3.event.shiftKey) {
+            if (d3.event.shiftKey && graphType != GraphType.depth_first && graphType != GraphType.breadth_first) {
                 // shift-clicked node: edit text content
                 var d3txt = thisGraph.changeTextOfNode(d3node, d);
                 var txtNode = d3txt.node();
@@ -561,12 +576,15 @@ GraphCreator.prototype.svgMouseUp = function() {
         thisGraph.nodes.push(d);
         thisGraph.updateGraph();
         // make title of text immediently editable
-        var d3txt = thisGraph.changeTextOfNode(thisGraph.circles.filter(function(dval) {
-                return dval.id === d.id;
-            }), d),
-            txtNode = d3txt.node();
-        thisGraph.selectElementContents(txtNode);
-        txtNode.focus();
+        
+        if(graphType != GraphType.depth_first && graphType != GraphType.breadth_first) {
+            var d3txt = thisGraph.changeTextOfNode(thisGraph.circles.filter(function(dval) {
+                    return dval.id === d.id;
+                }), d),
+                txtNode = d3txt.node();
+            thisGraph.selectElementContents(txtNode);
+            txtNode.focus();
+        }
     } else if (state.shiftNodeDrag) {
         // dragged from node
         state.shiftNodeDrag = false;
@@ -636,7 +654,7 @@ GraphCreator.prototype.updateGraph = function() {
 
     var id = "";
     // add new paths
-    var text = paths.enter()
+    var path = paths.enter()
         .append("path")
         .classed("link", true)
         .attr("d", function(d) {
@@ -714,6 +732,10 @@ GraphCreator.prototype.updateGraph = function() {
 
     // remove old nodes
     thisGraph.circles.exit().remove();
+
+    if(graphType == GraphType.depth_first || graphType == GraphType.breadth_first) {
+        d3.select("#paths").selectAll("text").attr("visibility", "hidden");
+    }
 };
 
 GraphCreator.prototype.zoomed = function() {
