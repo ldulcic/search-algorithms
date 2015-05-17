@@ -10,6 +10,7 @@ var GraphType = Object.freeze(
         dijkstra : "Dijkstra",
         breadth_first : "BreadthFirst",
         depth_first : "DepthFirst",
+        iterative_depth_first: "IterativeDepthFirst",
         none : "none"
     });
 
