@@ -52,7 +52,7 @@ Dijkstra.prototype = {
             
             this.nextSteps = this.getNext();
             if(this.nextSteps == null) {
-                this.pathDoesntExist;
+                this.pathDoesntExist = true;
             }
         }
         
