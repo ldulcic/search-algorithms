@@ -6,7 +6,8 @@ var Blob = window.Blob;
 
 // TODO add user settings
 var consts = {
-    defaultTitle: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
+    defaultTitle: "A".charCodeAt(),
+    numOfLettersInTitle: 1
 };
 var titleIndex = 0;
 var settings = {
@@ -514,10 +515,23 @@ GraphCreator.prototype.svgMouseUp = function() {
         if (titleIndex == consts.defaultTitle.length) {
             titleIndex = 0;
         }
+
+        //novo
+        var title = "";
+        var letter = String.fromCharCode(consts.defaultTitle++);
+        for (var i = 0; i < consts.numOfLettersInTitle; i++) {
+            title += letter;
+        }
+        if(consts.defaultTitle == "Z".charCodeAt() + 1) {
+            consts.defaultTitle = "A".charCodeAt();
+            consts.numOfLettersInTitle++;
+        }
+        //novo
+
         var xycoords = d3.mouse(thisGraph.svgG.node()),
             d = {
                 id: ++thisGraph.idct,
-                title: /*(thisGraph.idct - 1).toString()*/consts.defaultTitle[thisGraph.idct],
+                title: title,
                 x: xycoords[0],
                 y: xycoords[1]
             };
@@ -650,8 +664,13 @@ GraphCreator.prototype.updateGraph = function() {
         .attr("transform", function(d) {
             return "translate(" + d.x + "," + d.y + ")";
         })
+<<<<<<< HEAD
         .attr("id",function(d) {
             return ("#"+d.id);
+=======
+        .attr("id", function (d) {
+            return "#" + d.id;
+>>>>>>> origin/master
         })
         .on("mouseover", function(d) {
             if (state.shiftNodeDrag) {

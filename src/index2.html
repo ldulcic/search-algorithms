@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="assets/css/graph-creator.css" />
+  </head>
+
+  <body>
+    <button type="button" id="enddrawing">Završi crtanje</button>
+    <button type="button" id="selectstart" disabled>Odaberite pocetak!</button>
+    <button type="button" id="selectend" disabled>Odaberite kraj!</button>
+    <button type="button" id="startgame" disabled>Pokreni igru!</button>
+    <button type="button" id="graph1">Pocetnicki graf</button>
+    <div id="graph">
+    <div id="toolbox">
+      <input type="file" id="hidden-file-upload"><input id="upload-input" type="image" title="upload graph" src="assets/img/upload-icon.png" alt="upload graph"> <input type="image" id="assets/img/download-input" title="download graph" src="assets/img/download-icon.png" alt="download graph"> <input type="image" id="delete-graph" title="delete graph" src="assets/img/trash-icon.png" alt="delete graph">
+    </div>
+    </div>
+    <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
+    <script src="http://cdn.jsdelivr.net/filesaver.js/0.1/FileSaver.min.js"></script>
+    <script src="assets/js/graph-creator.js"></script>
+    <script src="assets/js/data-structures.js"></script>
+    <script src="assets/js/breadth_first_search.js"></script>
+  </body>
+
+</html>
