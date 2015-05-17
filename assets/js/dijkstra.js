@@ -246,9 +246,6 @@ document.getElementById("startgame").addEventListener("click", function() {
             window.alert("dobro je, ne pritsci vise nista!");
             console.log(result);
         } else if (result) {
-            if(dijkstra.pathDoesntExist){
-                window.alert("put ne postoji");
-            }else{
             l = dijkstra.findLink(clickedNode);
             for (var i = graph.edges.length - 1; i >= 0; i--) {
                 e = graph.edges[i];
@@ -260,7 +257,12 @@ document.getElementById("startgame").addEventListener("click", function() {
             }
             document.getElementById(edg.id).style.stroke = "#9bafd7"; 
             d3node.select("circle")[0][0].style.fill = "#9bafd7";
-            d3node.on("mouseup",null); }
+            d3node.on("mouseup",null);
+            if(dijkstra.pathDoesntExist){
+                window.alert("put ne postoji");
+                GraphCreator.prototype.circleMouseUp = function() {
+                }
+            }
         } else {
             wrongAnimation(d3node.select("circle"));
 
