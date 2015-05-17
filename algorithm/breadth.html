@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Dijkstra's algorithm</title>
+    <title>Breadth first search algorithm</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
@@ -44,11 +44,11 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active">
-                        <a href="dijkstra.html">Dijkstra's algorithm<span class="sr-only">(current)</span></a>
-                    </li>
                     <li>
-                        <a href="breadth.html">Breadth first search algorithm</a>
+                        <a href="dijkstra.html">Dijkstra's algorithm</a>
+                    </li>
+                    <li class="active">
+                        <a href="breadth.html">Breadth first search algorithm<span class="sr-only">(current)</span></a>
                     </li>
                     <li>
                         <a href="#">Algorithm 3</a>
@@ -69,26 +69,12 @@
     </nav>
 
     <div class="odd-section">
-        <iframe class="col-md-7" src="dijkstra_fs.html" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+        <iframe class="col-md-7" src="breadth_fs.html" marginwidth="0" marginheight="0" scrolling="no"></iframe>
         <div class="col-md-5">
-        <h1>Dijkstra's algorithm</h1>
-		<br>
-        <p><b>How does it work?</b></p>
-		<br><font color="gray">
-		<p><b>RULE</b></p> 
-		<p>You have to select the node adjacent to one of <b>open nodes</b> that has the least <b>cumulative weight</b>.</p>
-        <br>
-		<p><b>EXPLANATION</b></p>
-		<p><b>open node</b><br>any node that you have already selected plus start node. Open nodes are colored green.</p>
-		<p><b>cumulative weight</b><br>sum of all weights on path between the starting node and the node whose cummulative weight you calculate</p>
-		</font>
+        <h1>Breadth first search algorithm</h1>
+		
 		</div>
     </div>
-
-    <!-- d3 JavaScript -->
-    <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
-    <!-- fileSaver JavaScript -->
-    <script src="http://cdn.jsdelivr.net/filesaver.js/0.1/FileSaver.min.js"></script>
 
 </body>
 
