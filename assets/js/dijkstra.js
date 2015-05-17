@@ -314,13 +314,16 @@ document.getElementById("graph3").addEventListener("click",
 
 // FUNCTIONS
 function createGraph(json){
+	if(!this.graph.nodes.empty()){
+		return;
+	}
     GraphCreator.prototype.svgKeyDown = function() {}
     GraphCreator.prototype.svgMouseUp = function() {}
     GraphCreator.prototype.circleMouseDown = function() {}
     GraphCreator.prototype.dragmove = function(d) {}
     GraphCreator.prototype.pathMouseDown = function() {}
 	var starterGraph = json;
-        graph.deleteGraph(true);
+        graph.deleteGraph();
 		var jsonObj = starterGraph;
         graph.nodes = jsonObj.nodes;
         graph.setIdCt(jsonObj.nodes.length + 1);
