@@ -1,15 +1,25 @@
-var d3 = window.d3;
 var saveAs = window.saveAs;
+var d3 = window.d3;
 var Blob = window.Blob;
 
 "use strict";
 
 // TODO add user settings
+var GraphType = Object.freeze(
+    {
+        dijkstra : "Dijkstra",
+        breadth_first : "BreadthFirst",
+        depth_first : "DepthFirst",
+        none : "none"
+    });
+
 var consts = {
     defaultTitle: "A".charCodeAt(),
     numOfLettersInTitle: 1
 };
 var titleIndex = 0;
+var counter = 0;
+var graphType = GraphType.none;
 var settings = {
     appendElSpec: "#graph"
 };
@@ -42,7 +52,6 @@ var GraphCreator = function(svg, nodes, edges) {
     thisGraph.dragLine = svgG.append('svg:path')
         .attr('class', 'link dragline hidden')
         .attr('d', 'M0,0L0,0');
-    //.style('marker-end', 'url(#mark-end-arrow)');
 
     // svg nodes and edges
     thisGraph.paths = svgG.append("g").attr("id", "paths").selectAll("g");
@@ -127,6 +136,28 @@ var GraphCreator = function(svg, nodes, edges) {
     });
 
 
+    function adjustTitle (graph) {
+        var titleFound = false;
+        while(true) {
+            for (var i = 0; i < graph.nodes.length; i++) {
+                if(graph.nodes[i].title == String.fromCharCode(consts.defaultTitle)) {
+                    consts.defaultTitle++;
+                    if(consts.defaultTitle == "Z".charCodeAt() + 1) {
+                       consts.defaultTitle = "A".charCodeAt();
+                        consts.numOfLettersInTitle++;
+                    }
+                    titleFound = true;
+                    break;
+                }
+            }
+
+            if(!titleFound) {
+                return;
+            }
+            titleFound = false;
+        }
+    }
+
     // handle uploaded data
     d3.select("#upload-input").on("click", function() {
         document.getElementById("hidden-file-upload").click();
@@ -158,8 +189,13 @@ var GraphCreator = function(svg, nodes, edges) {
                         };
                     });
                     thisGraph.edges = newEdges;
+                    counter = thisGraph.edges.length;
                     thisGraph.updateGraph();
-                    this.setIdCt(thisGraph.nodes.length + 1);
+                    adjustTitle(thisGraph);
+
+                    if(graphType == GraphType.depth_first || graphType == GraphType.breadth_first) {
+                        d3.select("#paths").selectAll("text").attr("visibility", "hidden");
+                    }
                 } catch (err) {
                     window.alert("Error parsing uploaded file\nerror message: " + err.message);
                     return;
@@ -428,7 +464,6 @@ GraphCreator.prototype.changeTextOfNode = function(d3node, d) {
     return d3txt;
 };
 
-var counter = 0;
 // mouseup on nodes
 GraphCreator.prototype.circleMouseUp = function(d3node, d) {
     var thisGraph = this,
@@ -461,10 +496,13 @@ GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         if (!filtRes[0].length) {
             thisGraph.edges.push(newEdge);
             thisGraph.updateGraph();
-            var d3text = this.changeWeightOfLink(d3.select("#pathId" + (counter - 1)), newEdge);
-            var txtNode = d3text.node();
-            thisGraph.selectElementContents(txtNode);
-            txtNode.focus();
+            
+            if(graphType != GraphType.depth_first && graphType != GraphType.breadth_first) {
+                var d3text = this.changeWeightOfLink(d3.select("#pathId" + (counter - 1)), newEdge);
+                var txtNode = d3text.node();
+                thisGraph.selectElementContents(txtNode);
+                txtNode.focus();
+            }
         }
     } else {
         // we're in the same node
@@ -473,7 +511,7 @@ GraphCreator.prototype.circleMouseUp = function(d3node, d) {
             state.justDragged = false;
         } else {
             // clicked, not dragged
-            if (d3.event.shiftKey) {
+            if (d3.event.shiftKey && graphType != GraphType.depth_first && graphType != GraphType.breadth_first) {
                 // shift-clicked node: edit text content
                 var d3txt = thisGraph.changeTextOfNode(d3node, d);
                 var txtNode = d3txt.node();
@@ -538,12 +576,15 @@ GraphCreator.prototype.svgMouseUp = function() {
         thisGraph.nodes.push(d);
         thisGraph.updateGraph();
         // make title of text immediently editable
-        var d3txt = thisGraph.changeTextOfNode(thisGraph.circles.filter(function(dval) {
-                return dval.id === d.id;
-            }), d),
-            txtNode = d3txt.node();
-        thisGraph.selectElementContents(txtNode);
-        txtNode.focus();
+        
+        if(graphType != GraphType.depth_first && graphType != GraphType.breadth_first) {
+            var d3txt = thisGraph.changeTextOfNode(thisGraph.circles.filter(function(dval) {
+                    return dval.id === d.id;
+                }), d),
+                txtNode = d3txt.node();
+            thisGraph.selectElementContents(txtNode);
+            txtNode.focus();
+        }
     } else if (state.shiftNodeDrag) {
         // dragged from node
         state.shiftNodeDrag = false;
@@ -613,7 +654,7 @@ GraphCreator.prototype.updateGraph = function() {
 
     var id = "";
     // add new paths
-    var text = paths.enter()
+    var path = paths.enter()
         .append("path")
         .classed("link", true)
         .attr("d", function(d) {
@@ -647,7 +688,6 @@ GraphCreator.prototype.updateGraph = function() {
     // remove old links
     paths.exit().remove();
 
-//console.log(thisGraph.nodes);
     // update existing nodes
     thisGraph.circles = thisGraph.circles.data(thisGraph.nodes, function(d) {
         return d.id;
@@ -664,13 +704,8 @@ GraphCreator.prototype.updateGraph = function() {
         .attr("transform", function(d) {
             return "translate(" + d.x + "," + d.y + ")";
         })
-<<<<<<< HEAD
         .attr("id",function(d) {
-            return ("#"+d.id);
-=======
-        .attr("id", function (d) {
             return "#" + d.id;
->>>>>>> origin/master
         })
         .on("mouseover", function(d) {
             if (state.shiftNodeDrag) {
@@ -697,6 +732,10 @@ GraphCreator.prototype.updateGraph = function() {
 
     // remove old nodes
     thisGraph.circles.exit().remove();
+
+    if(graphType == GraphType.depth_first || graphType == GraphType.breadth_first) {
+        d3.select("#paths").selectAll("text").attr("visibility", "hidden");
+    }
 };
 
 GraphCreator.prototype.zoomed = function() {
