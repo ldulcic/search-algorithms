@@ -18,12 +18,9 @@ BreadthFirstSearch.prototype = {
 
 	isNextStep: function (node) {
 		if(this.nextStep == endNode && node == endNode) {
-			return "end";
+			return this.reconstructPath(node);
 		}
 
-		console.log(node);
-		console.log(this.nextStep);
-		console.log("\n");
 		if(this.nextStep != node) {
 			return false;
 		}
@@ -84,7 +81,18 @@ BreadthFirstSearch.prototype = {
                 return aNode.links[i];
             }
         }
-    }	
+    },
+
+    reconstructPath: function (node) {
+        var path = [node];
+        var tmp;
+        while((tmp = node.cameFrom) != null) {
+            path.splice(0, 0, tmp);
+            node = tmp;
+        }
+
+        return path;
+    }
 }
 
 // -------------------------------------------
@@ -168,7 +176,7 @@ document.getElementById("startgame").addEventListener("click", function() {
         var e;
         var result = search.isNextStep(clickedNode);
 
-        if (result == "end") {
+        if (result instanceof Array) {
             /*l = dijkstra.findLink(clickedNode);
             for (var i = graph.edges.length - 1; i >= 0; i--) {
                 e = graph.edges[i];
@@ -180,6 +188,7 @@ document.getElementById("startgame").addEventListener("click", function() {
             document.getElementById(edg.id).style.stroke = "green"; 
             d3node.select("circle")[0][0].style.fill = "GreenYellow ";*/
             window.alert("dobro je, ne pritsci vise nista!");
+            console.log(result);
             //console.log(result);
         } else if (result) {
            /* l = search.findLink(clickedNode);
