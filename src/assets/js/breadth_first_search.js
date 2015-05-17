@@ -85,15 +85,12 @@ BreadthFirstSearch.prototype = {
         var tempnode;
         for (var i = aNode.links.length - 1; i >= 0; i--) {
             tempnode = aNode.links[i].node;
-            if (  (this.visited.indexOf(tempnode) != -1) && (tempnode.value + aNode.links[i].value == aNode.value)) {
-                prevNode = tempnode;
+            if (  (this.visited.indexOf(tempnode) != -1) && ( tempnode == aNode.cameFrom)) {
+                prevNode = aNode.links[i];
+                break;
             }
         }
-        for (var i = aNode.links.length - 1; i >= 0; i--) {
-            if(aNode.links[i].node === prevNode){
-                return aNode.links[i];
-            }
-        }
+        return prevNode;
     },
 
     reconstructPath: function (node) {
@@ -185,26 +182,31 @@ document.getElementById("startgame").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         clickedNode = getNode(d.id);
         var edg;
-        var l;
+        var l1;
+        var l2;
         var e;
         var result = search.isNextStep(clickedNode);
 
         if (result instanceof Array) {
-            /*l = dijkstra.findLink(clickedNode);
-            for (var i = graph.edges.length - 1; i >= 0; i--) {
-                e = graph.edges[i];
-                if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
-                    edg = graph.edges[i];
-                    break;
+            console.log("uso u kraj");
+            for(var j = result.length -1; j > 0; j--){
+                l1 = result[j];
+                document.getElementById("#"+l1.id).getElementsByTagName("circle")[0].style.stroke = "GreenYellow";
+                l2 = result[j-1]
+                for (var i = graph.edges.length - 1; i >= 0; i--) {
+                    e = graph.edges[i];
+                    if( (e.source.id == l1.id && e.target.id == l2.id) || (e.target.id == l1.id && e.source.id == l2.id)){
+                        edg = graph.edges[i];
+                        break;
+                    }
                 }
+                document.getElementById(edg.id).style.stroke = "#005200";
             }
-            document.getElementById(edg.id).style.stroke = "green"; 
-            d3node.select("circle")[0][0].style.fill = "GreenYellow ";*/
+            d3node.select("circle")[0][0].style.fill = "GreenYellow";
             window.alert("dobro je, ne pritsci vise nista!");
             console.log(result);
-            //console.log(result);
         } else if (result) {
-           /* l = search.findLink(clickedNode);
+            var l = search.findLink(clickedNode);
             for (var i = graph.edges.length - 1; i >= 0; i--) {
                 e = graph.edges[i];
                 if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
@@ -213,16 +215,18 @@ document.getElementById("startgame").addEventListener("click", function() {
                 }
 
             }
-            document.getElementById(edg.id).style.stroke = "green";*/ 
-            d3node.select("circle")[0][0].style.fill = "GreenYellow ";
+            document.getElementById(edg.id).style.stroke = "#ff6d19"; 
+            d3node.select("circle")[0][0].style.fill = "##ff6d19";
+            d3node.on("mouseup",null);
         } else {
             wrongAnimation(d3node.select("circle"));
-
+            
         }
+
     }
 
-    document.getElementById("selectstart").setAttribute("disabled", "");
-    document.getElementById("selectend").setAttribute("disabled", "");
+    document.getElementById("selectstart").style.display = "none";
+    document.getElementById("selectend").style.display = "none";
 
     search = new BreadthFirstSearch(startNode, endNode);
 });
@@ -244,8 +248,10 @@ document.getElementById("enddrawing").addEventListener("click", function() {
         target.addLink(new Link(source, e.weight));
     }
 
-    document.getElementById("enddrawing").setAttribute("disabled", "");
-    document.getElementById("selectstart").removeAttribute("disabled");
+    document.getElementById("enddrawing").style.display = "none";
+    document.getElementById("selectstart").style.display = "inline-block";
+    document.getElementById("selectend").style.display = "inline-block";
+    document.getElementById("startgame").style.display = "inline-block";
 
 });
 

@@ -257,10 +257,12 @@ document.getElementById("startgame").addEventListener("click", function() {
             }
             document.getElementById(edg.id).style.stroke = "#ff6d19"; 
             d3node.select("circle")[0][0].style.fill = "##ff6d19";
+            d3node.on("mouseup",null);
         } else {
             wrongAnimation(d3node.select("circle"));
 
         }
+
     }
 
     document.getElementById("selectstart").style.display = "none";
