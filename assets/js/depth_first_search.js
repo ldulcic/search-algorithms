@@ -1,8 +1,10 @@
 function DepthFirstSearch (startNode, endNode, depth) {
 	this.startNode = startNode;
+   // console.log(startNode);
     if(depth !== undefined) this.startNode.depth = 0;
 	this.endNode = endNode;
     this.maxDepth = depth;
+    this.maxDepthTooSmall = [];
 	this.openedNodes = [];
 	this.visited = [startNode];
 	this.pathDoesntExist = false;
@@ -53,15 +55,25 @@ DepthFirstSearch.prototype = {
             } else {
                 this.expand(nodes);
             }
+        } else {
+            var nodes = node.expand();
+            for (var i = nodes.length - 1; i >= 0; i--) {
+                if(this.visited.indexOf(nodes[i]) == -1) {
+                    this.maxDepthTooSmall.push(nodes[i]);
+                }
+            }
         }
 		
         if(this.openedNodes.length == 0) {
 			this.pathDoesntExist = true;
 		} else {
 			this.nextStep = this.getNext();
-			if(this.nextStep == null) return null;
+			if(this.nextStep == null) {
+                this.pathDoesntExist = true;
+            }
 		}
-
+        //console.log(this.nextStep);
+        
 		return true;
 	},
 
@@ -120,6 +132,15 @@ DepthFirstSearch.prototype = {
         }
 
         return path;
+    },
+
+    isDepthTooSmall: function () {
+        for (var i = this.maxDepthTooSmall.length - 1; i >= 0; i--) {
+            if(this.visited.indexOf(this.maxDepthTooSmall[i]) == -1) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
@@ -159,7 +180,9 @@ graph.updateGraph();
 // LISTENERS
 document.getElementById("selectstart").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
+        console.log(d3node.node());
         startNode = getNode(d.id);
+        console.log(startNode);
         if (d3startNode != null) {
             d3startNode[0][0].setAttribute("stroke", "black");
         }
@@ -232,7 +255,15 @@ document.getElementById("startgame").addEventListener("click", function() {
             }
             document.getElementById(edg.id).style.stroke = "green";*/ 
             d3node.select("circle")[0][0].style.fill = "GreenYellow ";
+            if(search.pathDoesntExist) {
+                if(search.isDepthTooSmall()) {
+                    window.alert("depth premali");
+                } else {
+                    window.alert("ne postoji put");
+                }
+            }
         } else {
+            console.log(result);
             wrongAnimation(d3node.select("circle"));
         }
     }
@@ -240,7 +271,7 @@ document.getElementById("startgame").addEventListener("click", function() {
     document.getElementById("selectstart").setAttribute("disabled", "");
     document.getElementById("selectend").setAttribute("disabled", "");
 
-    search = new DepthFirstSearch(startNode, endNode, 2);
+    search = new DepthFirstSearch(startNode, endNode, 3);
 });
 
 document.getElementById("enddrawing").addEventListener("click", function() {

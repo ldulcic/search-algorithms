@@ -273,6 +273,10 @@ document.getElementById("startgame").addEventListener("click", function() {
     document.getElementById("selectend").style.display = "none";
 
     dijkstra = new Dijkstra(startNode, endNode);
+    if(dijkstra.pathDoesntExist){
+        window.alert("put ne postoji");
+        GraphCreator.prototype.circleMouseUp = function() {}
+    }
 });
 
 document.getElementById("enddrawing").addEventListener("click", function() {
