@@ -6,9 +6,11 @@ var Blob = window.Blob;
 
 // TODO add user settings
 var consts = {
-    defaultTitle: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
+    defaultTitle: "A".charCodeAt(),
+    numOfLettersInTitle: 1
 };
 var titleIndex = 0;
+var counter = 0;
 var settings = {
     appendElSpec: "#graph"
 };
@@ -41,7 +43,6 @@ var GraphCreator = function(svg, nodes, edges) {
     thisGraph.dragLine = svgG.append('svg:path')
         .attr('class', 'link dragline hidden')
         .attr('d', 'M0,0L0,0');
-    //.style('marker-end', 'url(#mark-end-arrow)');
 
     // svg nodes and edges
     thisGraph.paths = svgG.append("g").attr("id", "paths").selectAll("g");
@@ -126,6 +127,29 @@ var GraphCreator = function(svg, nodes, edges) {
     });
 
 
+    function adjustTitle (graph) {
+        console.log(graph.nodes.length);
+        var titleFound = false;
+        while(true) {
+            for (var i = 0; i < graph.nodes.length; i++) {
+                if(graph.nodes[i].title == String.fromCharCode(consts.defaultTitle)) {
+                    consts.defaultTitle++;
+                    if(consts.defaultTitle == "Z".charCodeAt() + 1) {
+                       consts.defaultTitle = "A".charCodeAt();
+                        consts.numOfLettersInTitle++;
+                    }
+                    titleFound = true;
+                    break;
+                }
+            }
+
+            if(!titleFound) {
+                return;
+            }
+            titleFound = false;
+        }
+    }
+
     // handle uploaded data
     d3.select("#upload-input").on("click", function() {
         document.getElementById("hidden-file-upload").click();
@@ -157,8 +181,9 @@ var GraphCreator = function(svg, nodes, edges) {
                         };
                     });
                     thisGraph.edges = newEdges;
+                    counter = thisGraph.edges.length;
                     thisGraph.updateGraph();
-                    this.setIdCt(thisGraph.nodes.length + 1);
+                    adjustTitle(thisGraph);
                 } catch (err) {
                     window.alert("Error parsing uploaded file\nerror message: " + err.message);
                     return;
@@ -427,7 +452,6 @@ GraphCreator.prototype.changeTextOfNode = function(d3node, d) {
     return d3txt;
 };
 
-var counter = 0;
 // mouseup on nodes
 GraphCreator.prototype.circleMouseUp = function(d3node, d) {
     var thisGraph = this,
@@ -465,7 +489,7 @@ GraphCreator.prototype.circleMouseUp = function(d3node, d) {
             thisGraph.selectElementContents(txtNode);
             txtNode.focus();
         }
-    } else {
+    } else {5
         // we're in the same node
         if (state.justDragged) {
             // dragged, not clicked
@@ -514,10 +538,23 @@ GraphCreator.prototype.svgMouseUp = function() {
         if (titleIndex == consts.defaultTitle.length) {
             titleIndex = 0;
         }
+
+        //novo
+        var title = "";
+        var letter = String.fromCharCode(consts.defaultTitle++);
+        for (var i = 0; i < consts.numOfLettersInTitle; i++) {
+            title += letter;
+        }
+        if(consts.defaultTitle == "Z".charCodeAt() + 1) {
+            consts.defaultTitle = "A".charCodeAt();
+            consts.numOfLettersInTitle++;
+        }
+        //novo
+
         var xycoords = d3.mouse(thisGraph.svgG.node()),
             d = {
                 id: ++thisGraph.idct,
-                title: /*(thisGraph.idct - 1).toString()*/consts.defaultTitle[thisGraph.idct],
+                title: title,
                 x: xycoords[0],
                 y: xycoords[1]
             };
@@ -633,7 +670,6 @@ GraphCreator.prototype.updateGraph = function() {
     // remove old links
     paths.exit().remove();
 
-//console.log(thisGraph.nodes);
     // update existing nodes
     thisGraph.circles = thisGraph.circles.data(thisGraph.nodes, function(d) {
         return d.id;
@@ -649,6 +685,9 @@ GraphCreator.prototype.updateGraph = function() {
     newGs.classed(consts.circleGClass, true)
         .attr("transform", function(d) {
             return "translate(" + d.x + "," + d.y + ")";
+        })
+        .attr("id",function(d) {
+            return "#" + d.id;
         })
         .on("mouseover", function(d) {
             if (state.shiftNodeDrag) {

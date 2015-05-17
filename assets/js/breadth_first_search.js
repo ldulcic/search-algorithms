@@ -1,107 +1,84 @@
-// ---------------- DIJKSTRA ----------------
-function Dijkstra(startNode, endNode) {
-    this.startNode = startNode;
-    this.startNode.value = 0;
-    this.endNode = endNode;
-    this.pathDoesntExist = false;
-    this.openNodes = [];
-    this.visited = [startNode];
-    this.expand(startNode.expand());
-    
-    if(this.openNodes.length == 0) {
-        this.pathDoesntExist = true;
-    } else {
-        this.nextSteps = this.getNext();
+function BreadthFirstSearch (startNode, endNode) {
+	this.startNode = startNode;
+	this.endNode = endNode;
+	this.openedNodes = [];
+	this.visited = [startNode];
+	this.pathDoesntExist = false;
+	
+    var nodes = this.startNode.expand();
+    for (var i = nodes.length - 1; i >= 0; i--) {
+        nodes[i].cameFrom = this.startNode;
     }
+    this.expand(nodes);
+
+	if(this.openedNodes.length == 0) {
+		this.pathDoesntExist = true;
+	} else {
+		this.nextStep = this.openedNodes.pop();
+	}
 }
 
-Dijkstra.prototype = {
-    constructor: Dijkstra,
+BreadthFirstSearch.prototype = {
+	
+	constructor: BreadthFirstSearch,
 
-    inNextSteps: function(node) {
-        if (node == endNode && this.nextSteps.indexOf(endNode) != -1) {
-            return this.reconstructPath(node);
-        }
+	isNextStep: function (node) {
+		if(this.nextStep == endNode && node == endNode) {
+			return this.reconstructPath(node);
+		}
 
-        var index = this.nextSteps.indexOf(node);
-        if (index == -1) {
-            return false;
-        }
+		if(this.nextStep != node) {
+			return false;
+		}
 
-        this.expand(node.expand());
-        this.nextSteps.splice(index, 1);
-        this.visited.push(node);
+		this.visited.push(node);
 
-        if (this.nextSteps.length == 0) {
-            for (var i = this.nextSteps.length - 1; i >= 0; i--) {
-                this.addToOpen(this.nextSteps[i]);
-            }
-            
-            this.nextSteps = this.getNext();
-            if(this.nextSteps == null) {
-                this.pathDoesntExist;
-            }
-        }
-        
-        return true;
-    },
-
-    expand: function(nodes) {
+        var nodes = node.expand();
         for (var i = nodes.length - 1; i >= 0; i--) {
-            if (this.visited.indexOf(nodes[i]) == -1) {
-                this.addToOpen(nodes[i]);
+            if(nodes[i].cameFrom == null && this.visited.indexOf(nodes[i]) == -1) {
+                nodes[i].cameFrom = node;
             }
         }
-    },
+		this.expand(nodes);
+		
+        if(this.openedNodes.length == 0) {
+			this.pathDoesntExist = true;
+		} else {
+			this.nextStep = this.getNext();
+			if(this.nextStep == null) return null;
+		}
 
-    getNext: function() {
-        while (this.openNodes.length != 0) {
-            var possibleNext = [];
-            var tmp = this.openNodes.pop();
+		return true;
+	},
 
-            if (this.visited.indexOf(tmp) == -1) {
-                possibleNext.push(tmp);
-                for (var i = this.openNodes.length - 1; i >= 0; i--) {
+	expand: function (nodes) {
+		nodes.sort(function (a, b) {
+			if(a.id < b.id) {
+				return 1;
+			} else if(a.id > b.id) {
+				return -1;
+			} else {
+				return 0;
+			}
+		});
 
-                    if (this.visited.indexOf(this.openNodes[i]) != -1) {
-                        this.openNodes.pop();
-                        continue;
-                    }
+		for (var i = nodes.length - 1; i >= 0; i--) {
+			if(this.visited.indexOf(nodes[i]) == -1) {
+				this.openedNodes.splice(0, 0, nodes[i]);
+			}
+		}
+	},
 
-                    if (this.openNodes[i].value == tmp.value) {
-                        var node = this.openNodes.pop();
-                        if (possibleNext.indexOf(node) == -1) {
-                            possibleNext.push(node);
-                        }
-                    } else {
-                        break;
-                    }
-
-                }
-                return possibleNext;
-            }
-        }
-        return null;
-    },
-
-    addToOpen: function(node) {
-        if (this.openNodes.length == 0) {
-            this.openNodes.push(node);
-            return;
-        }
-
-        if (node.value > this.openNodes[0].value) {
-            this.openNodes.splice(0, 0, node);
-            return;
-        }
-
-        for (var i = this.openNodes.length - 1; i >= 0; i--) {
-            if (this.openNodes[i].value >= node.value) {
-                this.openNodes.splice(i + 1, 0, node);
-                break;
-            }
-        }
-    },
+	getNext: function () {
+		var node;
+		while(this.openedNodes.length > 0) {
+			node = this.openedNodes.pop();
+			if(this.visited.indexOf(node) == -1) {
+				return node;
+			}
+		}
+		return null;
+	},
 
     findLink: function(aNode) {
         var prevNode;
@@ -129,8 +106,7 @@ Dijkstra.prototype = {
 
         return path;
     }
-
-};
+}
 
 // -------------------------------------------
 //                   MAIN
@@ -143,7 +119,7 @@ var endNode = null;
 var d3startNode = null;
 var d3endNode = null;
 var nodes = [];
-var dijkstra = null;
+var search = null;
 
 var docEl = document.documentElement,
     bodyEl = document.getElementsByTagName('body')[0];
@@ -209,31 +185,26 @@ document.getElementById("startgame").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         clickedNode = getNode(d.id);
         var edg;
-        var l1;
-        var l2;
+        var l;
         var e;
-        var result = dijkstra.inNextSteps(clickedNode);
+        var result = search.isNextStep(clickedNode);
 
         if (result instanceof Array) {
-            console.log("uso u kraj");
-            for(var j = result.length -1; j > 0; j--){
-                l1 = result[j];
-                l2 = result[j-1]
-                for (var i = graph.edges.length - 1; i >= 0; i--) {
-                    e = graph.edges[i];
-                    if( (e.source.id == l1.id && e.target.id == l2.id) || (e.target.id == l1.id && e.source.id == l2.id)){
-                        console.log("IF");
-                        edg = graph.edges[i];
-                        break;
-                    }
+            /*l = dijkstra.findLink(clickedNode);
+            for (var i = graph.edges.length - 1; i >= 0; i--) {
+                e = graph.edges[i];
+                if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
+                    edg = graph.edges[i];
+                    break;
                 }
-                document.getElementById(edg.id).style.stroke = "red";
             }
-            d3node.select("circle")[0][0].style.fill = "GreenYellow ";
+            document.getElementById(edg.id).style.stroke = "green"; 
+            d3node.select("circle")[0][0].style.fill = "GreenYellow ";*/
             window.alert("dobro je, ne pritsci vise nista!");
             console.log(result);
+            //console.log(result);
         } else if (result) {
-            l = dijkstra.findLink(clickedNode);
+           /* l = search.findLink(clickedNode);
             for (var i = graph.edges.length - 1; i >= 0; i--) {
                 e = graph.edges[i];
                 if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
@@ -242,7 +213,7 @@ document.getElementById("startgame").addEventListener("click", function() {
                 }
 
             }
-            document.getElementById(edg.id).style.stroke = "green"; 
+            document.getElementById(edg.id).style.stroke = "green";*/ 
             d3node.select("circle")[0][0].style.fill = "GreenYellow ";
         } else {
             wrongAnimation(d3node.select("circle"));
@@ -253,7 +224,7 @@ document.getElementById("startgame").addEventListener("click", function() {
     document.getElementById("selectstart").setAttribute("disabled", "");
     document.getElementById("selectend").setAttribute("disabled", "");
 
-    dijkstra = new Dijkstra(startNode, endNode);
+    search = new BreadthFirstSearch(startNode, endNode);
 });
 
 document.getElementById("enddrawing").addEventListener("click", function() {
