@@ -317,6 +317,7 @@ document.getElementById("startgame").addEventListener("click", function() {
 
     document.getElementById("selectstart").style.display = "none";
     document.getElementById("selectend").style.display = "none";
+    document.getElementById("startgame").style.display = "none";
 
     dijkstra = new Dijkstra(startNode, endNode);
     if(dijkstra.pathDoesntExist){
