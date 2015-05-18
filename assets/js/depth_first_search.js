@@ -237,14 +237,11 @@ graph.updateGraph();
 // LISTENERS
 document.getElementById("selectstart").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
-        console.log(d3node.node());
         startNode = getNode(d.id);
-        console.log(startNode);
         if (d3startNode != null) {
-            d3startNode[0][0].setAttribute("stroke", "black");
+            d3startNode.select("circle")[0][0].style.fill = "#F6FBFF";
         }
-        d3node[0][0].setAttribute("stroke", "green");
-        d3node.select("circle")[0][0].style.fill = "GreenYellow ";
+        d3node.select("circle")[0][0].style.fill = "#9bafd7";
         d3startNode = d3node;
         document.getElementById("selectend").removeAttribute("disabled");
     }
@@ -270,9 +267,9 @@ document.getElementById("selectend").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         endNode = getNode(d.id);
         if (d3endNode != null) {
-            d3endNode[0][0].setAttribute("stroke", "black");
+            d3endNode.select("circle")[0][0].setAttribute("style", "stroke-width:2px");
         }
-        d3node[0][0].setAttribute("stroke", "red");
+        d3node.select("circle")[0][0].setAttribute("style", "stroke-width:5px");
         d3endNode = d3node;
         document.getElementById("startgame").removeAttribute("disabled");
     }
@@ -282,25 +279,32 @@ document.getElementById("startgame").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         clickedNode = getNode(d.id);
         var edg;
-        var l;
+        var l1;
+        var l2;
         var e;
         var result = search.isNextStep(clickedNode);
 
         if (result instanceof Array) {
-           /* l = dijkstra.findLink(clickedNode);
-            for (var i = graph.edges.length - 1; i >= 0; i--) {
-                e = graph.edges[i];
-                if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
-                    edg = graph.edges[i];
-                    break;
+            console.log("uso u kraj");
+            for(var j = result.length -1; j > 0; j--){
+                l1 = result[j];
+                document.getElementById("#"+l1.id).getElementsByTagName("circle")[0].style.fill = "#83d675";
+                l2 = result[j-1]
+                for (var i = graph.edges.length - 1; i >= 0; i--) {
+                    e = graph.edges[i];
+                    if( (e.source.id == l1.id && e.target.id == l2.id) || (e.target.id == l1.id && e.source.id == l2.id)){
+                        edg = graph.edges[i];
+                        break;
+                    }
                 }
+                document.getElementById(edg.id).style.stroke = "#83d675";
             }
-            document.getElementById(edg.id).style.stroke = "green"; 
-            d3node.select("circle")[0][0].style.fill = "GreenYellow ";
-            window.alert("dobro je, ne pritsci vise nista!");*/
+            document.getElementById("#"+result[0].id).getElementsByTagName("circle")[0].style.fill = "#83d675";
+            d3node.select("circle")[0][0].style.fill = "#83d675";
+            window.alert("dobro je, ne pritsci vise nista!");
             console.log(result);
         } else if (result) {
-            l = search.findLink(clickedNode);
+            var l = search.findLink(clickedNode);
             for (var i = graph.edges.length - 1; i >= 0; i--) {
                 e = graph.edges[i];
                 if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
@@ -309,25 +313,30 @@ document.getElementById("startgame").addEventListener("click", function() {
                 }
 
             }
-            document.getElementById(edg.id).style.stroke = "green"; 
-            d3node.select("circle")[0][0].style.fill = "GreenYellow ";
-            if(search.pathDoesntExist) {
-                if(search.isDepthTooSmall()) {
-                    window.alert("depth premali");
-                } else {
-                    window.alert("ne postoji put");
+            document.getElementById(edg.id).style.stroke = "#9bafd7"; 
+            d3node.select("circle")[0][0].style.fill = "#9bafd7";
+            d3node.on("mouseup",null);
+            if(search.pathDoesntExist){
+                window.alert("put ne postoji");
+                GraphCreator.prototype.circleMouseUp = function() {
                 }
             }
         } else {
-            console.log(result);
             wrongAnimation(d3node.select("circle"));
+            
         }
+
     }
 
-    document.getElementById("selectstart").setAttribute("disabled", "");
-    document.getElementById("selectend").setAttribute("disabled", "");
+    document.getElementById("selectstart").style.display = "none";
+    document.getElementById("selectend").style.display = "none";
+    document.getElementById("startgame").style.display = "none";
 
-    search = new DepthFirstSearch(startNode, endNode, 3);
+    search = new DepthFirstSearch(startNode, endNode, 3, false);
+    if(search.pathDoesntExist){
+        window.alert("put ne postoji");
+        GraphCreator.prototype.circleMouseUp = function() {}
+    }
 });
 
 document.getElementById("enddrawing").addEventListener("click", function() {
@@ -347,8 +356,10 @@ document.getElementById("enddrawing").addEventListener("click", function() {
         target.addLink(new Link(source, e.weight));
     }
 
-    document.getElementById("enddrawing").setAttribute("disabled", "");
-    document.getElementById("selectstart").removeAttribute("disabled");
+    document.getElementById("enddrawing").style.display = "none";
+    document.getElementById("selectstart").style.display = "inline-block";
+    document.getElementById("selectend").style.display = "inline-block";
+    document.getElementById("startgame").style.display = "inline-block";
 
 });
 
@@ -363,7 +374,6 @@ document.getElementById("graph2").addEventListener("click",
 		createGraph({"nodes":[{"id":3,"title":"A","x":98,"y":102},{"id":4,"title":"B","x":535,"y":306},{"id":5,"title":"C","x":311,"y":304},{"id":6,"title":"D","x":316,"y":103},{"id":7,"title":"E","x":647,"y":210},{"id":8,"title":"F","x":102,"y":304},{"id":9,"title":"G","x":533,"y":466},{"id":10,"title":"H","x":534,"y":101}],"edges":[{"source":3,"target":6,"id":"pathId0","weight":""},{"source":5,"target":10,"id":"pathId2","weight":""},{"source":6,"target":4,"id":"pathId4","weight":""},{"source":5,"target":9,"id":"pathId5","weight":""},{"source":10,"target":7,"id":"pathId6","weight":""},{"source":4,"target":7,"id":"pathId7","weight":""},{"source":3,"target":8,"id":"pathId8","weight":""},{"source":8,"target":5,"id":"pathId9","weight":""}]},3,7);
 	}
 );
-
 document.getElementById("graph3").addEventListener("click",
 	function(){
 		createGraph({"nodes":[{"id":3,"title":"A","x":730,"y":362},{"id":4,"title":"B","x":461,"y":77},{"id":5,"title":"C","x":371,"y":517},{"id":6,"title":"D","x":461,"y":302},{"id":7,"title":"E","x":144,"y":369},{"id":10,"title":"H","x":706,"y":517},{"id":11,"title":"I","x":199,"y":512},{"id":12,"title":"J","x":278,"y":173},{"id":13,"title":"K","x":634,"y":171},{"id":14,"title":"L","x":532,"y":520}],"edges":[{"source":6,"target":4,"id":"pathId0","weight":""},{"source":6,"target":10,"id":"pathId1","weight":""},{"source":6,"target":11,"id":"pathId2","weight":""},{"source":11,"target":7,"id":"pathId3","weight":""},{"source":11,"target":5,"id":"pathId4","weight":""},{"source":3,"target":10,"id":"pathId5","weight":""},{"source":4,"target":13,"id":"pathId11","weight":""},{"source":4,"target":12,"id":"pathId12","weight":""},{"source":14,"target":10,"id":"pathId13","weight":""}]},3,7);
