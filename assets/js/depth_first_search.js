@@ -49,6 +49,8 @@ function Link(node, value) {
 Link.prototype = {
     constructor: Link
 };
+
+// ---------------- DEPTH FIRST ----------------
 function DepthFirstSearch (startNode, endNode, depth, iterative) {
 	this.startNode = startNode;
     if(depth !== undefined) this.startNode.depth = 0;

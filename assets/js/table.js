@@ -89,6 +89,7 @@ var Table = function module() {
                 .text(function(d, i){return d;});
 
             // Body
+            var counter = 0;
             var row = tableBodySvg.selectAll('g.row')
                 .data(value);
             row.enter().append('g')
@@ -112,7 +113,8 @@ var Table = function module() {
                             x: function(d, i){return i * cellW + (cellW * rowHeaderLevelNum)},
                             y: function(d, i){return pI * cellH + 2*cellH},
                             dx: cellW/2,
-                            dy: cellH/2
+                            dy: cellH/2,
+                            id: "tableData" + counter++
                         })
                         .style({fill:'black', 'text-anchor':'middle'})
                         .text(function(d, i){return d;});

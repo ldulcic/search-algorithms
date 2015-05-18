@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Dijkstra's algorithm</title>
+    <title>Iterative deepening depth-first search</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
@@ -47,9 +47,10 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Algorithms<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li class="active"><a href="dijkstra.html">Dijkstra's algorithm<span class="sr-only">(current)</span></a></li>
+                            <li><a href="dijkstra.html">Dijkstra's algorithm</a></li>
                             <li><a href="breadth.html">Breadth-first search</a></li>
                             <li><a href="depth.html">Depth-first search</a></li>
+                            <li class="active"><a href="iterative.html">Iterative deepening depth-first search<span class="sr-only">(current)</span></a></li>
                         </ul>
                     </li> 
                 </ul>
@@ -64,49 +65,28 @@
     </nav>
 
     <div class="odd-section">
-        <iframe class="col-md-7" id="myframe" src="dijkstra_fs.html" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+        <iframe class="col-md-7" src="iterative_fs.html" marginwidth="0" marginheight="0" scrolling="no"></iframe>
         <div class="col-md-5">
-        <h1>Dijkstra's algorithm</h1>
+        <h1>Iterative deepening depth-first search</h1>
 		<br>
         <p><b>How does it work?</b></p>
 		<br><font color="gray">
 		<p><b>RULE</b></p> 
-		<p>You have to select the node adjacent to one of <b>open nodes</b> that has the least <b>cumulative weight</b>.</p>
+		<p></p>
         <br>
 		<p><b>EXPLANATION</b></p>
-		<p><b>open node</b><br>any node that you have already selected plus start node</p>
-		<p><b>cumulative weight</b><br>sum of all weights on path between the starting node and the node whose cummulative weight you calculate</p>
+		<p></p>
 		</font><br>
 		<p><b>Still confused?</b></p>
-		<font color="gray"><p><a href="http://en.wikipedia.org/wiki/Dijkstra%27s_algorithm" target="_blank">Read more about it</a> and then return here to try out what you learned.</p></font>
+		<font color="gray"><p><a href="http://en.wikipedia.org/wiki/Iterative_deepening_depth-first_search" target="_blank">Read more about it</a> and then return here to try out what you learned.</p></font>
 		</div>
     </div>
 
-    <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
     <!-- jQuery -->
     <script src="../assets/js/jquery.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="../assets/js/bootstrap.min.js"></script>
-    <script>
-    $( "#myframe" ).load(function(){
-
-        var full = false;
-        var framD3 = d3.select("#myframe");
-        var fram = document.getElementById("myframe");
-        var myDiv = document.getElementsByClassName("col-md-5")[0];
-        fram.contentDocument.getElementById("fullscreen").addEventListener("click", function() {
-            if(full){
-               myDiv.style.display = "inline";
-               framD3.classed("col-md-12",false).classed("col-md-7",true);
-               full = false;
-            }else{
-                myDiv.style.display = "none";
-                framD3.classed("col-md-7",false).classed("col-md-12",true);
-                full = true;}
-        }, false);
-    });
-    </script>
 
 </body>
 
