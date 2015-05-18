@@ -214,6 +214,20 @@ var GraphCreator = function(svg, nodes, edges) {
     d3.select("#delete-graph").on("click", function() {
         thisGraph.deleteGraph(false);
     });
+
+    d3.select("#reset").on("click", function(){
+        GraphCreator.prototype.svgKeyDown = svgKeyD;
+        GraphCreator.prototype.svgMouseUp = svgMouseU;
+        GraphCreator.prototype.circleMouseDown = circleMouseD;
+        GraphCreator.prototype.dragmove = dragmov;
+        GraphCreator.prototype.pathMouseDown = pathMouseD;
+        GraphCreator.prototype.circleMouseUp = circleMouseU;
+        document.getElementById("enddrawing").style.display = "inline-block";
+        document.getElementById("selectstart").style.display = "none";
+        document.getElementById("selectend").style.display = "none";
+        document.getElementById("startgame").style.display = "none";
+        thisGraph.deleteGraph(false);
+    });
 };
 
 GraphCreator.prototype.setIdCt = function(idct) {
@@ -244,6 +258,7 @@ GraphCreator.prototype.dragmove = function(d) {
         thisGraph.updateGraph();
     }
 };
+var dragmov = GraphCreator.prototype.dragmove;
 
 GraphCreator.prototype.deleteGraph = function(skipPrompt) {
     var thisGraph = this,
@@ -255,6 +270,10 @@ GraphCreator.prototype.deleteGraph = function(skipPrompt) {
         thisGraph.nodes = [];
         thisGraph.edges = [];
         d3.select("svg").selectAll("text").remove();
+        consts.defaultTitle = "A".charCodeAt();
+        consts.numOfLettersInTitle = 1;
+        this.setIdCt(1);
+        console.log(consts.defaultTitle);
         thisGraph.updateGraph();
     }
 };
@@ -352,6 +371,7 @@ GraphCreator.prototype.pathMouseDown = function(d3path, d) {
         thisGraph.removeSelectFromEdge();
     }
 };
+var pathMouseD = GraphCreator.prototype.pathMouseDown;
 
 // mousedown on node
 GraphCreator.prototype.circleMouseDown = function(d3node, d) {
@@ -367,6 +387,7 @@ GraphCreator.prototype.circleMouseDown = function(d3node, d) {
         return;
     }
 };
+var circleMouseD = GraphCreator.prototype.circleMouseDown;
 
 GraphCreator.prototype.changeWeightOfLink = function(d3edge, d) {
     var id = d3edge.node().getAttribute("id");
@@ -536,6 +557,7 @@ GraphCreator.prototype.circleMouseUp = function(d3node, d) {
     return;
 
 }; // end of circles mouseup
+var circleMouseU = GraphCreator.prototype.circleMouseUp;
 
 // mousedown on main svg
 GraphCreator.prototype.svgMouseDown = function() {
@@ -593,6 +615,7 @@ GraphCreator.prototype.svgMouseUp = function() {
     }
     state.graphMouseDown = false;
 };
+var svgMouseU = GraphCreator.prototype.svgMouseUp;
 
 // keydown on main svg
 GraphCreator.prototype.svgKeyDown = function() {
@@ -629,6 +652,7 @@ GraphCreator.prototype.svgKeyDown = function() {
             break;
     }
 };
+var svgKeyD = GraphCreator.prototype.svgKeyDown;
 
 GraphCreator.prototype.svgKeyUp = function() {
     this.state.lastKeyDown = -1;

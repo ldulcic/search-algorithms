@@ -37,23 +37,18 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav">
-                    <li>
-                        <a href="algorithm/dijkstra.html">Dijkstra's algorithm</a>
-                    </li>
-                    <li>
-                        <a href="#">Breadth first search algorithm</a>
-                    </li>
-                    <li>
-                        <a href="#">Algorithm 3</a>
-                    </li>
-                    <li>
-                        <a href="index.html#about">About</a>
-                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Algorithms<span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="algorithm/dijkstra.html">Dijkstra's algorithm</a></li>
+                            <li><a href="algorithm/breadth.html">Breadth-first search</a></li>
+                            <li><a href="depth.html">Depth-first search</a></li>
+                        </ul>
+                    </li> 
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="active">
-                        <a href="help.html">Help<span class="sr-only">(current)</span></a>
-                    </li>
+                    <li class="active"><a href="help.html">Help<span class="sr-only">(current)</span></a></li>
+                    <li><a href="index.html#about">About</a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -89,10 +84,11 @@
 		</div>
     </div>
 
-    <!-- d3 JavaScript -->
-    <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
-    <!-- fileSaver JavaScript -->
-    <script src="http://cdn.jsdelivr.net/filesaver.js/0.1/FileSaver.min.js"></script>
+    <!-- jQuery -->
+    <script src="assets/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="assets/js/bootstrap.min.js"></script>
 
 </body>
 
