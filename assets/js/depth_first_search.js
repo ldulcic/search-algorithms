@@ -164,20 +164,18 @@ DepthFirstSearch.prototype = {
 		return null;
 	},
 
+
     findLink: function(aNode) {
         var prevNode;
         var tempnode;
         for (var i = aNode.links.length - 1; i >= 0; i--) {
             tempnode = aNode.links[i].node;
-            if (  (this.visited.indexOf(tempnode) != -1) && (tempnode.value + aNode.links[i].value == aNode.value)) {
-                prevNode = tempnode;
+            if (  (this.visited.indexOf(tempnode) != -1) && ( tempnode == aNode.cameFrom)) {
+                prevNode = aNode.links[i];
+                break;
             }
         }
-        for (var i = aNode.links.length - 1; i >= 0; i--) {
-            if(aNode.links[i].node === prevNode){
-                return aNode.links[i];
-            }
-        }
+        return prevNode;
     },
 
     reconstructPath: function (node) {
@@ -283,6 +281,7 @@ document.getElementById("startgame").addEventListener("click", function() {
         var l2;
         var e;
         var result = search.isNextStep(clickedNode);
+        console.log(result);
 
         if (result instanceof Array) {
             console.log("uso u kraj");
