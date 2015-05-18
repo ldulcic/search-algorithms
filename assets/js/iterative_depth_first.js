@@ -176,7 +176,21 @@ document.getElementById("enddrawing").addEventListener("click", function() {
     document.getElementById("enddrawing").setAttribute("disabled", "");
     document.getElementById("selectstart").removeAttribute("disabled");
 
-});
+    var dataset = {
+    rowLabel: ['Heuristic values', 'A', 'B', 'C', 'D'],
+    columnLabel: ['P'],
+    value: [[1], [5], [9], [13], [17]]
+    };
+                        
+    var width = 300;
+    var height = 200;
+
+    var table = Table().width(width).height(height);
+
+    d3.select('svg')
+        .datum(dataset)
+        .call(table);
+    });
 
 document.getElementById("graph1").addEventListener("click",
     function() {
