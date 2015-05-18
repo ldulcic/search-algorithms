@@ -330,6 +330,7 @@ document.getElementById("startgame").addEventListener("click", function() {
 
     document.getElementById("selectstart").style.display = "none";
     document.getElementById("selectend").style.display = "none";
+    document.getElementById("startgame").style.display = "none";
 
     search = new DepthFirstSearch(startNode, endNode, 3, false);
     if(search.pathDoesntExist){
