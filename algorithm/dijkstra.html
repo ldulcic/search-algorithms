@@ -89,6 +89,8 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="../assets/js/bootstrap.min.js"></script>
     <script>
+    $( "#myframe" ).load(function(){
+
         var full = false;
         var framD3 = d3.select("#myframe");
         var fram = document.getElementById("myframe");
@@ -103,7 +105,7 @@
                 framD3.classed("col-md-7",false).classed("col-md-12",true);
                 full = true;}
         }, false);
-
+    });
     </script>
 
 </body>
