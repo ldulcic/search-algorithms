@@ -1,3 +1,207 @@
+// -------------------------------------------
+//                 OBJECTS
+// -------------------------------------------
+// ---------------- NODE ----------------
+function Node(x, y, id) {
+    this.id = id;
+    this.x = x;
+    this.y = y;
+    this.depth;
+    this.cameFrom = null;
+    this.links = [];
+}
+
+Node.prototype = {
+
+    constructor: Node,
+
+    addLink: function(link) {
+        this.links.push(link);
+    },
+
+    removeLink: function(link) {
+        var i = this.links.indexOf(link);
+        if (i > -1) {
+            this.links.splice(i, 1);
+        }
+    },
+
+    expand: function() {
+        var nodes = [];
+        var node;
+        for (var i = this.links.length - 1; i >= 0; i--) {
+            node = this.links[i].node;
+            nodes.push(node);
+        }
+        return nodes;
+    }
+
+
+
+};
+
+// ---------------- LINK ----------------
+function Link(node, value) {
+    this.node = node;
+    this.value = value;
+}
+
+Link.prototype = {
+    constructor: Link
+};
+
+// ---------------- DEPTH FIRST ----------------
+function DepthFirstSearch (startNode, endNode, depth, iterative) {
+    this.startNode = startNode;
+    if(depth !== undefined) this.startNode.depth = 0;
+    this.endNode = endNode;
+    this.maxDepth = depth;
+    this.maxDepthTooSmall = [];
+    this.openedNodes = [];
+    this.visited = [startNode];
+    this.pathDoesntExist = false;
+    
+    if((depth !== undefined && depth == 0) || iterative !== undefined) {//iterative means we are using this search as a helper in iterative depth first
+        this.nextStep = startNode;
+        this.maxDepthTooSmall.push(new Node(0, 0, 0));//dummy node, it is added so function isDepthTooSmall would return true
+        return;
+    }
+
+    var nodes = this.startNode.expand();
+    for (var i = nodes.length - 1; i >= 0; i--) {
+        nodes[i].cameFrom = this.startNode;
+    }
+
+    if(depth !== undefined) {
+        this.expand(nodes, this.startNode.depth + 1);
+    } else {
+        this.expand(nodes);
+    }
+
+    if(this.openedNodes.length == 0) {
+        this.pathDoesntExist = true;
+    } else {
+        this.nextStep = this.openedNodes.pop();
+    }
+}
+
+DepthFirstSearch.prototype = {
+    
+    constructor: DepthFirstSearch,
+
+    isNextStep: function (node) {
+        if(this.nextStep == endNode && node == endNode) {
+            return this.reconstructPath(node);
+        }
+
+        if(this.nextStep != node) {
+            return false;
+        }
+
+        this.visited.push(node);
+
+        if(this.maxDepth === undefined || node.depth < this.maxDepth) {
+            var nodes = node.expand();
+            for (var i = nodes.length - 1; i >= 0; i--) {
+                if(this.visited.indexOf(nodes[i]) == -1) {
+                    nodes[i].cameFrom = node;
+                }
+            }
+
+            if(this.maxDepth !== undefined) {
+               this.expand(nodes, node.depth + 1);
+            } else {
+                this.expand(nodes);
+            }
+        } else {
+            var nodes = node.expand();
+            for (var i = nodes.length - 1; i >= 0; i--) {
+                if(this.visited.indexOf(nodes[i]) == -1) {
+                    this.maxDepthTooSmall.push(nodes[i]);
+                }
+            }
+        }
+        
+        if(this.openedNodes.length == 0) {
+            this.pathDoesntExist = true;
+        } else {
+            this.nextStep = this.getNext();
+            if(this.nextStep == null) {
+                this.pathDoesntExist = true;
+            }
+        }
+        
+        return true;
+    },
+
+    expand: function (nodes, depth) {
+        nodes.sort(function (a, b) {
+            if(a.id < b.id) {
+                return -1;
+            } else if(a.id > b.id) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+
+        for (var i = nodes.length - 1; i >= 0; i--) {
+            if(this.visited.indexOf(nodes[i]) == -1) {
+                if(depth !== undefined) nodes[i].depth = depth;
+                this.openedNodes.push(nodes[i]); 
+            }
+        }
+    },
+
+    getNext: function () {
+        var node;
+        while(this.openedNodes.length > 0) {
+            node = this.openedNodes.pop();
+            if(this.visited.indexOf(node) == -1) {
+                return node;
+            }
+        }
+        return null;
+    },
+
+    findLink: function(aNode) {
+        var prevNode;
+        var tempnode;
+        for (var i = aNode.links.length - 1; i >= 0; i--) {
+            tempnode = aNode.links[i].node;
+            if (  (this.visited.indexOf(tempnode) != -1) && (tempnode.value + aNode.links[i].value == aNode.value)) {
+                prevNode = tempnode;
+            }
+        }
+        for (var i = aNode.links.length - 1; i >= 0; i--) {
+            if(aNode.links[i].node === prevNode){
+                return aNode.links[i];
+            }
+        }
+    },
+
+    reconstructPath: function (node) {
+        var path = [node];
+        var tmp;
+        while((tmp = node.cameFrom) != null) {
+            path.splice(0, 0, tmp);
+            node = tmp;
+        }
+
+        return path;
+    },
+
+    isDepthTooSmall: function () {
+        for (var i = this.maxDepthTooSmall.length - 1; i >= 0; i--) {
+            if(this.visited.indexOf(this.maxDepthTooSmall[i]) == -1) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+// ---------------- ITERATIVE DEPTH FIRST ----------------
 function IterativeDepthFirstSearch (startNode, endNode) {
 	this.startNode = startNode;
 	this.endNode = endNode;
