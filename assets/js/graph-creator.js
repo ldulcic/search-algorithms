@@ -446,6 +446,59 @@ GraphCreator.prototype.changeWeightOfLink = function(d3edge, d) {
     return d3txt;
 };
 
+var currentId = 0;
+GraphCreator.prototype.changeTableData = function(d3lal, d) {
+    d3cell = d3.select("#tableData" + currentId);
+    var thisGraph = this,
+        consts = thisGraph.consts,
+        htmlEl = d3cell.node();
+
+    if(htmlEl == null) return;//kraj editiranja tablice
+
+    var nodeBCR = htmlEl.getBoundingClientRect(),
+        curScale = nodeBCR.width / consts.nodeRadius,
+        placePad = 5 * curScale,
+        useHW = curScale > 1 ? nodeBCR.width * 0.71 : consts.nodeRadius * 1.42;
+
+    // replace with editableconent text
+    var d3txt = thisGraph.svg.selectAll("foreignObject")
+        .data([d])
+        .enter()
+        .append("foreignObject")
+        .attr("x", nodeBCR.left - 6)
+        .attr("y", nodeBCR.top - 20)
+        .attr("height", 2 * useHW)
+        .attr("width", 20)
+        .append("xhtml:p")
+        .attr("id", consts.activeEditId)
+        .attr("contentEditable", "true")
+        .text(1)
+        .style("opacity", "10%")
+        .on("mousedown", function(d) {
+            d3.event.stopPropagation();
+        })
+        .on("keydown", function(d) {
+            d3.event.stopPropagation();
+            if (d3.event.keyCode == consts.ENTER_KEY && !d3.event.shiftKey) {
+                this.blur();
+            }
+        })
+        .on("blur", function(d) {
+            var value = parseInt(this.textContent);
+            if(isNaN(value) || value < 0) {
+                value = 1;
+            }
+            d3.select("#tableData" + currentId++).text(value);
+            d3.select(this.parentElement).remove();
+            thisGraph.changeTableData();
+        });
+        d3cell.text("");
+        var txtNode = d3txt.node();
+        thisGraph.selectElementContents(txtNode);
+        txtNode.focus();
+    return d3txt;
+};
+
 /* place editable text on node in place of svg text */
 GraphCreator.prototype.changeTextOfNode = function(d3node, d) {
     var thisGraph = this,
