@@ -324,8 +324,9 @@ document.getElementById("startgame").addEventListener("click", function() {
         }
     }
 
-    document.getElementById("selectstart").setAttribute("disabled", "");
-    document.getElementById("selectend").setAttribute("disabled", "");
+    document.getElementById("selectstart").style.display = "none";
+    document.getElementById("selectend").style.display = "none";
+    document.getElementById("startgame").style.display = "none";
 
     search = new DepthFirstSearch(startNode, endNode, 3);
 });
@@ -347,8 +348,10 @@ document.getElementById("enddrawing").addEventListener("click", function() {
         target.addLink(new Link(source, e.weight));
     }
 
-    document.getElementById("enddrawing").setAttribute("disabled", "");
-    document.getElementById("selectstart").removeAttribute("disabled");
+    document.getElementById("enddrawing").style.display = "none";
+    document.getElementById("selectstart").style.display = "inline-block";
+    document.getElementById("selectend").style.display = "inline-block";
+    document.getElementById("startgame").style.display = "inline-block";
 
 });
 
