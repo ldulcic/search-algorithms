@@ -60,7 +60,7 @@ function Dijkstra(startNode, endNode) {
     this.pathDoesntExist = false;
     this.openNodes = [];
     this.visited = [startNode];
-    
+	
     var nodes = this.startNode.expand();
     for (var i = nodes.length - 1; i >= 0; i--) {
         nodes[i].cameFrom = this.startNode;
@@ -232,6 +232,7 @@ document.getElementById("selectstart").addEventListener("click", function() {
         }
         d3node.select("circle")[0][0].style.fill = "#9bafd7";
         d3startNode = d3node;
+		console.log(d3startNode);
         document.getElementById("selectend").removeAttribute("disabled");
     }
 
@@ -317,6 +318,7 @@ document.getElementById("startgame").addEventListener("click", function() {
 
     document.getElementById("selectstart").style.display = "none";
     document.getElementById("selectend").style.display = "none";
+    document.getElementById("startgame").style.display = "none";
 
     dijkstra = new Dijkstra(startNode, endNode);
     if(dijkstra.pathDoesntExist){
@@ -351,32 +353,31 @@ document.getElementById("enddrawing").addEventListener("click", function() {
 
 document.getElementById("graph1").addEventListener("click",
     function() {
-        createGraph({"nodes":[{"id":2,"title":"A","x":161,"y":327},{"id":3,"title":"B","x":462,"y":131},{"id":4,"title":"C","x":470,"y":507},{"id":5,"title":"D","x":759,"y":311}],"edges":[{"source":2,"target":3,"id":"pathId4","weight":Math.floor((Math.random() * 10) + 1)},{"source":2,"target":4,"id":"pathId5","weight":Math.floor((Math.random() * 10) + 1)},{"source":4,"target":5,"id":"pathId6","weight":Math.floor((Math.random() * 10) + 1)},{"source":3,"target":5,"id":"pathId7","weight":Math.floor((Math.random() * 10) + 1)}]});
+        createGraph({"nodes":[{"id":2,"title":"A","x":161,"y":327},{"id":3,"title":"B","x":462,"y":131},{"id":4,"title":"C","x":470,"y":507},{"id":5,"title":"D","x":759,"y":311}],"edges":[{"source":2,"target":3,"id":"pathId4","weight":Math.floor((Math.random() * 10) + 1)},{"source":2,"target":4,"id":"pathId5","weight":Math.floor((Math.random() * 10) + 1)},{"source":4,"target":5,"id":"pathId6","weight":Math.floor((Math.random() * 10) + 1)},{"source":3,"target":5,"id":"pathId7","weight":Math.floor((Math.random() * 10) + 1)}]},2,5);
 	});
 	
 document.getElementById("graph2").addEventListener("click",
 	function() {
-		createGraph({"nodes":[{"id":2,"title":"A","x":69,"y":358},{"id":3,"title":"B","x":342,"y":141},{"id":4,"title":"C","x":305,"y":527},{"id":5,"title":"D","x":661,"y":151},{"id":6,"title":"E","x":652,"y":533},{"id":7,"title":"F","x":887,"y":355}],"edges":[{"source":6,"target":7,"id":"pathId5","weight":Math.floor((Math.random() * 20) + 1)},{"source":5,"target":7,"id":"pathId6","weight":Math.floor((Math.random() * 20) + 1)},{"source":2,"target":3,"id":"pathId7","weight":Math.floor((Math.random() * 20) + 1)},{"source":2,"target":4,"id":"pathId8","weight":Math.floor((Math.random() * 20) + 1)},{"source":4,"target":5,"id":"pathId9","weight":Math.floor((Math.random() * 20) + 1)},{"source":3,"target":6,"id":"pathId10","weight":Math.floor((Math.random() * 20) + 1)}]});
+		createGraph({"nodes":[{"id":2,"title":"A","x":69,"y":358},{"id":3,"title":"B","x":342,"y":141},{"id":4,"title":"C","x":305,"y":527},{"id":5,"title":"D","x":661,"y":151},{"id":6,"title":"E","x":652,"y":533},{"id":7,"title":"F","x":887,"y":355}],"edges":[{"source":6,"target":7,"id":"pathId5","weight":Math.floor((Math.random() * 20) + 1)},{"source":5,"target":7,"id":"pathId6","weight":Math.floor((Math.random() * 20) + 1)},{"source":2,"target":3,"id":"pathId7","weight":Math.floor((Math.random() * 20) + 1)},{"source":2,"target":4,"id":"pathId8","weight":Math.floor((Math.random() * 20) + 1)},{"source":4,"target":5,"id":"pathId9","weight":Math.floor((Math.random() * 20) + 1)},{"source":3,"target":6,"id":"pathId10","weight":Math.floor((Math.random() * 20) + 1)}]},2,7);
 	});	
 	
 document.getElementById("graph3").addEventListener("click",
 	function(){
-		createGraph({"nodes":[{"id":2,"title":"A","x":75,"y":322},{"id":3,"title":"B","x":341,"y":82},{"id":4,"title":"C","x":341,"y":546},{"id":5,"title":"D","x":583,"y":312},{"id":6,"title":"E","x":820,"y":96},{"id":7,"title":"F","x":818,"y":534},{"id":8,"title":"G","x":578,"y":745},{"id":9,"title":"H","x":592,"y":-124},{"id":10,"title":"I","x":1048,"y":329}],"edges":[{"source":6,"target":10,"id":"pathId11","weight":Math.floor((Math.random() * 30) + 1)},{"source":2,"target":3,"id":"pathId12","weight":Math.floor((Math.random() * 30) + 1)},{"source":2,"target":4,"id":"pathId13","weight":Math.floor((Math.random() * 30) + 1)},{"source":3,"target":5,"id":"pathId14","weight":Math.floor((Math.random() * 30) + 1)},{"source":3,"target":9,"id":"pathId15","weight":Math.floor((Math.random() * 30) + 1)},{"source":4,"target":5,"id":"pathId16","weight":Math.floor((Math.random() * 30) + 1)},{"source":4,"target":8,"id":"pathId17","weight":Math.floor((Math.random() * 30) + 1)},{"source":8,"target":7,"id":"pathId18","weight":Math.floor((Math.random() * 30) + 1)},{"source":5,"target":7,"id":"pathId19","weight":Math.floor((Math.random() * 30) + 1)},{"source":7,"target":10,"id":"pathId20","weight":Math.floor((Math.random() * 30) + 1)},{"source":5,"target":6,"id":"pathId21","weight":Math.floor((Math.random() * 30) + 1)},{"source":9,"target":6,"id":"pathId22","weight":Math.floor((Math.random() * 30) + 1)}]});
+		createGraph({"nodes":[{"id":2,"title":"A","x":75,"y":322},{"id":3,"title":"B","x":341,"y":82},{"id":4,"title":"C","x":341,"y":546},{"id":5,"title":"D","x":583,"y":312},{"id":6,"title":"E","x":820,"y":96},{"id":7,"title":"F","x":818,"y":534},{"id":8,"title":"G","x":578,"y":745},{"id":9,"title":"H","x":592,"y":-124},{"id":10,"title":"I","x":1048,"y":329}],"edges":[{"source":6,"target":10,"id":"pathId11","weight":Math.floor((Math.random() * 30) + 1)},{"source":2,"target":3,"id":"pathId12","weight":Math.floor((Math.random() * 30) + 1)},{"source":2,"target":4,"id":"pathId13","weight":Math.floor((Math.random() * 30) + 1)},{"source":3,"target":5,"id":"pathId14","weight":Math.floor((Math.random() * 30) + 1)},{"source":3,"target":9,"id":"pathId15","weight":Math.floor((Math.random() * 30) + 1)},{"source":4,"target":5,"id":"pathId16","weight":Math.floor((Math.random() * 30) + 1)},{"source":4,"target":8,"id":"pathId17","weight":Math.floor((Math.random() * 30) + 1)},{"source":8,"target":7,"id":"pathId18","weight":Math.floor((Math.random() * 30) + 1)},{"source":5,"target":7,"id":"pathId19","weight":Math.floor((Math.random() * 30) + 1)},{"source":7,"target":10,"id":"pathId20","weight":Math.floor((Math.random() * 30) + 1)},{"source":5,"target":6,"id":"pathId21","weight":Math.floor((Math.random() * 30) + 1)},{"source":9,"target":6,"id":"pathId22","weight":Math.floor((Math.random() * 30) + 1)}]},2,10);
 	});		
 
 // FUNCTIONS
-function createGraph(json){
+function createGraph(json,start,end){
+    GraphCreator.prototype.svgKeyDown = function() {}
+    GraphCreator.prototype.svgMouseUp = function() {}
+    GraphCreator.prototype.circleMouseDown = function() {}
+    GraphCreator.prototype.dragmove = function(d) {}
+    GraphCreator.prototype.pathMouseDown = function() {}
 	if(!this.graph.nodes === []){
 		return;
 	}
-    GraphCreator.prototype.svgKeyDown = function() {};
-    GraphCreator.prototype.svgMouseUp = function() {};
-    GraphCreator.prototype.circleMouseDown = function() {};
-    GraphCreator.prototype.dragmove = function(d) {};
-    GraphCreator.prototype.pathMouseDown = function() {};
-	var starterGraph = json;
-        graph.deleteGraph(true);
-		var jsonObj = starterGraph;
+    graph.deleteGraph(true);
+		var jsonObj = json;
         graph.nodes = jsonObj.nodes;
         graph.setIdCt(jsonObj.nodes.length + 1);
         var newEdges = jsonObj.edges;
@@ -393,12 +394,37 @@ function createGraph(json){
                 };
          });
          graph.edges = newEdges;
-         graph.updateGraph()
+		 graph.updateGraph();
+		 this.nodes = [];
+		 
+		var n;
+		for (var i = graph.nodes.length - 1; i >= 0; i--) {
+			n = graph.nodes[i];
+			nodes.push(new Node(n.x, n.y, n.id));
+		}
+
+		var source, target, e;
+		for (var i = graph.edges.length - 1; i >= 0; i--) {
+			e = graph.edges[i];
+			source = getNode(e.source.id);
+			target = getNode(e.target.id);
+			source.addLink(new Link(target, e.weight));
+			target.addLink(new Link(source, e.weight));
+		}
+        
+		this.startNode = getNode(start);
+		this.endNode = getNode(end);
+		document.getElementById("#"+start).getElementsByTagName("circle")[0].style.fill = "#9bafd7";
+		document.getElementById("#"+end).getElementsByTagName("circle")[0].setAttribute("style", "stroke-width:5px");
+		document.getElementById("enddrawing").style.display = "none";
+		document.getElementById("startgame").style.display = "inline-block";
+		document.getElementById("startgame").removeAttribute("disabled");
 }
 
 function getNode(id) {
+	console.log(nodes);
     for (var i = nodes.length - 1; i >= 0; i--) {
-        if (nodes[i].id == id) {
+		if (nodes[i].id == id) {
             return nodes[i];
         }
     }
