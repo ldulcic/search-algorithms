@@ -332,7 +332,7 @@ document.getElementById("startgame").addEventListener("click", function() {
     document.getElementById("selectend").style.display = "none";
     document.getElementById("startgame").style.display = "none";
 
-    search = new DepthFirstSearch(startNode, endNode, 3, false);
+    search = new DepthFirstSearch(startNode, endNode, 3);
     if(search.pathDoesntExist){
         window.alert("put ne postoji");
         GraphCreator.prototype.circleMouseUp = function() {}
