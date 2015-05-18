@@ -47,6 +47,7 @@ Node.prototype = {
             var value = parseInt(this.value) + parseInt(this.links[i].value);
             if (node.value == Number.MIN_VALUE || node.value > value) {
                 node.value = value;
+                node.cameFrom = this;
             }
             nodes.push(node);
         }

@@ -154,7 +154,7 @@ DepthFirstSearch.prototype = {
 
 
 // VARIABLES
-/*var startNode = null;
+var startNode = null;
 var endNode = null;
 var d3startNode = null;
 var d3endNode = null;
@@ -234,7 +234,7 @@ document.getElementById("startgame").addEventListener("click", function() {
         var result = search.isNextStep(clickedNode);
 
         if (result instanceof Array) {
-            l = dijkstra.findLink(clickedNode);
+           /* l = dijkstra.findLink(clickedNode);
             for (var i = graph.edges.length - 1; i >= 0; i--) {
                 e = graph.edges[i];
                 if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
@@ -244,11 +244,10 @@ document.getElementById("startgame").addEventListener("click", function() {
             }
             document.getElementById(edg.id).style.stroke = "green"; 
             d3node.select("circle")[0][0].style.fill = "GreenYellow ";
-            window.alert("dobro je, ne pritsci vise nista!");
+            window.alert("dobro je, ne pritsci vise nista!");*/
             console.log(result);
-            //console.log(result);
         } else if (result) {
-           /* l = search.findLink(clickedNode);
+            l = search.findLink(clickedNode);
             for (var i = graph.edges.length - 1; i >= 0; i--) {
                 e = graph.edges[i];
                 if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
@@ -302,68 +301,50 @@ document.getElementById("enddrawing").addEventListener("click", function() {
 
 document.getElementById("graph1").addEventListener("click",
     function() {
-        GraphCreator.prototype.svgKeyDown = function() {
-
-        }
-        GraphCreator.prototype.svgMouseUp = function() {
-
-        }
-        GraphCreator.prototype.circleMouseDown = function() {
-
-        }
-        GraphCreator.prototype.dragmove = function(d) {
-
-        }
-        GraphCreator.prototype.pathMouseDown = function() {
-
-        }
-        graph.deleteGraph();
-        graph.updateGraph();
-        graph.nodes.push({
-            "title": "a",
-            "x": "200",
-            "y": "300",
-            "id": 1
-        });
-        graph.nodes.push({
-            "title": "b",
-            "x": "800",
-            "y": "300",
-            "id": 2
-        });
-        graph.nodes.push({
-            "title": "c",
-            "x": "500",
-            "y": "100",
-            "id": 3
-        });
-        graph.nodes.push({
-            "title": "d",
-            "x": "500",
-            "y": "500",
-            "id": 4
-        });
-        graph.updateGraph();
-        graph.edges.push({
-            "source": graph.nodes[0],
-            "target": graph.nodes[2]
-        });
-        graph.edges.push({
-            "source": graph.nodes[0],
-            "target": graph.nodes[3]
-        });
-        graph.edges.push({
-            "source": graph.nodes[2],
-            "target": graph.nodes[1]
-        });
-        graph.edges.push({
-            "source": graph.nodes[3],
-            "target": graph.nodes[1]
-        });
-        graph.updateGraph();
+		createGraph({"nodes":[{"id":3,"title":"A","x":430,"y":86},{"id":4,"title":"B","x":209,"y":244},{"id":5,"title":"C","x":434,"y":246},{"id":6,"title":"D","x":648,"y":243},{"id":7,"title":"E","x":89,"y":402},{"id":8,"title":"F","x":287,"y":407}],"edges":[{"source":3,"target":5,"id":"pathId0","weight":""},{"source":3,"target":4,"id":"pathId1","weight":""},{"source":3,"target":6,"id":"pathId2","weight":""},{"source":4,"target":8,"id":"pathId3","weight":""},{"source":4,"target":7,"id":"pathId4","weight":""}]});
     });
 
+document.getElementById("graph2").addEventListener("click",
+	function(){
+		createGraph({"nodes":[{"id":3,"title":"A","x":730,"y":362},{"id":4,"title":"B","x":461,"y":77},{"id":5,"title":"C","x":371,"y":517},{"id":6,"title":"D","x":461,"y":302},{"id":7,"title":"E","x":144,"y":369},{"id":10,"title":"H","x":706,"y":517},{"id":11,"title":"I","x":199,"y":512},{"id":12,"title":"J","x":278,"y":173},{"id":13,"title":"K","x":634,"y":171},{"id":14,"title":"L","x":532,"y":520}],"edges":[{"source":6,"target":4,"id":"pathId0","weight":""},{"source":6,"target":10,"id":"pathId1","weight":""},{"source":6,"target":11,"id":"pathId2","weight":""},{"source":11,"target":7,"id":"pathId3","weight":""},{"source":11,"target":5,"id":"pathId4","weight":""},{"source":3,"target":10,"id":"pathId5","weight":""},{"source":4,"target":13,"id":"pathId11","weight":""},{"source":4,"target":12,"id":"pathId12","weight":""},{"source":14,"target":10,"id":"pathId13","weight":""}]});
+	});
+	
+document.getElementById("garph3").addEventListener("click",
+	function(){
+		createGraph({"nodes":[{"id":3,"title":"DODO LIVES","x":98,"y":102},{"id":4,"title":"B","x":535,"y":306},{"id":5,"title":"C","x":311,"y":304},{"id":6,"title":"D","x":316,"y":103},{"id":7,"title":"E","x":647,"y":210},{"id":8,"title":"F","x":102,"y":304},{"id":9,"title":"G","x":533,"y":466},{"id":10,"title":"H","x":534,"y":101}],"edges":[{"source":3,"target":6,"id":"pathId0","weight":""},{"source":5,"target":10,"id":"pathId2","weight":""},{"source":6,"target":4,"id":"pathId4","weight":""},{"source":5,"target":9,"id":"pathId5","weight":""},{"source":10,"target":7,"id":"pathId6","weight":""},{"source":4,"target":7,"id":"pathId7","weight":""},{"source":3,"target":8,"id":"pathId8","weight":""},{"source":8,"target":5,"id":"pathId9","weight":""}]});
+	});
+	
 // FUNCTIONS
+function createGraph(json){
+	if(!this.graph.nodes === []){
+		return;
+	}
+    GraphCreator.prototype.svgKeyDown = function() {};
+    GraphCreator.prototype.svgMouseUp = function() {};
+    GraphCreator.prototype.circleMouseDown = function() {};
+    GraphCreator.prototype.dragmove = function(d) {};
+    GraphCreator.prototype.pathMouseDown = function() {};
+	var starterGraph = json;
+        graph.deleteGraph(true);
+		var jsonObj = starterGraph;
+        graph.nodes = jsonObj.nodes;
+        graph.setIdCt(jsonObj.nodes.length + 1);
+        var newEdges = jsonObj.edges;
+        newEdges.forEach(function(e, i) {
+        newEdges[i] = {
+            source: graph.nodes.filter(function(n) {
+                return n.id == e.source;
+                })[0],
+                target: graph.nodes.filter(function(n) {
+                return n.id == e.target;
+                })[0],
+                id: e.id,
+                weight: e.weight
+                };
+         });
+         graph.edges = newEdges;
+         graph.updateGraph()
+}
 
 function getNode(id) {
     for (var i = nodes.length - 1; i >= 0; i--) {
@@ -388,4 +369,4 @@ function wrongAnimation(node){
     .transition()
     .style("fill","#F6FBFF")
     .duration(125);
-}*/
+}
