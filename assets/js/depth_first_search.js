@@ -1,6 +1,5 @@
-function DepthFirstSearch (startNode, endNode, depth) {
+function DepthFirstSearch (startNode, endNode, depth, iterative) {
 	this.startNode = startNode;
-   // console.log(startNode);
     if(depth !== undefined) this.startNode.depth = 0;
 	this.endNode = endNode;
     this.maxDepth = depth;
@@ -9,6 +8,12 @@ function DepthFirstSearch (startNode, endNode, depth) {
 	this.visited = [startNode];
 	this.pathDoesntExist = false;
 	
+    if((depth !== undefined && depth == 0) || iterative !== undefined) {//iterative means we are using this search as a helper in iterative depth first
+        this.nextStep = startNode;
+        this.maxDepthTooSmall.push(new Node(0, 0, 0));//dummy node, it is added so function isDepthTooSmall would return true
+        return;
+    }
+
     var nodes = this.startNode.expand();
     for (var i = nodes.length - 1; i >= 0; i--) {
         nodes[i].cameFrom = this.startNode;
@@ -72,7 +77,6 @@ DepthFirstSearch.prototype = {
                 this.pathDoesntExist = true;
             }
 		}
-        //console.log(this.nextStep);
         
 		return true;
 	},
@@ -150,7 +154,7 @@ DepthFirstSearch.prototype = {
 
 
 // VARIABLES
-var startNode = null;
+/*var startNode = null;
 var endNode = null;
 var d3startNode = null;
 var d3endNode = null;
@@ -230,7 +234,7 @@ document.getElementById("startgame").addEventListener("click", function() {
         var result = search.isNextStep(clickedNode);
 
         if (result instanceof Array) {
-            /*l = dijkstra.findLink(clickedNode);
+            l = dijkstra.findLink(clickedNode);
             for (var i = graph.edges.length - 1; i >= 0; i--) {
                 e = graph.edges[i];
                 if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
@@ -239,7 +243,7 @@ document.getElementById("startgame").addEventListener("click", function() {
                 }
             }
             document.getElementById(edg.id).style.stroke = "green"; 
-            d3node.select("circle")[0][0].style.fill = "GreenYellow ";*/
+            d3node.select("circle")[0][0].style.fill = "GreenYellow ";
             window.alert("dobro je, ne pritsci vise nista!");
             console.log(result);
             //console.log(result);
@@ -253,7 +257,7 @@ document.getElementById("startgame").addEventListener("click", function() {
                 }
 
             }
-            document.getElementById(edg.id).style.stroke = "green";*/ 
+            document.getElementById(edg.id).style.stroke = "green"; 
             d3node.select("circle")[0][0].style.fill = "GreenYellow ";
             if(search.pathDoesntExist) {
                 if(search.isDepthTooSmall()) {
@@ -384,4 +388,4 @@ function wrongAnimation(node){
     .transition()
     .style("fill","#F6FBFF")
     .duration(125);
-}
+}*/

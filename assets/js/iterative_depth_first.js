@@ -2,7 +2,8 @@ function IterativeDepthFirstSearch (startNode, endNode) {
 	this.startNode = startNode;
 	this.endNode = endNode;
     this.depth = 0;
-    this.search = new DepthFirstSearch(startNode, endNode, this.depth);
+    this.nextIteration = false;
+    this.search = new DepthFirstSearch(startNode, endNode, this.depth, true);
 	this.pathDoesntExist = false;
 }
 
@@ -11,32 +12,23 @@ IterativeDepthFirstSearch.prototype = {
 	constructor: IterativeDepthFirstSearch,
 
 	isNextStep: function (node) {
-		if(this.nextStep == endNode && node == endNode) {
-			return this.reconstructPath(node);
-		}
-
-		if(this.nextStep != node) {
-			return false;
-		}
-
-		this.visited.push(node);
-
-        var nodes = node.expand();
-        for (var i = nodes.length - 1; i >= 0; i--) {
-            if(nodes[i].cameFrom == null && this.visited.indexOf(nodes[i]) == -1) {
-                nodes[i].cameFrom = node;
+        var result = this.search.isNextStep(node);
+        console.log(result);
+        if(result instanceof Array) {
+            return result;
+        } else if(result) {
+            if(this.search.pathDoesntExist) {
+                if(this.search.isDepthTooSmall()) {
+                    this.search = new DepthFirstSearch(this.startNode, this.endNode, ++this.depth, true);
+                    this.nextIteration = true;
+                } else {
+                    this.pathDoesntExist = true;
+                }
             }
+            return true;
+        } else {
+            return false;
         }
-		this.expand(nodes);
-		
-        if(this.openedNodes.length == 0) {
-			this.pathDoesntExist = true;
-		} else {
-			this.nextStep = this.getNext();
-			if(this.nextStep == null) return null;
-		}
-
-		return true;
 	}
 }
 
@@ -149,6 +141,9 @@ document.getElementById("startgame").addEventListener("click", function() {
             }
             document.getElementById(edg.id).style.stroke = "green";*/ 
             d3node.select("circle")[0][0].style.fill = "GreenYellow ";
+            if(search.nextIteration) {
+                d3.selectAll("circle").style("fill", "white");
+            }
         } else {
             wrongAnimation(d3node.select("circle"));
 
