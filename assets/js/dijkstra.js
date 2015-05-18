@@ -33,14 +33,7 @@ Dijkstra.prototype = {
             return false;
         }
 
-        
-        var nodes = node.expand();
-        for (var i = nodes.length - 1; i >= 0; i--) {
-            if(nodes[i].cameFrom == null && this.visited.indexOf(nodes[i]) == -1) {
-                nodes[i].cameFrom = node;
-            }
-        }
-        this.expand(nodes);
+        this.expand(node.expand());
 
         this.nextSteps.splice(index, 1);
         this.visited.push(node);
@@ -227,7 +220,6 @@ document.getElementById("startgame").addEventListener("click", function() {
         var result = dijkstra.inNextSteps(clickedNode);
 
         if (result instanceof Array) {
-            console.log("uso u kraj");
             for(var j = result.length -1; j > 0; j--){
                 l1 = result[j];
                 document.getElementById("#"+l1.id).getElementsByTagName("circle")[0].style.fill = "#83d675";
