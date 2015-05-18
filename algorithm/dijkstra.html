@@ -44,23 +44,18 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="navbar-ex1-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active">
-                        <a href="dijkstra.html">Dijkstra's algorithm<span class="sr-only">(current)</span></a>
-                    </li>
-                    <li>
-                        <a href="breadth.html">Breadth first search algorithm</a>
-                    </li>
-                    <li>
-                        <a href="#">Algorithm 3</a>
-                    </li>
-                    <li>
-                        <a href="../index.html#about">About</a>
-                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Algorithms<span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li class="active"><a href="dijkstra.html">Dijkstra's algorithm<span class="sr-only">(current)</span></a></li>
+                            <li><a href="breadth.html">Breadth-first search</a></li>
+                            <li><a href="depth.html">Depth-first search</a></li>
+                        </ul>
+                    </li> 
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="../help.html">Help</a>
-                    </li>
+                    <li><a href="../help.html">Help</a></li>
+                    <li><a href="../index.html#about">About</a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -84,6 +79,12 @@
 		</font>
 		</div>
     </div>
+
+    <!-- jQuery -->
+    <script src="../assets/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../assets/js/bootstrap.min.js"></script>
 
 </body>
 
