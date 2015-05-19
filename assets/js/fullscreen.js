@@ -9,13 +9,11 @@
         fram.contentDocument.getElementById("fullscreen").addEventListener("click", function() {
             if(full){
                myDiv.style.display = "inline";
-                navBar[0].style.display = "inline";
                framD3.classed("col-md-12",false).classed("col-md-7",true);
                full = false;
             }else{
                 myDiv.style.display = "none";
-                navBar[0].style.display = "none";
-                framD3.classed("col-md-7",false).classed("odd-section",true);
+                framD3.classed("col-md-7",false).classed("col-md-12",true);
                 full = true;}
         }, false);
     });
