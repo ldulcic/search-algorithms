@@ -613,6 +613,7 @@ function createGraph(json,start,end){
         
 		this.startNode = getNode(start);
 		this.endNode = getNode(end);
+        document.getElementById("#"+start).getElementsByTagName("circle")[0].setAttribute("style", "stroke-width:5px");
 		document.getElementById("#"+start).getElementsByTagName("circle")[0].style.fill = "#9bafd7";
 		document.getElementById("#"+end).getElementsByTagName("circle")[0].setAttribute("style", "stroke-width:5px");
 		document.getElementById("enddrawing").style.display = "none";
