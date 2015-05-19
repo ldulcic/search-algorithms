@@ -93,10 +93,6 @@ Dijkstra.prototype = {
         this.visited.push(node);
 
         if (this.nextSteps.length == 0) {
-            for (var i = this.nextSteps.length - 1; i >= 0; i--) {
-                this.addToOpen(this.nextSteps[i]);
-            }
-            
             this.nextSteps = this.getNext();
             if(this.nextSteps == null) {
                 this.pathDoesntExist = true;

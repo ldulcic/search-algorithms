@@ -447,13 +447,15 @@ GraphCreator.prototype.changeWeightOfLink = function(d3edge, d) {
 };
 
 var currentId = 0;
-GraphCreator.prototype.changeTableData = function(d3lal, d) {
-    d3cell = d3.select("#tableData" + currentId);
+var heuristics = [];
+var nodeTitles;
+GraphCreator.prototype.changeTableData = function(d) {
+    var d3cell = d3.select("#tableData" + currentId);
     var thisGraph = this,
         consts = thisGraph.consts,
         htmlEl = d3cell.node();
 
-    if(htmlEl == null) return;//kraj editiranja tablice
+    if(htmlEl == null) return;
 
     var nodeBCR = htmlEl.getBoundingClientRect(),
         curScale = nodeBCR.width / consts.nodeRadius,
@@ -477,21 +479,23 @@ GraphCreator.prototype.changeTableData = function(d3lal, d) {
         .on("mousedown", function(d) {
             d3.event.stopPropagation();
         })
-        .on("keydown", function(d) {
+        .on("keyup", function(d) {
             d3.event.stopPropagation();
-            if (d3.event.keyCode == consts.ENTER_KEY && !d3.event.shiftKey) {
-                this.blur();
+            if (d3.event.keyCode == consts.ENTER_KEY) {
+                var value = parseInt(this.textContent);
+                if(isNaN(value) || value < 0) {
+                    value = 1;
+                }
+                heuristics[nodeTitles[currentId + 1]] = value;
+                d3.select("#tableData" + currentId++).text(value);
+                d3.select(this.parentElement).remove();
+                thisGraph.changeTableData();
             }
         })
         .on("blur", function(d) {
-            var value = parseInt(this.textContent);
-            if(isNaN(value) || value < 0) {
-                value = 1;
-            }
-            d3.select("#tableData" + currentId++).text(value);
-            d3.select(this.parentElement).remove();
-            thisGraph.changeTableData();
+            this.focus();
         });
+
         d3cell.text("");
         var txtNode = d3txt.node();
         thisGraph.selectElementContents(txtNode);

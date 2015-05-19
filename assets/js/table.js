@@ -3,7 +3,7 @@ var Table = function module() {
     var opts = {
         width: 200,
         height: 200,
-        margins: {top: 20, right: 20, bottom: 20, left: 20}
+        margins: {top: 0, right: 20, bottom: 20, left: 0}
     };
 
     function exports(selection) {
@@ -57,7 +57,7 @@ var Table = function module() {
                 .attr({
                     class:'row-header-content',
                     x: 0,
-                    y: function(d, i){return i * cellH + (cellH * colHeaderLevelNum)},
+                    y: function(d, i){return i * cellH + (cellH * colHeaderLevelNum) + 5},
                     dx: cellW/2,
                     dy: cellH/2
                 })
@@ -83,7 +83,7 @@ var Table = function module() {
                     x: function(d, i){return i * cellW + (cellW * rowHeaderLevelNum)},
                     y: 0,
                     dx: cellW/2,
-                    dy: cellH/2 + cellH
+                    dy: cellH/2 + cellH + 5
                 })
                 .style({fill:'black', 'text-anchor':'middle'})
                 .text(function(d, i){return d;});
@@ -113,7 +113,7 @@ var Table = function module() {
                             x: function(d, i){return i * cellW + (cellW * rowHeaderLevelNum)},
                             y: function(d, i){return pI * cellH + 2*cellH},
                             dx: cellW/2,
-                            dy: cellH/2,
+                            dy: cellH/2 + 5,
                             id: "tableData" + counter++
                         })
                         .style({fill:'black', 'text-anchor':'middle'})
