@@ -359,7 +359,12 @@ document.getElementById("startgame").addEventListener("click", function() {
             clickedCirc[0][0].style.fill = "#9bafd7";        
             
             var clickedCirc = d3node.select("circle");
-            console.log(clickedNode.depth+"dubina");
+            if(currentIter[clickedNode.depth] == undefined){
+                currentIter[clickedNode.depth] = []
+            }
+            currentIter[clickedNode.depth].push(clickedCirc);
+
+
             console.log(currentIter);
 
             if(search.pathDoesntExist){
@@ -368,10 +373,10 @@ document.getElementById("startgame").addEventListener("click", function() {
                 }
             }
             if(search.nextIteration) {
-                currentIter = [];
-                console.log("usao");
-                d3.selectAll("circle").style("fill", "#F6FBFF");
+                console.log(currentIter.length);
+                fadeOut();
                 d3.selectAll("path").style("stroke","#333");
+                currentIter = [];
             }
         } else {
             var color;
@@ -539,5 +544,13 @@ function wrongAnimation(node,color){
 }
 
 function fadeOut(){
+    for(var i = currentIter.length -1 ; i>=0 ; i--){
+        for(var j = currentIter[i].length -1; j>=0; j--){
+            currentIter[i][j].transition()
+            .delay(500*(currentIter.length -(i+1)))
+            .style("fill","#F6FBFF")
+            .duration(500);
+        }
+    }
 
 }
