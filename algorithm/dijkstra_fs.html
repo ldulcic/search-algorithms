@@ -17,9 +17,8 @@
     <a class="btn btn-default page-scroll" id="enddrawing">Finish drawing</a>
     <a class="btn btn-default page-scroll" id="selectstart" style="display:none">Choose start node!</a>
     <a class="btn btn-default page-scroll" id="selectend" style="display:none">Choose end node!</a>
-    <a class="btn btn-default page-scroll" id="startgame" style="display:none">Start game!</a>
-	
-	<a class="btn btn-default page-scroll" id="drawing" style="float:right">Draw your own</a>
+    <button type="button"class="btn btn-default page-scroll" id="startgame" style="display:none">Start game!</button>
+	<button type="button" data-placement="bottom" data-toggle="popover" data-content="Check Help for controls!" class="btn btn-default" id="drawing" style="float:right" data-content="Check Help for controls!">Draw your own</button>
     <a class="btn btn-default page-scroll" id="graph3" style="float:right">Advanced graph</a>
     <a class="btn btn-default page-scroll" id="graph2" style="float:right">Intermediate graph</a>
     <a class="btn btn-default page-scroll" id="graph1" style="float:right">Starter graph</a>
@@ -47,6 +46,14 @@
     <!-- Graph creator and dijkstra js -->
     <script src="../assets/js/graph-creator.js"></script>
     <script src="../assets/js/dijkstra.js"></script>
+	
+<script>
+	$(
+		function () { 
+			$('[data-toggle="popover"]').popover(); 
+		}
+	);
+  </script>
 
 </body>
 
