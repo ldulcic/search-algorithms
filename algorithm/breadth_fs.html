@@ -17,7 +17,8 @@
     <a class="btn btn-default page-scroll" id="selectstart" style="display:none">Choose start node!</a>
     <a class="btn btn-default page-scroll" id="selectend" style="display:none">Choose end node!</a>
     <a class="btn btn-default page-scroll" id="startgame" style="display:none">Start game!</a>
-    <a class="btn btn-default page-scroll" id="graph3" style="float:right">Advanced graph</a>
+	<button type="button" data-placement="bottom" data-toggle="popover" data-content="Check Help for controls!" class="btn btn-default" id="drawing" style="float:right" data-content="Check Help for controls!">Draw your own</button>
+	<a class="btn btn-default page-scroll" id="graph3" style="float:right">Advanced graph</a>
     <a class="btn btn-default page-scroll" id="graph2" style="float:right">Intermediate graph</a>
     <a class="btn btn-default page-scroll" id="graph1" style="float:right">Starter graph</a>
     <div id="graph">
@@ -35,10 +36,24 @@
     <!-- fileSaver JavaScript -->
     <script src="http://cdn.jsdelivr.net/filesaver.js/0.1/FileSaver.min.js"></script>
 
+		    <!-- jQuery -->
+    <script src="../assets/js/jquery.js"></script>
+	
+	    <!-- Bootstrap Core JavaScript -->
+    <script src="../assets/js/bootstrap.min.js"></script>
+	
     <!-- Graph creator and breadth js -->
     <script src="../assets/js/graph-creator.js"></script>
     <script src="../assets/js/breadth_first_search.js"></script>
-
+	
+<script>
+	$(
+		function () { 
+			$('[data-toggle="popover"]').popover(); 
+		}
+	);
+  </script>
+  
 </body>
 
 </html>

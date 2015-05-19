@@ -4,6 +4,8 @@
         var framD3 = d3.select("#myframe");
         var fram = document.getElementById("myframe");
         var myDiv = document.getElementsByClassName("col-md-5")[0];
+        var navBar = document.getElementsByClassName("navbar");
+        console.log(navBar[0]);
         fram.contentDocument.getElementById("fullscreen").addEventListener("click", function() {
             if(full){
                myDiv.style.display = "inline";
