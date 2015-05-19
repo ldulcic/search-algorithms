@@ -589,6 +589,9 @@ function createGraph(json,start,end){
 		document.getElementById("enddrawing").style.display = "none";
 		document.getElementById("startgame").style.display = "inline-block";
 		document.getElementById("startgame").removeAttribute("disabled");
+		
+		document.getElementById("selectend").style.display = "none";
+		document.getElementById("selectstart").style.display = "none";
 }
 
 function getNode(id) {

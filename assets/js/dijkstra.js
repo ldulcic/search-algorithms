@@ -227,7 +227,7 @@ createGraph({"nodes":[{"id":2,"title":"A","x":161,"y":327},{"id":3,"title":"B","
 document.getElementById("drawing").addEventListener("click", function(){
 	graph.deleteGraph(true);
 	graph.setIdCt(2);
-	graph.updateGraph();	
+	graph.updateGraph();
    	document.getElementById("startgame").style.display = "none";
 	document.getElementById("enddrawing").style.display = "inline-block";
 	
@@ -298,7 +298,6 @@ document.getElementById("drawing").addEventListener("click", function(){
     }
     state.mouseDownNode = null;
     return;};
-	//restartanje listenera
 	GraphCreator.prototype.svgKeyDown = function() {
 		var thisGraph = this,
         state = thisGraph.state,
@@ -333,9 +332,10 @@ document.getElementById("drawing").addEventListener("click", function(){
             break;
     }
 };
-    GraphCreator.prototype.svgMouseUp = function() {var thisGraph = this,
+    GraphCreator.prototype.svgMouseUp = function() {
+		var thisGraph = this,
         state = thisGraph.state;
-    if (state.justScaleTransGraph) {
+		if (state.justScaleTransGraph) {
         // dragged not clicked
         state.justScaleTransGraph = false;
     } else if (state.graphMouseDown && d3.event.shiftKey) {
@@ -622,6 +622,8 @@ function createGraph(json,start,end){
 		document.getElementById("enddrawing").style.display = "none";
 		document.getElementById("startgame").style.display = "inline-block";
 		document.getElementById("startgame").removeAttribute("disabled");
+		document.getElementById("selectend").style.display = "none";
+		document.getElementById("selectstart").style.display = "none";
 }
 
 function getNode(id) {
