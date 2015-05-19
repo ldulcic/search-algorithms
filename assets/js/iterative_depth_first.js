@@ -169,15 +169,12 @@ DepthFirstSearch.prototype = {
         var tempnode;
         for (var i = aNode.links.length - 1; i >= 0; i--) {
             tempnode = aNode.links[i].node;
-            if (  (this.visited.indexOf(tempnode) != -1) && (tempnode.value + aNode.links[i].value == aNode.value)) {
-                prevNode = tempnode;
+            if ( tempnode == aNode.cameFrom ) {
+                prevNode = aNode.links[i];
+                break;
             }
         }
-        for (var i = aNode.links.length - 1; i >= 0; i--) {
-            if(aNode.links[i].node === prevNode){
-                return aNode.links[i];
-            }
-        }
+        return prevNode;
     },
 
     reconstructPath: function (node) {
@@ -216,8 +213,8 @@ IterativeDepthFirstSearch.prototype = {
 	constructor: IterativeDepthFirstSearch,
 
 	isNextStep: function (node) {
+        this.nextIteration = false;
         var result = this.search.isNextStep(node);
-        console.log(result);
         if(result instanceof Array) {
             return result;
         } else if(result) {
@@ -233,7 +230,11 @@ IterativeDepthFirstSearch.prototype = {
         } else {
             return false;
         }
-	}
+	},
+
+    findLink: function(node){
+        return this.search.findLink(node);
+    }
 }
 
 // -------------------------------------------
@@ -248,6 +249,7 @@ var d3startNode = null;
 var d3endNode = null;
 var nodes = [];
 var search = null;
+var currentIter = [];
 
 graphType = GraphType.depth_first;
 
@@ -266,18 +268,21 @@ var svg = d3.select(settings.appendElSpec).append("svg")
     .attr("height", height);
 
 var graph = new GraphCreator(svg, [], []);
-createGraph({"nodes":[{"id":3,"title":"A","x":430,"y":86},{"id":4,"title":"B","x":209,"y":244},{"id":5,"title":"C","x":434,"y":246},{"id":6,"title":"D","x":648,"y":243},{"id":7,"title":"E","x":89,"y":402},{"id":8,"title":"F","x":287,"y":407}],"edges":[{"source":3,"target":5,"id":"pathId0","weight":""},{"source":3,"target":4,"id":"pathId1","weight":""},{"source":3,"target":6,"id":"pathId2","weight":""},{"source":4,"target":8,"id":"pathId3","weight":""},{"source":4,"target":7,"id":"pathId4","weight":""}]},3,8)
+graph.setIdCt(2);
+graph.updateGraph();
 
 // LISTENERS
 document.getElementById("selectstart").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         startNode = getNode(d.id);
         if (d3startNode != null) {
-            d3startNode[0][0].setAttribute("stroke", "black");
+            d3startNode.select("circle")[0][0].setAttribute("style", "stroke-width:2px");
+            d3startNode.select("circle")[0][0].style.fill = "#F6FBFF";
         }
-        d3node[0][0].setAttribute("stroke", "green");
-        d3node.select("circle")[0][0].style.fill = "GreenYellow ";
+        d3node.select("circle")[0][0].setAttribute("style", "stroke-width:5px");
+        d3node.select("circle")[0][0].style.fill = "#9bafd7";
         d3startNode = d3node;
+        console.log(d3startNode);
         document.getElementById("selectend").removeAttribute("disabled");
     }
 
@@ -304,7 +309,7 @@ document.getElementById("selectend").addEventListener("click", function() {
         if (d3endNode != null) {
             d3endNode[0][0].setAttribute("stroke", "black");
         }
-        d3node[0][0].setAttribute("stroke", "red");
+        d3node.select("circle")[0][0].setAttribute("style", "stroke-width:5px");
         d3endNode = d3node;
         document.getElementById("startgame").removeAttribute("disabled");
     }
@@ -314,49 +319,80 @@ document.getElementById("startgame").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         clickedNode = getNode(d.id);
         var edg;
-        var l;
+        var l1;
+        var l2;
         var e;
         var result = search.isNextStep(clickedNode);
-
+        console.log(result);
         if (result instanceof Array) {
-            /*l = dijkstra.findLink(clickedNode);
-            for (var i = graph.edges.length - 1; i >= 0; i--) {
-                e = graph.edges[i];
-                if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
-                    edg = graph.edges[i];
-                    break;
+            for(var j = result.length -1; j > 0; j--){
+                l1 = result[j];
+                document.getElementById("#"+l1.id).getElementsByTagName("circle")[0].style.fill = "#83d675";
+                l2 = result[j-1]
+                for (var i = graph.edges.length - 1; i >= 0; i--) {
+                    e = graph.edges[i];
+                    if( (e.source.id == l1.id && e.target.id == l2.id) || (e.target.id == l1.id && e.source.id == l2.id)){
+                        edg = graph.edges[i];
+                        break;
+                    }
                 }
+                document.getElementById(edg.id).style.stroke = "#83d675";
             }
-            document.getElementById(edg.id).style.stroke = "green"; 
-            d3node.select("circle")[0][0].style.fill = "GreenYellow ";*/
-            window.alert("Congratulations!\n\nNow try more advanced graphs, draw your own graphs, or exchange graphs with your friends.");
-			createGraph({"nodes":[{"id":3,"title":"A","x":430,"y":86},{"id":4,"title":"B","x":209,"y":244},{"id":5,"title":"C","x":434,"y":246},{"id":6,"title":"D","x":648,"y":243},{"id":7,"title":"E","x":89,"y":402},{"id":8,"title":"F","x":287,"y":407}],"edges":[{"source":3,"target":5,"id":"pathId0","weight":""},{"source":3,"target":4,"id":"pathId1","weight":""},{"source":3,"target":6,"id":"pathId2","weight":""},{"source":4,"target":8,"id":"pathId3","weight":""},{"source":4,"target":7,"id":"pathId4","weight":""}]},3,8)
-
+            document.getElementById("#"+result[0].id).getElementsByTagName("circle")[0].style.fill = "#83d675";
+            d3node.select("circle")[0][0].style.fill = "#83d675";
+            window.alert("dobro je, ne pritsci vise nista!");
+            console.log(result);
         } else if (result) {
-           /* l = search.findLink(clickedNode);
-            for (var i = graph.edges.length - 1; i >= 0; i--) {
-                e = graph.edges[i];
-                if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
-                    edg = graph.edges[i];
-                    break;
-                }
+            var l = search.findLink(clickedNode);
+            if( l != undefined ){
+                for (var i = graph.edges.length - 1; i >= 0; i--) {
+                    e = graph.edges[i];
+                    if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
+                        edg = graph.edges[i];
+                        break;
+                    }
 
+                }
+                document.getElementById(edg.id).style.stroke = "#9bafd7";
             }
-            document.getElementById(edg.id).style.stroke = "green";*/ 
-            d3node.select("circle")[0][0].style.fill = "GreenYellow ";
+            var clickedCirc = d3node.select("circle");
+            clickedCirc[0][0].style.fill = "#9bafd7";        
+            
+            var clickedCirc = d3node.select("circle");
+            console.log(clickedNode.depth+"dubina");
+            console.log(currentIter);
+
+            if(search.pathDoesntExist){
+                window.alert("put ne postoji");
+                GraphCreator.prototype.circleMouseUp = function() {
+                }
+            }
             if(search.nextIteration) {
-                d3.selectAll("circle").style("fill", "white");
+                currentIter = [];
+                console.log("usao");
+                d3.selectAll("circle").style("fill", "#F6FBFF");
+                d3.selectAll("path").style("stroke","#333");
             }
         } else {
-            wrongAnimation(d3node.select("circle"));
+            var color;
+            var clickedCircle = d3node.select("circle");
+            console.log(clickedCircle[0][0]);
+            color = clickedCircle[0][0].style.getPropertyValue("fill");
+            console.log(color);
+            wrongAnimation(d3node.select("circle"),color);
 
         }
     }
 
-    document.getElementById("selectstart").setAttribute("disabled", "");
-    document.getElementById("selectend").setAttribute("disabled", "");
+    document.getElementById("selectstart").style.display = "none";
+    document.getElementById("selectend").style.display = "none";
+    document.getElementById("startgame").style.display = "none";
 
     search = new IterativeDepthFirstSearch(startNode, endNode);
+    if(search.pathDoesntExist){
+        window.alert("put ne postoji");
+        GraphCreator.prototype.circleMouseUp = function() {}
+    }
 });
 
 document.getElementById("enddrawing").addEventListener("click", function() {
@@ -376,8 +412,10 @@ document.getElementById("enddrawing").addEventListener("click", function() {
         target.addLink(new Link(source, e.weight));
     }
 
-    document.getElementById("enddrawing").setAttribute("disabled", "");
-    document.getElementById("selectstart").removeAttribute("disabled");
+    document.getElementById("enddrawing").style.display = "none";
+    document.getElementById("selectstart").style.display = "inline-block";
+    document.getElementById("selectend").style.display = "inline-block";
+    document.getElementById("startgame").style.display = "inline-block";
 
     var dataset = {
     rowLabel: ['Heuristic values', 'A', 'B', 'C', 'D'],
@@ -414,200 +452,6 @@ document.getElementById("graph3").addEventListener("click",
 );
 
 // FUNCTIONS
-document.getElementById("drawing").addEventListener("click", function(){
-	graph.deleteGraph(true);
-	graph.setIdCt(2);
-	graph.updateGraph();	
-   	document.getElementById("startgame").style.display = "none";
-	document.getElementById("enddrawing").style.display = "inline-block";
-	
-	GraphCreator.prototype.circleMouseUp = function(d3node, d) {    var thisGraph = this,
-        state = thisGraph.state,
-        consts = thisGraph.consts;
-    // reset the states
-    state.shiftNodeDrag = false;
-    d3node.classed(consts.connectClass, false);
-
-    var mouseDownNode = state.mouseDownNode;
-
-    if (!mouseDownNode) return;
-
-    thisGraph.dragLine.classed("hidden", true);
-
-    if (mouseDownNode !== d) {
-        // we're in a different node: create new edge for mousedown edge and add to graph
-        var newEdge = {
-            source: mouseDownNode,
-            target: d,
-            id: "pathId" + counter++,
-            weight: 1
-        };
-        var filtRes = thisGraph.paths.filter(function(d) {
-            if (d.source === newEdge.target && d.target === newEdge.source) {
-                thisGraph.edges.splice(thisGraph.edges.indexOf(d), 1);
-            }
-            return d.source === newEdge.source && d.target === newEdge.target;
-        });
-        if (!filtRes[0].length) {
-            thisGraph.edges.push(newEdge);
-            thisGraph.updateGraph();
-            
-            if(graphType != GraphType.depth_first && graphType != GraphType.breadth_first) {
-                var d3text = this.changeWeightOfLink(d3.select("#pathId" + (counter - 1)), newEdge);
-                var txtNode = d3text.node();
-                thisGraph.selectElementContents(txtNode);
-                txtNode.focus();
-            }
-        }
-    } else {
-        // we're in the same node
-        if (state.justDragged) {
-            // dragged, not clicked
-            state.justDragged = false;
-        } else {
-            // clicked, not dragged
-            if (d3.event.shiftKey && graphType != GraphType.depth_first && graphType != GraphType.breadth_first) {
-                // shift-clicked node: edit text content
-                var d3txt = thisGraph.changeTextOfNode(d3node, d);
-                var txtNode = d3txt.node();
-                thisGraph.selectElementContents(txtNode);
-                txtNode.focus();
-            } else {
-                if (state.selectedEdge) {
-                    thisGraph.removeSelectFromEdge();
-                }
-                var prevNode = state.selectedNode;
-
-                if (!prevNode || prevNode.id !== d.id) {
-                    thisGraph.replaceSelectNode(d3node, d);
-                } else {
-                    thisGraph.removeSelectFromNode();
-                }
-            }
-        }
-    }
-    state.mouseDownNode = null;
-    return;};
-	//restartanje listenera
-	GraphCreator.prototype.svgKeyDown = function() {
-		var thisGraph = this,
-        state = thisGraph.state,
-        consts = thisGraph.consts;
-    // make sure repeated key presses don't register for each keydown
-    if (state.lastKeyDown !== -1) return;
-
-    state.lastKeyDown = d3.event.keyCode;
-    var selectedNode = state.selectedNode,
-        selectedEdge = state.selectedEdge;
-
-    switch (d3.event.keyCode) {
-        case consts.BACKSPACE_KEY:
-        case consts.DELETE_KEY:
-            d3.event.preventDefault();
-            if (selectedNode) {
-                thisGraph.nodes.splice(thisGraph.nodes.indexOf(selectedNode), 1);
-                thisGraph.spliceLinksForNode(selectedNode);
-                state.selectedNode = null;
-                thisGraph.updateGraph();
-            } else if (selectedEdge) {
-                thisGraph.edges.splice(thisGraph.edges.indexOf(selectedEdge), 1);
-
-                d3.select("#textId" + selectedEdge.id.substring(6, selectedEdge.id.length))
-                    .select(function() {
-                        return this.parentNode;
-                    }).remove();
-
-                state.selectedEdge = null;
-                thisGraph.updateGraph();
-            }
-            break;
-    }
-};
-    GraphCreator.prototype.svgMouseUp = function() {var thisGraph = this,
-        state = thisGraph.state;
-    if (state.justScaleTransGraph) {
-        // dragged not clicked
-        state.justScaleTransGraph = false;
-    } else if (state.graphMouseDown && d3.event.shiftKey) {
-        // clicked not dragged from svg
-        if (titleIndex == consts.defaultTitle.length) {
-            titleIndex = 0;
-        }
-
-        //novo
-        var title = "";
-        var letter = String.fromCharCode(consts.defaultTitle++);
-        for (var i = 0; i < consts.numOfLettersInTitle; i++) {
-            title += letter;
-        }
-        if(consts.defaultTitle == "Z".charCodeAt() + 1) {
-            consts.defaultTitle = "A".charCodeAt();
-            consts.numOfLettersInTitle++;
-        }
-        //novo
-
-        var xycoords = d3.mouse(thisGraph.svgG.node()),
-            d = {
-                id: ++thisGraph.idct,
-                title: title,
-                x: xycoords[0],
-                y: xycoords[1]
-            };
-        thisGraph.nodes.push(d);
-        thisGraph.updateGraph();
-        // make title of text immediently editable
-        
-        if(graphType != GraphType.depth_first && graphType != GraphType.breadth_first) {
-            var d3txt = thisGraph.changeTextOfNode(thisGraph.circles.filter(function(dval) {
-                    return dval.id === d.id;
-                }), d),
-                txtNode = d3txt.node();
-            thisGraph.selectElementContents(txtNode);
-            txtNode.focus();
-        }
-    } else if (state.shiftNodeDrag) {
-        // dragged from node
-        state.shiftNodeDrag = false;
-        thisGraph.dragLine.classed("hidden", true);
-    }
-    state.graphMouseDown = false;
-	};
-    GraphCreator.prototype.circleMouseDown = function(d3node, d) {var thisGraph = this,
-        state = thisGraph.state;
-    d3.event.stopPropagation();
-    state.mouseDownNode = d;
-    if (d3.event.shiftKey) {
-        state.shiftNodeDrag = d3.event.shiftKey;
-        // reposition dragged directed edge
-        thisGraph.dragLine.classed('hidden', false)
-            .attr('d', 'M' + d.x + ',' + d.y + 'L' + d.x + ',' + d.y);
-        return;
-    }};
-    GraphCreator.prototype.dragmove = function(d) {var thisGraph = this;
-    if (thisGraph.state.shiftNodeDrag) {
-        thisGraph.dragLine.attr('d', 'M' + d.x + ',' + d.y + 'L' + d3.mouse(thisGraph.svgG.node())[0] + ',' + d3.mouse(this.svgG.node())[1]);
-    } else {
-        d.x += d3.event.dx;
-        d.y += d3.event.dy;
-        thisGraph.updateGraph();
-    }};
-    GraphCreator.prototype.pathMouseDown = function(d3path, d) {var thisGraph = this,
-        state = thisGraph.state;
-    d3.event.stopPropagation();
-    state.mouseDownLink = d;
-
-    if (state.selectedNode) {
-        thisGraph.removeSelectFromNode();
-    }
-
-    var prevEdge = state.selectedEdge;
-    if (!prevEdge || prevEdge !== d) {
-        thisGraph.replaceSelectEdge(d3path, d);
-    } else {
-        thisGraph.removeSelectFromEdge();
-    }}
-});
-
 function createGraph(json,start,end){
 	if(!this.graph.nodes === []){
 		return;
@@ -661,8 +505,6 @@ function createGraph(json,start,end){
 		document.getElementById("enddrawing").style.display = "none";
 		document.getElementById("startgame").style.display = "inline-block";
 		document.getElementById("startgame").removeAttribute("disabled");
-		document.getElementById("selectend").style.display = "none";
-		document.getElementById("selectstart").style.display = "none";
 }
 
 function getNode(id) {
@@ -674,18 +516,28 @@ function getNode(id) {
     return null;
 }
 
-function wrongAnimation(node){
+function wrongAnimation(node,color){
+    var myCol ;
+    if(color == null){
+        myCol = "#F6FBFF";
+    }else{
+        myCol = color;
+    }
     node
     .transition()
     .style("fill","red")
     .duration(125)
     .transition()
-    .style("fill","#F6FBFF")
+    .style("fill",myCol)
     .duration(125)
     .transition()
     .style("fill","red")
     .duration(125)
     .transition()
-    .style("fill","#F6FBFF")
+    .style("fill",myCol)
     .duration(125);
+}
+
+function fadeOut(){
+
 }
