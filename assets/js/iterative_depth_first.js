@@ -169,15 +169,12 @@ DepthFirstSearch.prototype = {
         var tempnode;
         for (var i = aNode.links.length - 1; i >= 0; i--) {
             tempnode = aNode.links[i].node;
-            if (  (this.visited.indexOf(tempnode) != -1) && (tempnode.value + aNode.links[i].value == aNode.value)) {
-                prevNode = tempnode;
+            if ( tempnode == aNode.cameFrom ) {
+                prevNode = aNode.links[i];
+                break;
             }
         }
-        for (var i = aNode.links.length - 1; i >= 0; i--) {
-            if(aNode.links[i].node === prevNode){
-                return aNode.links[i];
-            }
-        }
+        return prevNode;
     },
 
     reconstructPath: function (node) {
@@ -216,8 +213,8 @@ IterativeDepthFirstSearch.prototype = {
 	constructor: IterativeDepthFirstSearch,
 
 	isNextStep: function (node) {
+        this.nextIteration = false;
         var result = this.search.isNextStep(node);
-        console.log(result);
         if(result instanceof Array) {
             return result;
         } else if(result) {
@@ -233,7 +230,11 @@ IterativeDepthFirstSearch.prototype = {
         } else {
             return false;
         }
-	}
+	},
+
+    findLink: function(node){
+        return this.search.findLink(node);
+    }
 }
 
 // -------------------------------------------
@@ -248,6 +249,7 @@ var d3startNode = null;
 var d3endNode = null;
 var nodes = [];
 var search = null;
+var currentIter = [];
 
 graphType = GraphType.depth_first;
 
@@ -274,11 +276,13 @@ document.getElementById("selectstart").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         startNode = getNode(d.id);
         if (d3startNode != null) {
-            d3startNode[0][0].setAttribute("stroke", "black");
+            d3startNode.select("circle")[0][0].setAttribute("style", "stroke-width:2px");
+            d3startNode.select("circle")[0][0].style.fill = "#F6FBFF";
         }
-        d3node[0][0].setAttribute("stroke", "green");
-        d3node.select("circle")[0][0].style.fill = "GreenYellow ";
+        d3node.select("circle")[0][0].setAttribute("style", "stroke-width:5px");
+        d3node.select("circle")[0][0].style.fill = "#9bafd7";
         d3startNode = d3node;
+        console.log(d3startNode);
         document.getElementById("selectend").removeAttribute("disabled");
     }
 
@@ -305,7 +309,7 @@ document.getElementById("selectend").addEventListener("click", function() {
         if (d3endNode != null) {
             d3endNode[0][0].setAttribute("stroke", "black");
         }
-        d3node[0][0].setAttribute("stroke", "red");
+        d3node.select("circle")[0][0].setAttribute("style", "stroke-width:5px");
         d3endNode = d3node;
         document.getElementById("startgame").removeAttribute("disabled");
     }
@@ -315,49 +319,80 @@ document.getElementById("startgame").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         clickedNode = getNode(d.id);
         var edg;
-        var l;
+        var l1;
+        var l2;
         var e;
         var result = search.isNextStep(clickedNode);
-
+        console.log(result);
         if (result instanceof Array) {
-            /*l = dijkstra.findLink(clickedNode);
-            for (var i = graph.edges.length - 1; i >= 0; i--) {
-                e = graph.edges[i];
-                if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
-                    edg = graph.edges[i];
-                    break;
+            for(var j = result.length -1; j > 0; j--){
+                l1 = result[j];
+                document.getElementById("#"+l1.id).getElementsByTagName("circle")[0].style.fill = "#83d675";
+                l2 = result[j-1]
+                for (var i = graph.edges.length - 1; i >= 0; i--) {
+                    e = graph.edges[i];
+                    if( (e.source.id == l1.id && e.target.id == l2.id) || (e.target.id == l1.id && e.source.id == l2.id)){
+                        edg = graph.edges[i];
+                        break;
+                    }
                 }
+                document.getElementById(edg.id).style.stroke = "#83d675";
             }
-            document.getElementById(edg.id).style.stroke = "green"; 
-            d3node.select("circle")[0][0].style.fill = "GreenYellow ";*/
+            document.getElementById("#"+result[0].id).getElementsByTagName("circle")[0].style.fill = "#83d675";
+            d3node.select("circle")[0][0].style.fill = "#83d675";
             window.alert("dobro je, ne pritsci vise nista!");
             console.log(result);
-            //console.log(result);
         } else if (result) {
-           /* l = search.findLink(clickedNode);
-            for (var i = graph.edges.length - 1; i >= 0; i--) {
-                e = graph.edges[i];
-                if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
-                    edg = graph.edges[i];
-                    break;
-                }
+            var l = search.findLink(clickedNode);
+            if( l != undefined ){
+                for (var i = graph.edges.length - 1; i >= 0; i--) {
+                    e = graph.edges[i];
+                    if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
+                        edg = graph.edges[i];
+                        break;
+                    }
 
+                }
+                document.getElementById(edg.id).style.stroke = "#9bafd7";
             }
-            document.getElementById(edg.id).style.stroke = "green";*/ 
-            d3node.select("circle")[0][0].style.fill = "GreenYellow ";
+            var clickedCirc = d3node.select("circle");
+            clickedCirc[0][0].style.fill = "#9bafd7";        
+            
+            var clickedCirc = d3node.select("circle");
+            console.log(clickedNode.depth+"dubina");
+            console.log(currentIter);
+
+            if(search.pathDoesntExist){
+                window.alert("put ne postoji");
+                GraphCreator.prototype.circleMouseUp = function() {
+                }
+            }
             if(search.nextIteration) {
-                d3.selectAll("circle").style("fill", "white");
+                currentIter = [];
+                console.log("usao");
+                d3.selectAll("circle").style("fill", "#F6FBFF");
+                d3.selectAll("path").style("stroke","#333");
             }
         } else {
-            wrongAnimation(d3node.select("circle"));
+            var color;
+            var clickedCircle = d3node.select("circle");
+            console.log(clickedCircle[0][0]);
+            color = clickedCircle[0][0].style.getPropertyValue("fill");
+            console.log(color);
+            wrongAnimation(d3node.select("circle"),color);
 
         }
     }
 
-    document.getElementById("selectstart").setAttribute("disabled", "");
-    document.getElementById("selectend").setAttribute("disabled", "");
+    document.getElementById("selectstart").style.display = "none";
+    document.getElementById("selectend").style.display = "none";
+    document.getElementById("startgame").style.display = "none";
 
     search = new IterativeDepthFirstSearch(startNode, endNode);
+    if(search.pathDoesntExist){
+        window.alert("put ne postoji");
+        GraphCreator.prototype.circleMouseUp = function() {}
+    }
 });
 
 document.getElementById("enddrawing").addEventListener("click", function() {
@@ -377,8 +412,10 @@ document.getElementById("enddrawing").addEventListener("click", function() {
         target.addLink(new Link(source, e.weight));
     }
 
-    document.getElementById("enddrawing").setAttribute("disabled", "");
-    document.getElementById("selectstart").removeAttribute("disabled");
+    document.getElementById("enddrawing").style.display = "none";
+    document.getElementById("selectstart").style.display = "inline-block";
+    document.getElementById("selectend").style.display = "inline-block";
+    document.getElementById("startgame").style.display = "inline-block";
 
     var dataset = {
     rowLabel: ['Heuristic values', 'A', 'B', 'C', 'D'],
@@ -479,18 +516,28 @@ function getNode(id) {
     return null;
 }
 
-function wrongAnimation(node){
+function wrongAnimation(node,color){
+    var myCol ;
+    if(color == null){
+        myCol = "#F6FBFF";
+    }else{
+        myCol = color;
+    }
     node
     .transition()
     .style("fill","red")
     .duration(125)
     .transition()
-    .style("fill","#F6FBFF")
+    .style("fill",myCol)
     .duration(125)
     .transition()
     .style("fill","red")
     .duration(125)
     .transition()
-    .style("fill","#F6FBFF")
+    .style("fill",myCol)
     .duration(125);
+}
+
+function fadeOut(){
+
 }

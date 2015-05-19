@@ -237,8 +237,10 @@ document.getElementById("selectstart").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         startNode = getNode(d.id);
         if (d3startNode != null) {
+            d3startNode.select("circle")[0][0].setAttribute("style", "stroke-width:2px");
             d3startNode.select("circle")[0][0].style.fill = "#F6FBFF";
         }
+        d3node.select("circle")[0][0].setAttribute("style", "stroke-width:5px");
         d3node.select("circle")[0][0].style.fill = "#9bafd7";
         d3startNode = d3node;
         document.getElementById("selectend").removeAttribute("disabled");
@@ -281,10 +283,8 @@ document.getElementById("startgame").addEventListener("click", function() {
         var l2;
         var e;
         var result = search.isNextStep(clickedNode);
-        console.log(result);
 
         if (result instanceof Array) {
-            console.log("uso u kraj");
             for(var j = result.length -1; j > 0; j--){
                 l1 = result[j];
                 document.getElementById("#"+l1.id).getElementsByTagName("circle")[0].style.fill = "#83d675";
