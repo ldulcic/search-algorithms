@@ -488,6 +488,8 @@ document.getElementById("startgame").addEventListener("click", function() {
             d3node.select("circle")[0][0].style.fill = "#83d675";
 			//pobjeda
 			alert("Congratulations!\n\nNow try more advanced graphs, draw your own graphs, or exchange graphs with your friends.");
+			createGraph({"nodes":[{"id":2,"title":"A","x":161,"y":327},{"id":3,"title":"B","x":462,"y":131},{"id":4,"title":"C","x":470,"y":507},{"id":5,"title":"D","x":759,"y":311}],"edges":[{"source":2,"target":3,"id":"pathId4","weight":Math.floor((Math.random() * 10) + 1)},{"source":2,"target":4,"id":"pathId5","weight":Math.floor((Math.random() * 10) + 1)},{"source":4,"target":5,"id":"pathId6","weight":Math.floor((Math.random() * 10) + 1)},{"source":3,"target":5,"id":"pathId7","weight":Math.floor((Math.random() * 10) + 1)}]},2,5);
+	
         } else if (result) {
             l = dijkstra.findLink(clickedNode);
             for (var i = graph.edges.length - 1; i >= 0; i--) {
@@ -502,7 +504,9 @@ document.getElementById("startgame").addEventListener("click", function() {
             d3node.select("circle")[0][0].style.fill = "#9bafd7";
             d3node.on("mouseup",null);
             if(dijkstra.pathDoesntExist){
-                window.alert("put ne postoji");
+                window.alert("There is no path between start and end nodes!\n\nTry starter graph if you are confused.");
+				createGraph({"nodes":[{"id":2,"title":"A","x":161,"y":327},{"id":3,"title":"B","x":462,"y":131},{"id":4,"title":"C","x":470,"y":507},{"id":5,"title":"D","x":759,"y":311}],"edges":[{"source":2,"target":3,"id":"pathId4","weight":Math.floor((Math.random() * 10) + 1)},{"source":2,"target":4,"id":"pathId5","weight":Math.floor((Math.random() * 10) + 1)},{"source":4,"target":5,"id":"pathId6","weight":Math.floor((Math.random() * 10) + 1)},{"source":3,"target":5,"id":"pathId7","weight":Math.floor((Math.random() * 10) + 1)}]},2,5);
+	
                 GraphCreator.prototype.circleMouseUp = function() {
                 }
             }
@@ -518,7 +522,9 @@ document.getElementById("startgame").addEventListener("click", function() {
 
     dijkstra = new Dijkstra(startNode, endNode);
     if(dijkstra.pathDoesntExist){
-        window.alert("put ne postoji");
+        window.alert("There is no path between start and end nodes!\n\nTry starter graph if you are confused.");
+		createGraph({"nodes":[{"id":2,"title":"A","x":161,"y":327},{"id":3,"title":"B","x":462,"y":131},{"id":4,"title":"C","x":470,"y":507},{"id":5,"title":"D","x":759,"y":311}],"edges":[{"source":2,"target":3,"id":"pathId4","weight":Math.floor((Math.random() * 10) + 1)},{"source":2,"target":4,"id":"pathId5","weight":Math.floor((Math.random() * 10) + 1)},{"source":4,"target":5,"id":"pathId6","weight":Math.floor((Math.random() * 10) + 1)},{"source":3,"target":5,"id":"pathId7","weight":Math.floor((Math.random() * 10) + 1)}]},2,5);
+	
         GraphCreator.prototype.circleMouseUp = function() {}
     }
 });
