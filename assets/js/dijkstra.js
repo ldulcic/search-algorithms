@@ -292,11 +292,7 @@ document.getElementById("startgame").addEventListener("click", function() {
             }
             document.getElementById("#"+result[0].id).getElementsByTagName("circle")[0].style.fill = "#83d675";
             d3node.select("circle")[0][0].style.fill = "#83d675";
-            
-            var event = document.createEvent('Event');
-            event.initEvent('victory', true, true);
-            document.dispatchEvent(event);
-
+            window.alert("dobro je, ne pritsci vise nista!");
             console.log(result);
         } else if (result) {
             l = dijkstra.findLink(clickedNode);
