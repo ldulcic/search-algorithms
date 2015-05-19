@@ -11,30 +11,20 @@
 
     <title>Search algorithms</title>
 
+    <!-- Main CSS and Font -->
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700" rel="stylesheet" type="text/css">
+
     <!-- Bootstrap Core CSS -->
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Main css -->
-    <link href="assets/css/main.css" rel="stylesheet">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
 
 </head>
-
-<!-- The #page-top ID is part of the scrolling feature - the data-spy and data-target are part of the built-in Bootstrap scrollspy function -->
-
-<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
-
+<body id="page-top">
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
-            <div class="navbar-header page-scroll">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-ex1-collapse">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -44,22 +34,7 @@
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse navbar-ex1-collapse">
-                <ul class="nav navbar-nav">
-                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
-                    <li class="hidden">
-                        <a class="page-scroll" href="#page-top"></a>
-                    </li>
-                    <li class="dropdown">
-			          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Algorithms<span class="caret"></span></a>
-			          <ul class="dropdown-menu" role="menu">
-			            <li><a class="page-scroll" href="#dijkstra">Dijkstra's algorithm</a></li>
-	                    <li><a class="page-scroll" href="#breadth">Breadth-first search</a></li>
-	                    <li><a class="page-scroll" href="#depth">Depth-first search</a></li>
-                        <li><a class="page-scroll" href="#iterative">Iterative deepening depth-first search</a></li>
-			          </ul>
-			        </li>
-                </ul>
+            <div class="collapse navbar-collapse" id="navbar-ex1-collapse">
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="help.html">Help</a></li>
                     <li><a class="page-scroll" href="#about">About</a></li>
@@ -69,141 +44,76 @@
         </div>
         <!-- /.container -->
     </nav>
-
-    <!-- Intro Section -->
-    <section id="intro" class="odd-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8">
-                    <h1>Search algorithms</h1>
-					<br><font color="grey">
-                    <p><i>As the world is becoming more interconnected, finding the right path is more important than ever...</i></p>
-					<br><b>
-					<p>Algorithms that find paths in a network of nodes are indispensable part of modern world - from everyday networking to cutting-edge aritificial intelligence.</p>
-					<p>This is a place where you can lern about them and experiment with them, but most importantly, have fun.</p>
-                    </b></font><br>
-					<a class="btn btn-default page-scroll" href="#dijkstra">Dijkstra's algorithm</a>
-                    <a class="btn btn-default page-scroll" href="#breadth">Breadth-first search</a>
-                    <a class="btn btn-default page-scroll" href="#depth">Depth-first search</a>
-                    <a class="btn btn-default page-scroll" href="#iterative">Iterative deepening depth-first search</a>
-                </div>
-				<div class="col-md-4 hidden-sm hidden-xs">
-					<img src="assets/img/connectivity-global-network.png">
-				</div>
+    <div class="hero">
+        <img src="assets/img/Hero.png" alt="">
+        <h2>Search Algorithms</h2>
+        <p>As the world is becoming more interconnected, finding the right path is more important than ever...</p>
+        <span><b>Algorithms</b> that find paths in a network of nodes are indispensable part of modern world, <br>from everyday networking to cutting-edge aritificial intelligence.
+        <br><br>
+        This is a place where you can lern about them and experiment with them, but most importantly, have fun.
+        <br><br>
+        You might want to visit our <a href="help.html">help page</a> before you start. If you think you are ready to go, jump to the Algorithms section.
+        </span>
+        <div class="button">
+            <a class="page-scroll" href="#algorithms">Algorithms</a>
+        </div>
+    </div>
+    <div class="alg-wrapper" id="algorithms">
+    <h2>Algorithms</h2>
+        <div class="sa-w u-cf">
+            <div class="single-alg">
+                <p>Dijkstra's algorithm</p>
+                <span>Dijkstra's algorithm is an algorithm that finds <b>shortest path</b> between two nodes in a graph.<br><br>
+                It was conceived in 1956. by computer scientist <b>Edsger W. Dijkstra</b></span>
+                <div class="button2"><a href="algorithm/dijkstra.html">Try it out</a></div>
+            </div>
+            <div class="single-alg">
+                <p>Breadth-first search</p>
+                <span>Breadth first search algorithm is an algorithm that traverses a graph <b>level by level</b>.<br><br>
+                It was invented by <b>E.F.Moore</b> in late and 1950s.</span>
+                <div class="button2"><a href="algorithm/breadth.html">Try it out</a></div>
+            </div>
+            <div class="single-alg">
+                <p>Depth-first search</p>
+                <span>Depth first search algorithm is an algorithm that finds a path between two nodes in a graph by exploring a branch <b>as far as possible</b>.<br><br>
+                An early version of depth-first search was investigated in the 19th century by mathematician <b>Charles Pierre Trémaux</b>.
+                </span>
+                <div class="button2"><a href="algorithm/depth.html">Try it out</a></div>
             </div>
         </div>
-    </section>
-
-    <!-- Dijkstra Section -->
-    <section id="dijkstra" class="even-section">
-        <div class="container">
-            <div class="row">
-                <h1>Dijkstra's algorithm</h1>
-                <div class="col-lg-8">
-				<br>
-                <p><b>What is it?</b></p>
-				<p>Dijkstra's algorithm is an algorithm that finds <b>shortest path</b> between two nodes in a graph.</p>
-				<p>It was conceived in 1956. by computer scientist <b>Edsger W. Dijkstra</b></p>
-				<br>
-				<p><b>Why does it matter?</b></p>
-				<p>Most notably, Dijkstra's algorithm is used in <b>networking</b>. Services that we use daily, like the <b>Internet</b>, could not work without this algorithm.</p>
-                </div>
-                <div class="col-lg-4">
-                    <a class="btn btn-default page-scroll" href="algorithm/dijkstra.html">Try it out</a>
-                </div>
+        <div class="sa-w2">
+            <div class="single-alg2">
+                <p>Iterative deepening depth-first search</p>
+                <span>Iterative deepening depth-first search combines approaches of <b>breadth-first</b> and <b>depth-first</b> searches.
+                <br>It searches until it reaches <b>maximum depth</b> which is increased in every iteration.<br><br>
+                </span>
+                <div class="button2"><a href="algorithm/iterative.html">Try it out</a></div>
+            </div>
+            <div class="single-alg2">
+                <p>Luka Dulčić search</p>
+                <span>The best and most optimized search today!</span>
+                <div class="button2"><a href="">Try it out</a></div>
             </div>
         </div>
-    </section>
-
-    <!-- Breadth first Section -->
-    <section id="breadth" class="odd-section">
-        <div class="container">
-            <div class="row">
-                <h1>Breadth-first search</h1>
-                <div class="col-lg-8">
-				<br>
-                <p><b>What is it?</b></p>
-				<p>Breadth first search algorithm is an algorithm that traverses a graph <b>level by level</b>.</p>
-				<p>It was invented by <b>E.F.Moore</b> in late and 1950s.</p>
-				<br>
-				<p><b>Why does it matter?</b></p>
-				<p>Breadth first search has many applications in IT and beyond, most notably in <b>GPS navigation</b> systems and P2P networks like <b>BitTorrent</b>.</p>
-                </div>
-                <div class="col-lg-4">
-                    <a class="btn btn-default page-scroll" href="algorithm/breadth.html">Try it out</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Depth first Section -->
-    <section id="depth" class="even-section">
-        <div class="container">
-			<h1>Depth-first search</h1>
-            <div class="row">
-                <div class="col-lg-8">
-				<br>
-                <p><b>What is it?</b></p>
-				<p>Depth first search algorithm is an algorithm that finds a path between two nodes in a graph by exploring a branch <b>as far as possible</b>.</p>
-				<p>An early version of depth-first search was investigated in the 19th century by mathematician <b>Charles Pierre Trémaux</b>.</p>
-				<br>
-				<p><b>Why does it matter?</b></p>
-				<p>Depth first search is used in <b>mathemathics</b> and to <b>solve mazes</b>.</p>
-                
-                </div>
-                <div class="col-lg-4">
-                    <a class="btn btn-default page-scroll" href="algorithm/depth.html">Try it out</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Iterative depth-first Section -->
-    <section id="iterative" class="odd-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8">
-                <h1>Iterative deepening depth-first search</h1>
-				<br><p><b>What is it?</b></p>
-				<p>Iterative deepening depth-first search combines approaches of <b>breadth-first</b> and <b>depth-first</b> searches.
-				<br>It searches until it reaches <b>maximum depth</b> which is increased in every iteration.</p>
-				<br>
-				<p><b>Why does it matter?</b></p>
-				<p>It is used in <b>Artificial Intelligence</b>.</p>
-                
-                </div>
-                <div class="col-lg-4">
-                    <a class="btn btn-default page-scroll" href="algorithm/iterative.html">Try it out</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="even-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1>About</h1>
-                    <br>
-					<p>Created as project for <b>Programming paradigms and languages</b> course.</p>
-					<p><a href="https://www.fer.unizg.hr/en" target="_blank">Faculty of Electrical Engineering and Computing.</a>
-					<br>University of Zagreb, Croatia.</p>
-					<br><p><b>Authors</b></p>
-					<p><a href="https://github.com/ldulcic" target="_blank">Luka Dulčić</a>
-					<br><a href="https://github.com/Dzaposlav" target="_blank">Frane Džapo</a>
-					<br><a href="https://github.com/mators" target="_blank">Matija Oršolić</a>
-					<br><a href="https://github.com/DZebec" target="_blank">Dominik Zebec</a></p>
-					<br>
-					<p><b>Created with</b></p> 
-					<p><a href="http://getbootstrap.com/" target="_blank">Bootstrap</a>
-					<br><a href="https://jquery.com/" target="_blank">jQuery</a>
-					<br><a href="http://d3js.org/" target="_blank">D3.js</a>
-					<br><a href="http://bl.ocks.org/cjrd/6863459" target="_blank">Directed Graph Creator</a></p>
-                </div>
-            </div>
-        </div>
-    </section>
+    </div>
+    <div class="footer" id="about">
+        <h2>About</h2>
+        <p>Created as project for <b>Programming paradigms and languages course.</b></p>
+        <a href="https://www.fer.unizg.hr/en" target="_blank">Faculty of Electrical Engineering and Computing.</a><br>
+        <span>University of Zagreb, Croatia.</span>
+        <br><br>
+        <p><b>About us</b></p>
+        <a href="https://github.com/ldulcic" target="_blank">Luka Dulčić</a>
+        <br><a href="https://github.com/Dzaposlav" target="_blank">Frane Džapo</a>
+        <br><a href="https://github.com/mators" target="_blank">Matija Oršolić</a>
+        <br><a href="https://github.com/DZebec" target="_blank">Dominik Zebec</a>
+        <br><br>
+        <p><b>Created with</b></p> 
+        <p><a href="http://getbootstrap.com/" target="_blank">Bootstrap</a>
+        <br><a href="https://jquery.com/" target="_blank">jQuery</a>
+        <br><a href="http://d3js.org/" target="_blank">D3.js</a>
+        <br><a href="http://bl.ocks.org/cjrd/6863459" target="_blank">Directed Graph Creator</a></p>
+    </div>
 
     <!-- jQuery -->
     <script src="assets/js/jquery.js"></script>
@@ -211,10 +121,7 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="assets/js/bootstrap.min.js"></script>
 
-    <!-- Scrolling Nav JavaScript -->
     <script src="assets/js/jquery.easing.min.js"></script>
     <script src="assets/js/scrolling-nav.js"></script>
-
 </body>
-
 </html>

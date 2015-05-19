@@ -1,0 +1,278 @@
+html {
+	font-family: 'Open Sans', sans-serif;
+	width: 100%;
+    height: 100%;
+}
+
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
+  border-top: 0px;
+  border-left: 0px;
+  border-right: 4px solid #DEDEDE;
+}
+
+@media(min-width:767px) {
+    .navbar {
+        padding: 20px 0;
+        -webkit-transition: background .5s ease-in-out,padding .5s ease-in-out;
+        -moz-transition: background .5s ease-in-out,padding .5s ease-in-out;
+        transition: background .5s ease-in-out,padding .5s ease-in-out;
+    }
+
+    .top-nav-collapse {
+        padding: 0;
+    }
+}
+
+.alg-section {
+    height: 100%;
+    padding-top: 100px;
+    background: #fff;
+}
+
+.u-cf {
+	overflow: auto;
+	zoom: 1;
+}
+
+.hero {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.hero img {
+	width: 100%;
+	position: relative;
+	top: 80px;
+}
+
+.hero h2 {
+	position: absolute;
+	z-index: 2;
+	top: 200px;
+	margin: 0 0 0 80px;
+	left: 0;
+	color: #fff;
+	font-size: 40px;
+}
+
+.hero p {
+	position: absolute;
+	z-index: 2;
+	top: 260px;
+	margin: 0 0 0 80px;
+	left: 0;
+	color: #fff;
+	font-style: italic;
+}
+
+.hero span {
+	position: absolute;
+	z-index: 2;
+	top: 340px;
+	margin: 0 0 0 80px;
+	left: 0;
+	color: #fff;
+}
+
+.button {
+	position: absolute;
+	z-index: 2;
+	top: 490px;
+	margin: 0 0 0 80px;
+	left: 0;
+	float: left;
+	}
+
+.button a {
+	text-decoration: none;
+	font-weight: bold;
+	text-transform: uppercase;
+	padding: 10px 20px 10px 20px;
+	background: #64aed9;
+	color: #fff;
+	border-radius: 4px;
+	margin-right: 20px;
+	transition: all 0.2s ease;
+}
+
+.button a:hover {
+	background: #478cb4;
+}
+
+.alg-wrapper {
+	padding-top: 30px;
+	height: 1000px;
+}
+
+.alg-wrapper h2 {
+	text-align: center;
+	font-size: 40px;
+	color: #333;
+	margin: 80px 0;
+}
+
+.sa-w {
+	margin: 0 auto;
+	width: 960px;
+	margin-bottom: 80px;
+}
+
+.sa-w2 {
+	margin: 0 auto;
+	width: 660px;
+}
+
+.single-alg {
+	float: left;
+	margin-right: 30px;
+	border-radius: 6px;
+	background: #f0f0f0;
+	color: #333;
+	width: 300px;
+	height: 300px;
+	padding: 20px 20px;
+	box-sizing: border-box;
+	text-align: center;
+	position: relative;
+}
+
+
+.single-alg:nth-child(3) {
+	margin-right: 0px;
+}
+
+.single-alg p {
+	text-align: center;
+	margin: 0;
+	padding: 0 0 20px 0;
+	font-weight: bold;
+	text-transform: uppercase;
+	font-size: 18px;
+}
+
+.single-alg span {
+	color: #333;
+	text-align: center;
+	font-size: 14px;
+}
+
+.single-alg .button2 a{
+	width: 100%;
+	background: #0a212b;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-weight: 700;
+	color: #fff;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	padding: 15px 0;
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius: 6px;
+	transition: all 0.2s ease;
+}
+
+.single-alg .button2 a:hover{
+	background: #64aed9;
+}
+
+.single-alg .button2 :after {
+	content: "\2192";
+	position: relative;
+	left: 5px;
+}
+
+.single-alg2 {
+	float: left;
+	margin-right: 30px;
+	border-radius: 6px;
+	background: #f0f0f0;
+	color: #333;
+	width: 300px;
+	height: 300px;
+	padding: 20px 20px;
+	box-sizing: border-box;
+	text-align: center;
+	position: relative;
+}
+
+.single-alg2:nth-child(2) {
+	margin-right: 0px;
+}
+
+.single-alg2 p {
+	text-align: center;
+	margin: 0;
+	padding: 0 0 20px 0;
+	font-weight: bold;
+	text-transform: uppercase;
+	font-size: 18px;
+}
+
+.single-alg2 span {
+	color: #333;
+	text-align: center;
+	font-size: 14px;
+}
+
+.single-alg2 .button2 a{
+	width: 100%;
+	background: #0a212b;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-weight: 700;
+	color: #fff;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	padding: 15px 0;
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius: 6px;
+	transition: all 0.2s ease;
+
+}
+
+.single-alg2 .button2 a:hover{
+	background: #64aed9;
+}
+
+.single-alg2 .button2 :after {
+	content: "\2192";
+	position: relative;
+	left: 5px;
+}
+
+.footer {
+	height: 100%;
+	background: #0a212b;
+	border-top: 8px solid #1d4759;
+	padding: 100px 0 30px 80px;
+	color: #fff;
+}
+
+.footer h2 {
+	color: #fff;
+	font-size: 30px;
+}
+
+.footer  a {
+	color: #64aed9;
+}
+
+.footer .about {
+	margin-bottom: 0;
+}
+
+
+
+
+
