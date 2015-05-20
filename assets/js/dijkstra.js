@@ -284,6 +284,7 @@ document.getElementById("selectend").addEventListener("click", function() {
 });
 
 document.getElementById("startgame").addEventListener("click", function() {
+    d3startNode.on("mouseup",null);
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         clickedNode = getNode(d.id);
         var edg;
