@@ -560,6 +560,7 @@ document.getElementById("enddrawing").addEventListener("click", function() {
     document.getElementById("selectstart").style.display = "inline-block";
     document.getElementById("selectend").style.display = "inline-block";
     document.getElementById("startgame").style.display = "inline-block";
+    document.getElementById("startgame").setAttribute("disabled","");
 
 });
 
