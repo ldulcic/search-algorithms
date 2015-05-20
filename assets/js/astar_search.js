@@ -34,19 +34,28 @@ Node.prototype = {
         var nodes = [];
         var node;
         var newNode;
+
         for (var i = this.links.length - 1; i >= 0; i--) {
             node = this.links[i].node;
             newNode = new Node(node.x, node.y, node.id, node.title);
+            newNode.links = node.links;
+            newNode.value = node.value;
             newNode.cameFrom = node.cameFrom;
 
+            console.log("EXPAND");
+            console.log(this.value);
             var value = parseInt(this.value) + parseInt(this.links[i].value);//possible shit
             if (newNode.value == Number.MIN_VALUE || newNode.value > value) {
+                console.log(newNode.title);
                 newNode.value = value;
+                console.log(newNode.value);
                 newNode.cameFrom = this;
+                //alert("alert");
             }
             
             nodes.push(newNode);
         }
+        console.log(nodes);
         return nodes;
     }
 };
@@ -62,17 +71,32 @@ Link.prototype = {
 };
 
 //------------------ASTAR-----------------
-function AStar(startNode, endNode) {
+function AStarSearch(startNode, endNode) {
     this.startNode = startNode;
+    this.startNode.value = 0;
+    this.startNode.heuristicValue = heuristics[this.startNode.title];
     this.endNode = endNode;
+    this.pathDoesntExist = false;
     this.openNodes = [];
     this.visited = [this.startNode];
+    this.nextSteps = []
+
+    this.expand(this.startNode);
+    this.nextSteps = this.getNext();
+    console.log(this.nextSteps);
+    if(this.nextSteps == null) {
+        this.pathDoesntExist = true;
+    }
+    /*console.log("open");
+    for (var i = this.openNodes.length - 1; i >= 0; i--) {
+        console.log(this.openNodes[i]);
+    }*/
 }
 
-AStar.prototype = {
-    constructor: AStar,
+AStarSearch.prototype = {
+    constructor: AStarSearch,
 
-    inNextSteps: function(node) {
+    isNextStep: function(node) {
         var index = this.indexOfNode(this.nextSteps, node);
         if (node == endNode && index != -1) {
             return this.reconstructPath(node);
@@ -82,25 +106,35 @@ AStar.prototype = {
             return false;
         }
 
-        this.expand(node.expand());
+        this.expand(this.nextSteps[index]);
 
         this.nextSteps.splice(index, 1);
+        for (var i = this.nextSteps.length - 1; i >= 0; i--) {
+            this.addToOpen(this.nextSteps[i]);
+        };
+
         this.visited.push(node);
 
-        if (this.nextSteps.length == 0) {
-            this.nextSteps = this.getNext();
-            if(this.nextSteps == null) {
-                this.pathDoesntExist = true;
-            }
+        this.nextSteps = this.getNext();
+        if(this.nextSteps == null) {
+            this.pathDoesntExist = true;
         }
+            console.log("open");
+    for (var i = this.openNodes.length - 1; i >= 0; i--) {
+        console.log(this.openNodes[i]);
+    }
+        console.log(this.nextSteps);
         
         return true;
     },
 
-    expand: function(nodes) {
+    expand: function(node) {
+        var nodes = node.expand();
         var index = 0;
         for (var i = nodes.length - 1; i >= 0; i--) {
-            nodes[i].heuristicValue = heuristics[nodes[i].title];//heuristics is defined in graph-creator.js
+            /*console.log(nodes[i].title);
+            console.log(nodes[i].value);*/
+            nodes[i].heuristicValue = nodes[i].value + heuristics[nodes[i].title];//heuristics is defined in graph-creator.js
             index = this.indexOfNode(this.openNodes, nodes[i]);
             if (index == -1) {
                 this.addToOpen(nodes[i]);
@@ -135,8 +169,8 @@ AStar.prototype = {
                         break;
                     }
                 }
+                return possibleNext;
             }
-            return possibleNext;
         }
         return null;
     },
@@ -184,9 +218,9 @@ AStar.prototype = {
         }
     },
 
-    indexOf: function (array, node) {
-        var lenght = array.lenght;
-        for (var i = 0; i < lenght; i++) {
+    indexOfNode: function (array, node) {
+        var length = array.length;
+        for (var i = 0; i < length; i++) {
             if(array[i].id == node.id) {
                 return i;
             }
@@ -328,7 +362,9 @@ document.getElementById("startgame").addEventListener("click", function() {
     document.getElementById("selectstart").setAttribute("disabled", "");
     document.getElementById("selectend").setAttribute("disabled", "");
 
-    search = new IterativeDepthFirstSearch(startNode, endNode);
+    search = new AStarSearch(startNode, endNode);
+    console.log("heuristike");
+    console.log(heuristics);
 });
 
 document.getElementById("enddrawing").addEventListener("click", function() {
@@ -351,11 +387,22 @@ document.getElementById("enddrawing").addEventListener("click", function() {
     document.getElementById("enddrawing").setAttribute("disabled", "");
     document.getElementById("selectstart").removeAttribute("disabled");
 
-    var dataset = {
+    /*var dataset = {
     rowLabel: ['Nodes', 'A', 'B', 'C', 'D', 'A', 'B', 'C', 'D', 'A', 'B'],
     columnLabel: ['Heuristic values'],
     value: [["-"], ["-"], ["-"], ["-"], ["-"], ["-"], ["-"], ["-"], ["-"], ["-"], ["-"]]
-    };
+    };*/
+
+    var dataset = [];
+    dataset.rowLabel = ["Nodes"];
+    dataset.columnLabel = ['Heuristic values'];
+    dataset.value = [];
+    
+    //console.log(nodes);
+    for(var i = 0; i < nodes.length; i++) {
+        dataset.rowLabel.splice(1, 0, nodes[i].title);
+        dataset.value.push("-");
+    }
     
     nodeTitles = dataset.rowLabel;
                         
