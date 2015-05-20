@@ -17,7 +17,7 @@
     <a class="btn btn-default page-scroll" id="selectstart" style="display:none">Choose start node!</a>
     <a class="btn btn-default page-scroll" id="selectend" style="display:none">Choose end node!</a>
     <a class="btn btn-default page-scroll" id="startgame" style="display:none">Start game!</a>
-	<button type="button" data-placement="bottom" data-toggle="popover" data-content="Check Help for controls!" class="btn btn-default" id="drawing" style="float:right" data-content="Check Help for controls!">Draw your own</button>
+	<button type="button" data-placement="bottom" data-toggle="popover" data-content="Check <a href='../help.html' target='_blank'>Help</a> for controls!" class="btn btn-default" id="drawing" style="float:right">Draw your own</button>
     <a class="btn btn-default page-scroll" id="graph3" style="float:right">Advanced graph</a>
     <a class="btn btn-default page-scroll" id="graph2" style="float:right">Intermediate graph</a>
     <a class="btn btn-default page-scroll" id="graph1" style="float:right">Starter graph</a>
@@ -47,11 +47,13 @@
     <script src="../assets/js/depth_first_search.js"></script>
 
     <script>
-	$(
-		function () { 
-			$('[data-toggle="popover"]').popover(); 
-		}
-	);
+	$(function () { 
+        $('[data-toggle="popover"]').popover({html:true}).click(function() {
+            setTimeout(function() {
+                $('[data-toggle="popover"]').popover('hide');
+            }, 3000);
+        });
+    });
     </script>
 	
 </body>
