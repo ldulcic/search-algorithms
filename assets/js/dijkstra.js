@@ -227,12 +227,12 @@ document.getElementById("drawing").addEventListener("click", function(){
    	document.getElementById("startgame").style.display = "none";
 	document.getElementById("enddrawing").style.display = "inline-block";
 	
-        GraphCreator.prototype.svgKeyDown = graph.svgKeyD;
-        GraphCreator.prototype.svgMouseUp = graph.svgMouseU;
-        GraphCreator.prototype.circleMouseDown = graph.circleMouseD;
-        GraphCreator.prototype.dragmove = graph.dragmov;
-        GraphCreator.prototype.pathMouseDown = graph.pathMouseD;
-        GraphCreator.prototype.circleMouseUp = graph.circleMouseU;
+    GraphCreator.prototype.svgKeyDown = svgKeyD;
+    GraphCreator.prototype.svgMouseUp = svgMouseU;
+    GraphCreator.prototype.circleMouseDown = circleMouseD;
+    GraphCreator.prototype.dragmove = dragmov;
+    GraphCreator.prototype.pathMouseDown = pathMouseD;
+    GraphCreator.prototype.circleMouseUp = circleMouseU;
 });
 
 document.getElementById("selectstart").addEventListener("click", function() {
