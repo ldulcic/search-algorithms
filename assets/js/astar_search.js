@@ -119,11 +119,6 @@ AStarSearch.prototype = {
         if(this.nextSteps == null) {
             this.pathDoesntExist = true;
         }
-            console.log("open");
-    for (var i = this.openNodes.length - 1; i >= 0; i--) {
-        console.log(this.openNodes[i]);
-    }
-        console.log(this.nextSteps);
         
         return true;
     },
@@ -132,15 +127,16 @@ AStarSearch.prototype = {
         var nodes = node.expand();
         var index = 0;
         for (var i = nodes.length - 1; i >= 0; i--) {
-            /*console.log(nodes[i].title);
-            console.log(nodes[i].value);*/
-            nodes[i].heuristicValue = nodes[i].value + heuristics[nodes[i].title];//heuristics is defined in graph-creator.js
-            index = this.indexOfNode(this.openNodes, nodes[i]);
-            if (index == -1) {
-                this.addToOpen(nodes[i]);
-            } else if(this.openNodes[index].value > nodes[i].value) {
-                this.openNodes.splice(index, 1);
-                this.addToOpen(nodes[i]);
+            if(this.indexOfNode(this.visited, nodes[i]) == -1) {
+                nodes[i].heuristicValue = nodes[i].value + heuristics[nodes[i].title];//heuristics is defined in graph-creator.js
+                
+                index = this.indexOfNode(this.openNodes, nodes[i]);
+                if (index == -1) {
+                    this.addToOpen(nodes[i]);
+                } else if(this.openNodes[index].value > nodes[i].value) {
+                    this.openNodes.splice(index, 1);
+                    this.addToOpen(nodes[i]);
+                }
             }
         }
     },
