@@ -221,6 +221,7 @@ createGraph({"nodes":[{"id":2,"title":"A","x":161,"y":327},{"id":3,"title":"B","
 
 // LISTENERS
 document.getElementById("drawing").addEventListener("click", function(){
+	startNode = endNode = null;
 	graph.deleteGraph(true);
 	graph.setIdCt(2);
 	graph.updateGraph();
@@ -246,7 +247,9 @@ document.getElementById("selectstart").addEventListener("click", function() {
         d3node.select("circle")[0][0].style.fill = "#9bafd7";
         d3startNode = d3node;
 		console.log(d3startNode);
-        document.getElementById("selectend").removeAttribute("disabled");
+        if (endNode != null) {
+        	document.getElementById("startgame").removeAttribute("disabled");
+        }
     }
 
     GraphCreator.prototype.svgKeyDown = function() {
@@ -274,7 +277,9 @@ document.getElementById("selectend").addEventListener("click", function() {
         }
         d3node.select("circle")[0][0].setAttribute("style", "stroke-width:5px");
         d3endNode = d3node;
-        document.getElementById("startgame").removeAttribute("disabled");
+        if (startNode != null) {
+        	document.getElementById("startgame").removeAttribute("disabled");
+        }
     }
 });
 

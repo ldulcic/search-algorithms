@@ -234,6 +234,7 @@ createGraph({"nodes":[{"id":3,"title":"A","x":430,"y":86},{"id":4,"title":"B","x
 
 // LISTENERS
 document.getElementById("drawing").addEventListener("click", function(){
+	startNode = endNode = null;
 	graph.deleteGraph(true);
 	graphType = GraphType.depth_first;
 	graph.setIdCt(2);
@@ -249,6 +250,38 @@ document.getElementById("drawing").addEventListener("click", function(){
     GraphCreator.prototype.circleMouseUp = circleMouseU;
 });
 
+document.getElementById("selectstart").addEventListener("click", function() {
+    GraphCreator.prototype.circleMouseUp = function(d3node, d) {
+        startNode = getNode(d.id);
+        if (d3startNode != null) {
+            d3startNode.select("circle")[0][0].setAttribute("style", "stroke-width:2px");
+            d3startNode.select("circle")[0][0].style.fill = "#F6FBFF";
+        }
+        d3node.select("circle")[0][0].setAttribute("style", "stroke-width:5px");
+        d3node.select("circle")[0][0].style.fill = "#9bafd7";
+        d3startNode = d3node;
+        if (endNode != null) {
+        	document.getElementById("startgame").removeAttribute("disabled");
+        }
+    }
+
+    GraphCreator.prototype.svgKeyDown = function() {
+
+    }
+    GraphCreator.prototype.svgMouseUp = function() {
+
+    }
+    GraphCreator.prototype.circleMouseDown = function() {
+
+    }
+    GraphCreator.prototype.dragmove = function(d) {
+
+    }
+    GraphCreator.prototype.pathMouseDown = function() {
+
+    }
+});
+
 document.getElementById("selectend").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         endNode = getNode(d.id);
@@ -257,7 +290,9 @@ document.getElementById("selectend").addEventListener("click", function() {
         }
         d3node.select("circle")[0][0].setAttribute("style", "stroke-width:5px");
         d3endNode = d3node;
-        document.getElementById("startgame").removeAttribute("disabled");
+        if (startNode != null) {
+        	document.getElementById("startgame").removeAttribute("disabled");
+        }
     }
 });
 
