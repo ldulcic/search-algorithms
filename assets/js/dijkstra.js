@@ -240,7 +240,9 @@ document.getElementById("selectstart").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
     	var n = getNode(d.id);
         if (endNode == n) {
-        	alert("Begin and end node can't be the same!");
+            window.parent.$("#title").html("Warning!");
+            window.parent.$("#text").html("Begin and end node can't be the same!");
+            window.parent.$("#myModal").modal("show");
         	return;
         }
         startNode = n;
@@ -278,7 +280,9 @@ document.getElementById("selectend").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
     	var n = getNode(d.id);
         if (startNode == n) {
-        	alert("Begin and end node can't be the same!");
+        	window.parent.$("#title").html("Warning!");
+            window.parent.$("#text").html("Begin and end node can't be the same!");
+            window.parent.$("#myModal").modal("show");
         	return;
         }
         endNode = n;
@@ -320,7 +324,9 @@ document.getElementById("startgame").addEventListener("click", function() {
             document.getElementById("c"+result[0].id).getElementsByTagName("circle")[0].style.fill = "#83d675";
             d3node.select("circle")[0][0].style.fill = "#83d675";
 			//pobjeda
-			alert("Congratulations!\n\nNow try more advanced graphs, draw your own graphs, or exchange graphs with your friends.");
+            window.parent.$("#title").html("Congratulations!");
+            window.parent.$("#text").html("Now try more advanced graphs, draw your own graphs, or exchange graphs with your friends.");
+            window.parent.$("#myModal").modal("show");
 			GraphCreator.prototype.circleMouseUp = function() {}
         } else if (result) {
             l = dijkstra.findLink(clickedNode);
@@ -336,11 +342,10 @@ document.getElementById("startgame").addEventListener("click", function() {
             d3node.select("circle")[0][0].style.fill = "#9bafd7";
             d3node.on("mouseup",null);
             if(dijkstra.pathDoesntExist){
-                window.alert("There is no path between start and end nodes!\n\nTry starter graph if you are confused.");
-				createGraph({"nodes":[{"id":2,"title":"A","x":161,"y":327},{"id":3,"title":"B","x":462,"y":131},{"id":4,"title":"C","x":470,"y":507},{"id":5,"title":"D","x":759,"y":311}],"edges":[{"source":2,"target":3,"id":"pathId4","weight":Math.floor((Math.random() * 10) + 1)},{"source":2,"target":4,"id":"pathId5","weight":Math.floor((Math.random() * 10) + 1)},{"source":4,"target":5,"id":"pathId6","weight":Math.floor((Math.random() * 10) + 1)},{"source":3,"target":5,"id":"pathId7","weight":Math.floor((Math.random() * 10) + 1)}]},2,5);
-	
-                GraphCreator.prototype.circleMouseUp = function() {
-                }
+                window.parent.$("#title").html("Warning!");
+                window.parent.$("#text").html("There is no path between start and end nodes!<br>Try starter graph if you are confused.");
+                window.parent.$("#myModal").modal("show");
+				GraphCreator.prototype.circleMouseUp = function() {}
             }
         } else {
             wrongAnimation(d3node.select("circle"));
@@ -354,9 +359,9 @@ document.getElementById("startgame").addEventListener("click", function() {
 
     dijkstra = new Dijkstra(startNode, endNode);
     if(dijkstra.pathDoesntExist){
-        window.alert("There is no path between start and end nodes!\n\nTry starter graph if you are confused.");
-		createGraph({"nodes":[{"id":2,"title":"A","x":161,"y":327},{"id":3,"title":"B","x":462,"y":131},{"id":4,"title":"C","x":470,"y":507},{"id":5,"title":"D","x":759,"y":311}],"edges":[{"source":2,"target":3,"id":"pathId4","weight":Math.floor((Math.random() * 10) + 1)},{"source":2,"target":4,"id":"pathId5","weight":Math.floor((Math.random() * 10) + 1)},{"source":4,"target":5,"id":"pathId6","weight":Math.floor((Math.random() * 10) + 1)},{"source":3,"target":5,"id":"pathId7","weight":Math.floor((Math.random() * 10) + 1)}]},2,5);
-	
+        window.parent.$("#title").html("Warning!");
+        window.parent.$("#text").html("There is no path between start and end nodes!<br>Try starter graph if you are confused.");
+        window.parent.$("#myModal").modal("show");
         GraphCreator.prototype.circleMouseUp = function() {}
     }
 });

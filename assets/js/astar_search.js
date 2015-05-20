@@ -42,20 +42,14 @@ Node.prototype = {
             newNode.value = node.value;
             newNode.cameFrom = node.cameFrom;
 
-            console.log("EXPAND");
-            console.log(this.value);
-            var value = parseInt(this.value) + parseInt(this.links[i].value);//possible shit
+            var value = parseInt(this.value) + parseInt(this.links[i].value);
             if (newNode.value == Number.MIN_VALUE || newNode.value > value) {
-                console.log(newNode.title);
                 newNode.value = value;
-                console.log(newNode.value);
                 newNode.cameFrom = this;
-                //alert("alert");
             }
             
             nodes.push(newNode);
         }
-        console.log(nodes);
         return nodes;
     }
 };
@@ -99,7 +93,7 @@ AStarSearch.prototype = {
     isNextStep: function(node) {
         var index = this.indexOfNode(this.nextSteps, node);
         if (node == endNode && index != -1) {
-            return this.reconstructPath(node);
+            return this.reconstructPath(this.nextSteps[index]);
         }
 
         if (index == -1) {
@@ -107,13 +101,12 @@ AStarSearch.prototype = {
         }
 
         this.expand(this.nextSteps[index]);
+        this.visited.push(this.nextSteps[index]);
 
         this.nextSteps.splice(index, 1);
         for (var i = this.nextSteps.length - 1; i >= 0; i--) {
             this.addToOpen(this.nextSteps[i]);
-        };
-
-        this.visited.push(node);
+        }
 
         this.nextSteps = this.getNext();
         if(this.nextSteps == null) {
@@ -199,16 +192,30 @@ AStarSearch.prototype = {
     },
 
     findLink: function(aNode) {
+        aNode = this.findNode(aNode.id);
         var prevNode;
         var tempnode;
         for (var i = aNode.links.length - 1; i >= 0; i--) {
             tempnode = aNode.links[i].node;
+<<<<<<< HEAD
             if (  (this.visited.indexOf(tempnode) != -1) && ( tempnode == aNode.cameFrom)) {
+=======
+            if (tempnode.id == aNode.cameFrom.id) {
+>>>>>>> e394c1cd0c596b890692613d33f4593373e4d6ef
                 prevNode = aNode.links[i];
                 break;
             }
         }
         return prevNode;
+    },
+
+    findNode: function (nodeId) {
+        for (var i = this.visited.length - 1; i >= 0; i--) {
+            if(this.visited[i].id == nodeId) {
+                return this.visited[i];
+            }
+        }
+        return null;
     },
 
     indexOfNode: function (array, node) {
@@ -353,7 +360,7 @@ document.getElementById("startgame").addEventListener("click", function() {
         var result = search.isNextStep(clickedNode);
 
         if (result instanceof Array) {
-            console.log("uso u kraj");
+            console.log(result);
             for(var j = result.length -1; j > 0; j--){
                 l1 = result[j];
                 document.getElementById("c"+l1.id).getElementsByTagName("circle")[0].style.fill = "#83d675";
