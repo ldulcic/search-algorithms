@@ -200,7 +200,7 @@ var GraphCreator = function(svg, nodes, edges) {
                 heuristics[dataset.rowLabel[i]] = dataset.value[i-1][0];
             }
             tableEditing = true;
-            d3.selectAll(".cell").on("mousedown", function () {alert("aaa")});
+            d3.selectAll(".cell").on("mouseup", function (d) {thisGraph.cellMouseDown.call(this);});
         }
     };
 
@@ -215,6 +215,11 @@ var GraphCreator = function(svg, nodes, edges) {
 
             //delete table if exists
             d3.selectAll(".vis-group").remove();
+            table = null;
+            dataset = [];
+            heuristics = [];
+            nodeTitles = [];
+            tableEditing = false;
 
             filereader.onload = function() {
                 var txtRes = filereader.result;
@@ -328,7 +333,12 @@ GraphCreator.prototype.deleteGraph = function(skipPrompt) {
 
         //delete table if exists
         d3.selectAll(".vis-group").remove();
-        
+        table = null;
+        dataset = [];
+        heuristics = [];
+        nodeTitles = [];
+        tableEditing = false;
+
         consts.defaultTitle = "A".charCodeAt();
         consts.numOfLettersInTitle = 1;
         this.setIdCt(1);
@@ -561,6 +571,8 @@ GraphCreator.prototype.changeTableData = function(d) {
 };
 
 GraphCreator.prototype.changeCellData = function(d3cell, d) {
+    console.log(d3cell);
+    return;
     var thisGraph = this,
         consts = thisGraph.consts,
         htmlEl = d3cell.node();
@@ -606,12 +618,12 @@ GraphCreator.prototype.changeCellData = function(d3cell, d) {
         .on("blur", function(d) {
             this.focus();
         });
-
-        /*d3cell.text("");
-        var txtNode = d3txt.node();
-        thisGraph.selectElementContents(txtNode);
-        txtNode.focus();*/
     return d3txt;
+};
+
+GraphCreator.prototype.cellMouseDown = function (arg) {
+    console.log(this);
+    console.log(arg);
 };
 
 /* place editable text on node in place of svg text */
