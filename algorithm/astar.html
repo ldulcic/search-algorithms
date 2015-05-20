@@ -9,8 +9,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Iterative deepening depth-first search</title>
-
+    <title>A* search algorithm</title>
+	
     <!-- Main CSS and Font -->
     <link href="../assets/css/style.css" rel="stylesheet">
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700" rel="stylesheet" type="text/css">
@@ -44,8 +44,8 @@
                             <li><a href="dijkstra.html">Dijkstra's algorithm</a></li>
                             <li><a href="breadth.html">Breadth-first search</a></li>
                             <li><a href="depth.html">Depth-first search</a></li>
-                            <li class="active"><a href="iterative.html">Iterative deepening depth-first search<span class="sr-only">(current)</span></a></li>
-                            <li><a href="astar.html">A* search algorithm</a></li>
+                            <li><a href="iterative.html">Iterative deepening depth-first search</a></li>
+                            <li class="active"><a href="astar.html">A* search algorithm<span class="sr-only">(current)</span></a></li>
                         </ul>
                     </li> 
                 </ul>
@@ -60,22 +60,21 @@
     </nav>
 
     <div class="alg-section">
-        <iframe class="col-md-7" id="myframe" src="iterative_fs.html" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+        <iframe class="col-md-7" id="myframe" src="astar_fs.html" marginwidth="0" marginheight="0" scrolling="no"></iframe>
         <div class="col-md-5">
-        <h1>Iterative deepening depth-first search</h1>
-		<br>
-        <p><b>How does it work?</b></p>
-		<br><font color="gray">
-		<p><b>RULE</b></p> 
-		<p>Select alphabetically first child node of current <b>branch tip</b> until you reach <b>maximum depth</b>, then start over from the starting node.</p>
+        <h1>A* search algorithm</h1>
         <br>
-		<p><b>EXPLANATION</b></p>
-		<p><b>branch tip</b><br>this is the starting node, but if you successfully select a node it becomes the new branch tip</p>
-		<p><b>maximum depth</b><br>it begins at zero and increases in every iteration</p>
-		</font><br>
-		<p><b>Still confused?</b></p>
-		<font color="gray"><p><a href="http://en.wikipedia.org/wiki/Iterative_deepening_depth-first_search" target="_blank">Read more about it</a> and then return here to try out what you learned.</p></font>
-		</div>
+        <p><b>How does it work?</b></p>
+        <br><font color="gray">
+        <p><b>RULE</b></p> 
+        
+        <br>
+        <p><b>EXPLANATION</b></p>
+        
+        </font><br>
+        <p><b>Still confused?</b></p>
+        <font color="gray"><p><a href="http://en.wikipedia.org/wiki/A*_search_algorithm" target="_blank">Read more about it</a> and then return here to try out what you learned.</p></font>
+        </div>
     </div>
 
     <!-- d3 -->
@@ -86,7 +85,7 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="../assets/js/bootstrap.min.js"></script>
     <script src ="../assets/js/fullscreen.js"></script>
-
+	
 </body>
 
 </html>

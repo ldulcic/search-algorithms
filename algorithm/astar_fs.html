@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <!-- Graph creator CSS -->
+    <link href="../assets/css/graph-creator.css" rel="stylesheet">
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../assets/css/bootstrap.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <a class="btn btn-default page-scroll" id="enddrawing">Finish drawing</a>
+    <a class="btn btn-default page-scroll" id="selectstart" style="display:none">Choose start node!</a>
+    <a class="btn btn-default page-scroll" id="selectend" style="display:none">Choose end node!</a>
+    <button type="button"class="btn btn-default page-scroll" id="startgame" style="display:none">Start game!</button>
+	<button type="button" data-placement="bottom" data-toggle="popover" data-content="Check <a href='../help.html' target='_blank'>Help</a> for controls!" class="btn btn-default" id="drawing" style="float:right">Draw your own</button>
+    <a class="btn btn-default page-scroll" id="graph3" style="float:right">Advanced graph</a>
+    <a class="btn btn-default page-scroll" id="graph2" style="float:right">Intermediate graph</a>
+    <a class="btn btn-default page-scroll" id="graph1" style="float:right">Starter graph</a>
+    <div id="graph">
+        <div id="toolbox">
+          <input type="file" id="hidden-file-upload">
+          <input id="upload-input" type="image" title="upload graph" src="../assets/img/upload-icon.png" alt="upload graph">
+          <input type="image" id="download-input" title="download graph" src="../assets/img/download-icon.png" alt="download graph">
+          <input type="image" id="fullscreen" title="full screen" src="../assets/img/fullscreen-icon.png" alt="full screen" style="margin-left:10px">
+          <input type="image" id="reset" title="reset" src="../assets/img/reset-icon.png" alt="reset" style="margin-left:10px">
+        </div>
+    </div>
+
+    <!-- d3 -->
+    <script src="../assets/js/d3.v3.js" charset="utf-8"></script>
+    <!-- fileSaver JavaScript -->
+    <script src="../assets/js/FileSaver.min.js"></script>
+
+	<!-- jQuery -->
+    <script src="../assets/js/jquery.js"></script>
+	
+	<!-- Bootstrap Core JavaScript -->
+    <script src="../assets/js/bootstrap.min.js"></script>
+	
+    <!-- Table, graph creator and astar js -->
+    <script src="../assets/js/table.js"></script>
+    <script src="../assets/js/graph-creator.js"></script>
+    <script src="../assets/js/astar_search.js"></script>
+	
+    <script>
+	$(function () { 
+		$('[data-toggle="popover"]').popover({html:true}).click(function() {
+            setTimeout(function() {
+                $('[data-toggle="popover"]').popover('hide');
+            }, 3000);
+        });
+	});
+    </script>
+
+</body>
+
+</html>
