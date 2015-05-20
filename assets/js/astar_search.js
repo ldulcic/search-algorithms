@@ -387,18 +387,20 @@ document.getElementById("enddrawing").addEventListener("click", function() {
     value: [["-"], ["-"], ["-"], ["-"], ["-"], ["-"], ["-"], ["-"], ["-"], ["-"], ["-"]]
     };*/
     
-    dataset.rowLabel = ["Nodes"];
-    dataset.columnLabel = ['Heuristic values'];
-    dataset.value = [];
     
-    //console.log(nodes);
-    for(var i = 0; i < nodes.length; i++) {
-        dataset.rowLabel.splice(1, 0, nodes[i].title);
-        dataset.value.push("-");
+    if(table === undefined) {
+        dataset.rowLabel = ["Nodes"];
+        dataset.columnLabel = ['Heuristic values'];
+        dataset.value = [];
+        
+        for(var i = 0; i < nodes.length; i++) {
+            dataset.rowLabel.splice(1, 0, nodes[i].title);
+            dataset.value.push("-");
+        }
+        
+        nodeTitles = dataset.rowLabel;
+        graph.createTable();
     }
-    
-    nodeTitles = dataset.rowLabel;
-    graph.createTable();
 });
 
 document.getElementById("graph1").addEventListener("click",
