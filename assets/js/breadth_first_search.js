@@ -271,7 +271,6 @@ document.getElementById("startgame").addEventListener("click", function() {
             document.getElementById("#"+result[0].id).getElementsByTagName("circle")[0].style.fill = "#83d675";
             d3node.select("circle")[0][0].style.fill = "#83d675";
             window.alert("Congratulations!\n\nNow try more advanced graphs, draw your own graphs, or exchange graphs with your friends.");
-			createGraph({"nodes":[{"id":3,"title":"A","x":430,"y":86},{"id":4,"title":"B","x":209,"y":244},{"id":5,"title":"C","x":434,"y":246},{"id":6,"title":"D","x":648,"y":243},{"id":7,"title":"E","x":89,"y":402},{"id":8,"title":"F","x":287,"y":407}],"edges":[{"source":3,"target":5,"id":"pathId0","weight":""},{"source":3,"target":4,"id":"pathId1","weight":""},{"source":3,"target":6,"id":"pathId2","weight":""},{"source":4,"target":8,"id":"pathId3","weight":""},{"source":4,"target":7,"id":"pathId4","weight":""}]},3,8)
 
         } else if (result) {
             var l = search.findLink(clickedNode);
