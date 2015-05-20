@@ -271,6 +271,7 @@ var svg = d3.select(settings.appendElSpec).append("svg")
 var graph = new GraphCreator(svg, [], []);
 graph.setIdCt(2);
 graph.updateGraph();
+createGraph({"nodes":[{"id":3,"title":"A","x":430,"y":86},{"id":4,"title":"B","x":209,"y":244},{"id":5,"title":"C","x":434,"y":246},{"id":6,"title":"D","x":648,"y":243},{"id":7,"title":"E","x":89,"y":402},{"id":8,"title":"F","x":287,"y":407}],"edges":[{"source":3,"target":5,"id":"pathId0","weight":""},{"source":3,"target":4,"id":"pathId1","weight":""},{"source":3,"target":6,"id":"pathId2","weight":""},{"source":4,"target":8,"id":"pathId3","weight":""},{"source":4,"target":7,"id":"pathId4","weight":""}]},3,8);
 
 // LISTENERS
 document.getElementById("drawing").addEventListener("click", function(){
@@ -292,7 +293,12 @@ document.getElementById("drawing").addEventListener("click", function(){
 
 document.getElementById("selectstart").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
-        startNode = getNode(d.id);
+        var n = getNode(d.id);
+        if (endNode == n) {
+            alert("Begin and end node can't be the same!");
+            return;
+        }
+        startNode = n;
         if (d3startNode != null) {
             d3startNode.select("circle")[0][0].setAttribute("style", "stroke-width:2px");
             d3startNode.select("circle")[0][0].style.fill = "#F6FBFF";
@@ -323,7 +329,12 @@ document.getElementById("selectstart").addEventListener("click", function() {
 
 document.getElementById("selectend").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
-        endNode = getNode(d.id);
+        var n = getNode(d.id);
+        if (startNode == n) {
+            alert("Begin and end node can't be the same!");
+            return;
+        }
+        endNode = n;
         if (d3endNode != null) {
             d3endNode.select("circle")[0][0].setAttribute("style", "stroke-width:2px");
         }
@@ -347,7 +358,7 @@ document.getElementById("startgame").addEventListener("click", function() {
         if (result instanceof Array) {
             for(var j = result.length -1; j > 0; j--){
                 l1 = result[j];
-                document.getElementById("#"+l1.id).getElementsByTagName("circle")[0].style.fill = "#83d675";
+                document.getElementById("c"+l1.id).getElementsByTagName("circle")[0].style.fill = "#83d675";
                 l2 = result[j-1]
                 for (var i = graph.edges.length - 1; i >= 0; i--) {
                     e = graph.edges[i];
@@ -358,10 +369,12 @@ document.getElementById("startgame").addEventListener("click", function() {
                 }
                 document.getElementById(edg.id).style.stroke = "#83d675";
             }
-            document.getElementById("#"+result[0].id).getElementsByTagName("circle")[0].style.fill = "#83d675";
+            document.getElementById("c"+result[0].id).getElementsByTagName("circle")[0].style.fill = "#83d675";
             d3node.select("circle")[0][0].style.fill = "#83d675";
             window.alert("dobro je, ne pritsci vise nista!");
-            console.log(result);
+            GraphCreator.prototype.circleMouseUp = function() {}
+            currentIter = [];
+            currentPaths = [];
         } else if (result) {
             var l = search.findLink(clickedNode);
             if( l != undefined ){
@@ -456,7 +469,7 @@ document.getElementById("enddrawing").addEventListener("click", function() {
 
 document.getElementById("graph1").addEventListener("click",
     function() {
-		createGraph({"nodes":[{"id":3,"title":"A","x":430,"y":86},{"id":4,"title":"B","x":209,"y":244},{"id":5,"title":"C","x":434,"y":246},{"id":6,"title":"D","x":648,"y":243},{"id":7,"title":"E","x":89,"y":402},{"id":8,"title":"F","x":287,"y":407}],"edges":[{"source":3,"target":5,"id":"pathId0","weight":""},{"source":3,"target":4,"id":"pathId1","weight":""},{"source":3,"target":6,"id":"pathId2","weight":""},{"source":4,"target":8,"id":"pathId3","weight":""},{"source":4,"target":7,"id":"pathId4","weight":""}]},3,8)
+		createGraph({"nodes":[{"id":3,"title":"A","x":430,"y":86},{"id":4,"title":"B","x":209,"y":244},{"id":5,"title":"C","x":434,"y":246},{"id":6,"title":"D","x":648,"y":243},{"id":7,"title":"E","x":89,"y":402},{"id":8,"title":"F","x":287,"y":407}],"edges":[{"source":3,"target":5,"id":"pathId0","weight":""},{"source":3,"target":4,"id":"pathId1","weight":""},{"source":3,"target":6,"id":"pathId2","weight":""},{"source":4,"target":8,"id":"pathId3","weight":""},{"source":4,"target":7,"id":"pathId4","weight":""}]},3,8);
 	}
 );
 
@@ -521,9 +534,11 @@ function createGraph(json,start,end){
 		
 		this.startNode = getNode(start);
 		this.endNode = getNode(end);
-        document.getElementById("#"+start).getElementsByTagName("circle")[0].setAttribute("style", "stroke-width:5px");
-		document.getElementById("#"+start).getElementsByTagName("circle")[0].style.fill = "#9bafd7";
-		document.getElementById("#"+end).getElementsByTagName("circle")[0].setAttribute("style", "stroke-width:5px");
+        d3startNode = d3.select("#c"+start);
+        d3endNode = d3.select("#c"+end);
+        document.getElementById("c"+start).getElementsByTagName("circle")[0].setAttribute("style", "stroke-width:5px");
+		document.getElementById("c"+start).getElementsByTagName("circle")[0].style.fill = "#9bafd7";
+		document.getElementById("c"+end).getElementsByTagName("circle")[0].setAttribute("style", "stroke-width:5px");
 		document.getElementById("enddrawing").style.display = "none";
 		document.getElementById("startgame").style.display = "inline-block";
 		document.getElementById("startgame").removeAttribute("disabled");

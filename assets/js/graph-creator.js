@@ -787,7 +787,7 @@ GraphCreator.prototype.updateGraph = function() {
             return "translate(" + d.x + "," + d.y + ")";
         })
         .attr("id",function(d) {
-            return "#" + d.id;
+            return "c" + d.id;
         })
         .on("mouseover", function(d) {
             if (state.shiftNodeDrag) {
