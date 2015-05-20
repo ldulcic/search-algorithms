@@ -42,20 +42,14 @@ Node.prototype = {
             newNode.value = node.value;
             newNode.cameFrom = node.cameFrom;
 
-            console.log("EXPAND");
-            console.log(this.value);
-            var value = parseInt(this.value) + parseInt(this.links[i].value);//possible shit
+            var value = parseInt(this.value) + parseInt(this.links[i].value);
             if (newNode.value == Number.MIN_VALUE || newNode.value > value) {
-                console.log(newNode.title);
                 newNode.value = value;
-                console.log(newNode.value);
                 newNode.cameFrom = this;
-                //alert("alert");
             }
             
             nodes.push(newNode);
         }
-        console.log(nodes);
         return nodes;
     }
 };
@@ -87,10 +81,6 @@ function AStarSearch(startNode, endNode) {
     if(this.nextSteps == null) {
         this.pathDoesntExist = true;
     }
-    /*console.log("open");
-    for (var i = this.openNodes.length - 1; i >= 0; i--) {
-        console.log(this.openNodes[i]);
-    }*/
 }
 
 AStarSearch.prototype = {
@@ -99,7 +89,7 @@ AStarSearch.prototype = {
     isNextStep: function(node) {
         var index = this.indexOfNode(this.nextSteps, node);
         if (node == endNode && index != -1) {
-            return this.reconstructPath(node);
+            return this.reconstructPath(this.nextSteps[index]);
         }
 
         if (index == -1) {
@@ -107,13 +97,12 @@ AStarSearch.prototype = {
         }
 
         this.expand(this.nextSteps[index]);
+        this.visited.push(this.nextSteps[index]);
 
         this.nextSteps.splice(index, 1);
         for (var i = this.nextSteps.length - 1; i >= 0; i--) {
             this.addToOpen(this.nextSteps[i]);
-        };
-
-        this.visited.push(node);
+        }
 
         this.nextSteps = this.getNext();
         if(this.nextSteps == null) {
@@ -199,19 +188,26 @@ AStarSearch.prototype = {
     },
 
     findLink: function(aNode) {
+        aNode = this.findNode(aNode.id);
         var prevNode;
         var tempnode;
         for (var i = aNode.links.length - 1; i >= 0; i--) {
             tempnode = aNode.links[i].node;
-            if (  (this.indexOfNode(this.visited, tempnode) != -1) && (tempnode.value + aNode.links[i].value == aNode.value)) {
-                prevNode = tempnode;
+            if (tempnode.id == aNode.cameFrom.id) {
+                prevNode = aNode.links[i];
+                break;
             }
         }
-        for (var i = aNode.links.length - 1; i >= 0; i--) {
-            if(aNode.links[i].node === prevNode){
-                return aNode.links[i];
+        return prevNode;
+    },
+
+    findNode: function (nodeId) {
+        for (var i = this.visited.length - 1; i >= 0; i--) {
+            if(this.visited[i].id == nodeId) {
+                return this.visited[i];
             }
         }
+        return null;
     },
 
     indexOfNode: function (array, node) {
@@ -268,19 +264,44 @@ var svg = d3.select(settings.appendElSpec).append("svg")
 var graph = new GraphCreator(svg, [], []);
 graph.setIdCt(2);
 graph.updateGraph();
+createGraph({"nodes":[{"id":3,"title":"A","x":430,"y":86},{"id":4,"title":"B","x":209,"y":244},{"id":5,"title":"C","x":434,"y":246},{"id":6,"title":"D","x":648,"y":243},{"id":7,"title":"E","x":89,"y":402},{"id":8,"title":"F","x":287,"y":407}],"edges":[{"source":3,"target":5,"id":"pathId0","weight":""},{"source":3,"target":4,"id":"pathId1","weight":""},{"source":3,"target":6,"id":"pathId2","weight":""},{"source":4,"target":8,"id":"pathId3","weight":""},{"source":4,"target":7,"id":"pathId4","weight":""}]},3,8);
 
 // LISTENERS
+document.getElementById("drawing").addEventListener("click", function(){
+    nodes = [];
+    startNode = endNode = null;
+    graph.deleteGraph(true);
+    graph.setIdCt(2);
+    graph.updateGraph();    
+    document.getElementById("startgame").style.display = "none";
+    document.getElementById("enddrawing").style.display = "inline-block";
+    
+    GraphCreator.prototype.svgKeyDown = svgKeyD;
+    GraphCreator.prototype.svgMouseUp = svgMouseU;
+    GraphCreator.prototype.circleMouseDown = circleMouseD;
+    GraphCreator.prototype.dragmove = dragmov;
+    GraphCreator.prototype.pathMouseDown = pathMouseD;
+    GraphCreator.prototype.circleMouseUp = circleMouseU;
+});
+
 document.getElementById("selectstart").addEventListener("click", function() {
-    console.log(heuristics);
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
-        startNode = getNode(d.id);
-        if (d3startNode != null) {
-            d3startNode[0][0].setAttribute("stroke", "black");
+        var n = getNode(d.id);
+        if (endNode == n) {
+            alert("Begin and end node can't be the same!");
+            return;
         }
-        d3node[0][0].setAttribute("stroke", "green");
-        d3node.select("circle")[0][0].style.fill = "GreenYellow ";
+        startNode = n;
+        if (d3startNode != null) {
+            d3startNode.select("circle")[0][0].setAttribute("style", "stroke-width:2px");
+            d3startNode.select("circle")[0][0].style.fill = "#F6FBFF";
+        }
+        d3node.select("circle")[0][0].setAttribute("style", "stroke-width:5px");
+        d3node.select("circle")[0][0].style.fill = "#9bafd7";
         d3startNode = d3node;
-        document.getElementById("selectend").removeAttribute("disabled");
+        if (endNode != null) {
+            document.getElementById("startgame").removeAttribute("disabled");
+        }
     }
 
     GraphCreator.prototype.svgKeyDown = function() {
@@ -302,13 +323,20 @@ document.getElementById("selectstart").addEventListener("click", function() {
 
 document.getElementById("selectend").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
-        endNode = getNode(d.id);
-        if (d3endNode != null) {
-            d3endNode[0][0].setAttribute("stroke", "black");
+        var n = getNode(d.id);
+        if (startNode == n) {
+            alert("Begin and end node can't be the same!");
+            return;
         }
-        d3node[0][0].setAttribute("stroke", "red");
+        endNode = n;
+        if (d3endNode != null) {
+            d3endNode.select("circle")[0][0].setAttribute("style", "stroke-width:2px");
+        }
+        d3node.select("circle")[0][0].setAttribute("style", "stroke-width:5px");
         d3endNode = d3node;
-        document.getElementById("startgame").removeAttribute("disabled");
+        if (startNode != null) {
+            document.getElementById("startgame").removeAttribute("disabled");
+        }    
     }
 });
 
@@ -321,21 +349,26 @@ document.getElementById("startgame").addEventListener("click", function() {
         var result = search.isNextStep(clickedNode);
 
         if (result instanceof Array) {
-            /*l = dijkstra.findLink(clickedNode);
-            for (var i = graph.edges.length - 1; i >= 0; i--) {
-                e = graph.edges[i];
-                if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
-                    edg = graph.edges[i];
-                    break;
-                }
-            }
-            document.getElementById(edg.id).style.stroke = "green"; 
-            d3node.select("circle")[0][0].style.fill = "GreenYellow ";*/
-            window.alert("dobro je, ne pritsci vise nista!");
             console.log(result);
-            //console.log(result);
+            for(var j = result.length -1; j > 0; j--){
+                l1 = result[j];
+                document.getElementById("c"+l1.id).getElementsByTagName("circle")[0].style.fill = "#83d675";
+                l2 = result[j-1]
+                for (var i = graph.edges.length - 1; i >= 0; i--) {
+                    e = graph.edges[i];
+                    if( (e.source.id == l1.id && e.target.id == l2.id) || (e.target.id == l1.id && e.source.id == l2.id)){
+                        edg = graph.edges[i];
+                        break;
+                    }
+                }
+                document.getElementById(edg.id).style.stroke = "#83d675";
+            }
+            document.getElementById("c"+result[0].id).getElementsByTagName("circle")[0].style.fill = "#83d675";
+            d3node.select("circle")[0][0].style.fill = "#83d675";
+            window.alert("Congratulations!\n\nNow try more advanced graphs, draw your own graphs, or exchange graphs with your friends.");
+            GraphCreator.prototype.circleMouseUp = function() {}
         } else if (result) {
-           /* l = search.findLink(clickedNode);
+            var l = search.findLink(clickedNode);
             for (var i = graph.edges.length - 1; i >= 0; i--) {
                 e = graph.edges[i];
                 if( (e.source.id == l.node.id && e.target.id == clickedNode.id) || (e.target.id == l.node.id && e.source.id == clickedNode.id)){
@@ -344,21 +377,27 @@ document.getElementById("startgame").addEventListener("click", function() {
                 }
 
             }
-            document.getElementById(edg.id).style.stroke = "green";*/ 
-            d3node.select("circle")[0][0].style.fill = "GreenYellow ";
-            if(search.nextIteration) {
-                d3.selectAll("circle").style("fill", "white");
+            document.getElementById(edg.id).style.stroke = "#9bafd7"; 
+            d3node.select("circle")[0][0].style.fill = "#9bafd7";
+            d3node.on("mouseup",null);
+            if(search.pathDoesntExist){
+                window.alert("There is no path between start and end nodes!\n\nTry starter graph if you are confused.");
+                GraphCreator.prototype.circleMouseUp = function() {}
             }
         } else {
             wrongAnimation(d3node.select("circle"));
-
         }
     }
 
-    document.getElementById("selectstart").setAttribute("disabled", "");
-    document.getElementById("selectend").setAttribute("disabled", "");
+    document.getElementById("selectstart").style.display = "none";
+    document.getElementById("selectend").style.display = "none";
+    document.getElementById("startgame").style.display = "none";
 
     search = new AStarSearch(startNode, endNode);
+    if(search.pathDoesntExist){
+        window.alert("There is no path between start and end nodes!\n\nTry starter graph if you are confused.");
+        GraphCreator.prototype.circleMouseUp = function() {}
+    }
 });
 
 document.getElementById("enddrawing").addEventListener("click", function() {
@@ -378,27 +417,26 @@ document.getElementById("enddrawing").addEventListener("click", function() {
         target.addLink(new Link(source, e.weight));
     }
 
-    document.getElementById("enddrawing").setAttribute("disabled", "");
-    document.getElementById("selectstart").removeAttribute("disabled");
+    document.getElementById("enddrawing").style.display = "none";
+    document.getElementById("selectstart").style.display = "inline-block";
+    document.getElementById("selectend").style.display = "inline-block";
+    document.getElementById("startgame").style.display = "inline-block";
+    document.getElementById("startgame").setAttribute("disabled", "");
 
-    /*var dataset = {
-    rowLabel: ['Nodes', 'A', 'B', 'C', 'D', 'A', 'B', 'C', 'D', 'A', 'B'],
-    columnLabel: ['Heuristic values'],
-    value: [["-"], ["-"], ["-"], ["-"], ["-"], ["-"], ["-"], ["-"], ["-"], ["-"], ["-"]]
-    };*/
-    
-    dataset.rowLabel = ["Nodes"];
-    dataset.columnLabel = ['Heuristic values'];
-    dataset.value = [];
-    
-    //console.log(nodes);
-    for(var i = 0; i < nodes.length; i++) {
-        dataset.rowLabel.splice(1, 0, nodes[i].title);
-        dataset.value.push("-");
+    if(table === undefined || table == null) {
+        dataset.rowLabel = ["Nodes"];
+        dataset.columnLabel = ['Heuristic values'];
+        dataset.value = [];
+        
+        console.log(nodes);
+        for(var i = 0; i < nodes.length; i++) {
+            dataset.rowLabel.splice(1, 0, nodes[i].title);
+            dataset.value.push("-");
+        }
+        
+        nodeTitles = dataset.rowLabel;
+        graph.createTable();
     }
-    
-    nodeTitles = dataset.rowLabel;
-    graph.createTable();
 });
 
 document.getElementById("graph1").addEventListener("click",
@@ -468,11 +506,17 @@ function createGraph(json,start,end){
         
         this.startNode = getNode(start);
         this.endNode = getNode(end);
-        document.getElementById("#"+start).getElementsByTagName("circle")[0].style.fill = "#9bafd7";
-        document.getElementById("#"+end).getElementsByTagName("circle")[0].setAttribute("style", "stroke-width:5px");
+        d3startNode = d3.select("#c"+start);
+        d3endNode = d3.select("#c"+end);
+        document.getElementById("c"+start).getElementsByTagName("circle")[0].setAttribute("style", "stroke-width:5px");
+        document.getElementById("c"+start).getElementsByTagName("circle")[0].style.fill = "#9bafd7";
+        document.getElementById("c"+end).getElementsByTagName("circle")[0].setAttribute("style", "stroke-width:5px");
         document.getElementById("enddrawing").style.display = "none";
         document.getElementById("startgame").style.display = "inline-block";
         document.getElementById("startgame").removeAttribute("disabled");
+        
+        document.getElementById("selectend").style.display = "none";
+        document.getElementById("selectstart").style.display = "none";  
 }
 
 function getNode(id) {

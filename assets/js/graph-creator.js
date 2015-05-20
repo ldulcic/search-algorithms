@@ -137,7 +137,7 @@ var GraphCreator = function(svg, nodes, edges) {
         });
 
         var blob;
-        if(graphType = GraphType.astar) {
+        if(graphType = GraphType.astar && table !== undefined) {
             blob = new Blob([window.JSON.stringify({
                 "nodes": thisGraph.nodes,
                 "edges": saveEdges,
@@ -200,7 +200,7 @@ var GraphCreator = function(svg, nodes, edges) {
                 heuristics[dataset.rowLabel[i]] = dataset.value[i-1][0];
             }
             tableEditing = true;
-            d3.selectAll(".cell").on("mousedown", function () {alert("aaa")});
+            d3.selectAll(".cell").on("mouseup", function (d) {thisGraph.cellMouseDown.call(this);});
         }
     };
 
@@ -212,6 +212,14 @@ var GraphCreator = function(svg, nodes, edges) {
         if (window.File && window.FileReader && window.FileList && window.Blob) {
             var uploadFile = this.files[0];
             var filereader = new window.FileReader();
+
+            //delete table if exists
+            d3.selectAll(".vis-group").remove();
+            table = null;
+            dataset = [];
+            heuristics = [];
+            nodeTitles = [];
+            tableEditing = false;
 
             filereader.onload = function() {
                 var txtRes = filereader.result;
@@ -237,7 +245,7 @@ var GraphCreator = function(svg, nodes, edges) {
                     thisGraph.edges = newEdges;
                     counter = thisGraph.edges.length;
 
-                    if(graphType = GraphType.astar) {
+                    if(graphType = GraphType.astar && jsonObj.table !== undefined) {
                         dataset = jsonObj.table;
                         nodeTitles = dataset.rowLabel;
                         thisGraph.createTable(true);
@@ -268,6 +276,7 @@ var GraphCreator = function(svg, nodes, edges) {
     });
 
     d3.select("#reset").on("click", function(){
+        nodes = [];
         GraphCreator.prototype.svgKeyDown = svgKeyD;
         GraphCreator.prototype.svgMouseUp = svgMouseU;
         GraphCreator.prototype.circleMouseDown = circleMouseD;
@@ -322,10 +331,18 @@ GraphCreator.prototype.deleteGraph = function(skipPrompt) {
         thisGraph.nodes = [];
         thisGraph.edges = [];
         d3.select("svg").selectAll("text").remove();
+
+        //delete table if exists
+        d3.selectAll(".vis-group").remove();
+        table = null;
+        dataset = [];
+        heuristics = [];
+        nodeTitles = [];
+        tableEditing = false;
+
         consts.defaultTitle = "A".charCodeAt();
         consts.numOfLettersInTitle = 1;
         this.setIdCt(1);
-        console.log(consts.defaultTitle);
         thisGraph.updateGraph();
     }
 };
@@ -555,6 +572,8 @@ GraphCreator.prototype.changeTableData = function(d) {
 };
 
 GraphCreator.prototype.changeCellData = function(d3cell, d) {
+    console.log(d3cell);
+    return;
     var thisGraph = this,
         consts = thisGraph.consts,
         htmlEl = d3cell.node();
@@ -600,12 +619,12 @@ GraphCreator.prototype.changeCellData = function(d3cell, d) {
         .on("blur", function(d) {
             this.focus();
         });
-
-        /*d3cell.text("");
-        var txtNode = d3txt.node();
-        thisGraph.selectElementContents(txtNode);
-        txtNode.focus();*/
     return d3txt;
+};
+
+GraphCreator.prototype.cellMouseDown = function (arg) {
+    console.log(this);
+    console.log(arg);
 };
 
 /* place editable text on node in place of svg text */
