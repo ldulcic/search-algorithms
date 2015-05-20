@@ -164,12 +164,15 @@ Dijkstra.prototype = {
         var tempnode;
         for (var i = aNode.links.length - 1; i >= 0; i--) {
             tempnode = aNode.links[i].node;
-            if (  (this.indexOfNode(this.visited, tempnode) != -1) && ( tempnode == aNode.cameFrom)) {
-                prevNode = aNode.links[i];
-                break;
+            if (  (this.visited.indexOf(tempnode) != -1) && (tempnode.value + aNode.links[i].value == aNode.value)) {
+                prevNode = tempnode;
             }
         }
-        return prevNode;
+        for (var i = aNode.links.length - 1; i >= 0; i--) {
+            if(aNode.links[i].node === prevNode){
+                return aNode.links[i];
+            }
+        }
     },
 
     reconstructPath: function (node) {
