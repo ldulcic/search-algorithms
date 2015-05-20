@@ -273,6 +273,23 @@ graph.setIdCt(2);
 graph.updateGraph();
 
 // LISTENERS
+document.getElementById("drawing").addEventListener("click", function(){
+    startNode = endNode = null;
+    graph.deleteGraph(true);
+    graphType = GraphType.iterative_depth_first;
+    graph.setIdCt(2);
+    graph.updateGraph();    
+    document.getElementById("startgame").style.display = "none";
+    document.getElementById("enddrawing").style.display = "inline-block";
+    
+    GraphCreator.prototype.svgKeyDown = svgKeyD;
+    GraphCreator.prototype.svgMouseUp = svgMouseU;
+    GraphCreator.prototype.circleMouseDown = circleMouseD;
+    GraphCreator.prototype.dragmove = dragmov;
+    GraphCreator.prototype.pathMouseDown = pathMouseD;
+    GraphCreator.prototype.circleMouseUp = circleMouseU;
+});
+
 document.getElementById("selectstart").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         startNode = getNode(d.id);
@@ -308,11 +325,13 @@ document.getElementById("selectend").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         endNode = getNode(d.id);
         if (d3endNode != null) {
-            d3endNode[0][0].setAttribute("stroke", "black");
+            d3endNode.select("circle")[0][0].setAttribute("style", "stroke-width:2px");
         }
         d3node.select("circle")[0][0].setAttribute("style", "stroke-width:5px");
         d3endNode = d3node;
-        document.getElementById("startgame").removeAttribute("disabled");
+        if (startNode != null) {
+            document.getElementById("startgame").removeAttribute("disabled");
+        }
     }
 });
 
@@ -432,20 +451,7 @@ document.getElementById("enddrawing").addEventListener("click", function() {
     document.getElementById("startgame").style.display = "inline-block";
     document.getElementById("startgame").setAttribute("disabled", "");
 
-    var dataset = {
-    rowLabel: ['Heuristic values', 'A', 'B', 'C', 'D'],
-    columnLabel: ['P'],
-    value: [[1], [5], [9], [13], [17]]
-    };
-                        
-    var width = 300;
-    var height = 200;
 
-    var table = Table().width(width).height(height);
-
-    d3.select('svg')
-        .datum(dataset)
-        .call(table);
     });
 
 document.getElementById("graph1").addEventListener("click",
@@ -559,10 +565,13 @@ function wrongAnimation(node,color){
 function fadeOut(){
     for(var i = currentIter.length -1 ; i>=0 ; i--){
         for(var j = currentIter[i].length -1; j>=0; j--){
-            currentIter[i][j].select("circle").transition()
+            currentIter[i][j].select("circle")
+            .attr("pointer-events", "none")
+            .transition()
             .delay(500*(currentIter.length -(i+1)))
             .style("fill","#F6FBFF")
-            .duration(500);
+            .duration(500)
+            .each("end", function() { d3.select(this).attr("pointer-events", null); });
             if(i > 0){
                 var dimentions = currentPaths[i-1][j].attr("d");
                 var temp = currentIter[i][j].attr("transform").split("(");
@@ -592,9 +601,11 @@ function fadeOut(){
                 }  
 
                 newPath.transition().delay(500*(currentIter.length -(i+1)))
+                .attr("pointer-events", "none")
                 .attr("d",dimentions)
                 .duration(500)
                 .ease("linear")
+                .each("end", function() { d3.select(this).attr("pointer-events", null); })
                 .remove();             
             }
         }
