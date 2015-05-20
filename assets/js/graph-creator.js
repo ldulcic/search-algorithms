@@ -137,7 +137,7 @@ var GraphCreator = function(svg, nodes, edges) {
         });
 
         var blob;
-        if(graphType = GraphType.astar) {
+        if(graphType = GraphType.astar && table !== undefined) {
             blob = new Blob([window.JSON.stringify({
                 "nodes": thisGraph.nodes,
                 "edges": saveEdges,
@@ -213,6 +213,9 @@ var GraphCreator = function(svg, nodes, edges) {
             var uploadFile = this.files[0];
             var filereader = new window.FileReader();
 
+            //delete table if exists
+            d3.selectAll(".vis-group").remove();
+
             filereader.onload = function() {
                 var txtRes = filereader.result;
                 // TODO better error handling
@@ -237,7 +240,7 @@ var GraphCreator = function(svg, nodes, edges) {
                     thisGraph.edges = newEdges;
                     counter = thisGraph.edges.length;
 
-                    if(graphType = GraphType.astar) {
+                    if(graphType = GraphType.astar && jsonObj.table !== undefined) {
                         dataset = jsonObj.table;
                         nodeTitles = dataset.rowLabel;
                         thisGraph.createTable(true);
@@ -322,10 +325,13 @@ GraphCreator.prototype.deleteGraph = function(skipPrompt) {
         thisGraph.nodes = [];
         thisGraph.edges = [];
         d3.select("svg").selectAll("text").remove();
+
+        //delete table if exists
+        d3.selectAll(".vis-group").remove();
+        
         consts.defaultTitle = "A".charCodeAt();
         consts.numOfLettersInTitle = 1;
         this.setIdCt(1);
-        console.log(consts.defaultTitle);
         thisGraph.updateGraph();
     }
 };
