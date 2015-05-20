@@ -295,7 +295,9 @@ document.getElementById("selectstart").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         var n = getNode(d.id);
         if (endNode == n) {
-            alert("Begin and end node can't be the same!");
+            window.parent.$("#title").html("Warning!");
+            window.parent.$("#text").html("Begin and end node can't be the same!");
+            window.parent.$("#myModal").modal("show");
             return;
         }
         startNode = n;
@@ -331,7 +333,9 @@ document.getElementById("selectend").addEventListener("click", function() {
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         var n = getNode(d.id);
         if (startNode == n) {
-            alert("Begin and end node can't be the same!");
+            window.parent.$("#title").html("Warning!");
+            window.parent.$("#text").html("Begin and end node can't be the same!");
+            window.parent.$("#myModal").modal("show");
             return;
         }
         endNode = n;
@@ -371,7 +375,9 @@ document.getElementById("startgame").addEventListener("click", function() {
             }
             document.getElementById("c"+result[0].id).getElementsByTagName("circle")[0].style.fill = "#83d675";
             d3node.select("circle")[0][0].style.fill = "#83d675";
-            window.alert("dobro je, ne pritsci vise nista!");
+            window.parent.$("#title").html("Congratulations!");
+            window.parent.$("#text").html("Now try more advanced graphs, draw your own graphs, or exchange graphs with your friends.");
+            window.parent.$("#myModal").modal("show");
             GraphCreator.prototype.circleMouseUp = function() {}
             currentIter = [];
             currentPaths = [];
@@ -408,9 +414,10 @@ document.getElementById("startgame").addEventListener("click", function() {
 
 
             if(search.pathDoesntExist){
-                window.alert("put ne postoji");
-                GraphCreator.prototype.circleMouseUp = function() {
-                }
+                window.parent.$("#title").html("Warning!");
+                window.parent.$("#text").html("There is no path between start and end nodes!<br>Try starter graph if you are confused.");
+                window.parent.$("#myModal").modal("show");
+                GraphCreator.prototype.circleMouseUp = function() {}
             }
             if(search.nextIteration) {
                 console.log(currentIter.length);
@@ -436,7 +443,9 @@ document.getElementById("startgame").addEventListener("click", function() {
 
     search = new IterativeDepthFirstSearch(startNode, endNode);
     if(search.pathDoesntExist){
-        window.alert("put ne postoji");
+        window.parent.$("#title").html("Warning!");
+        window.parent.$("#text").html("There is no path between start and end nodes!<br>Try starter graph if you are confused.");
+        window.parent.$("#myModal").modal("show");
         GraphCreator.prototype.circleMouseUp = function() {}
     }
 });
