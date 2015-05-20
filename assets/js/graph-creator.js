@@ -276,6 +276,7 @@ var GraphCreator = function(svg, nodes, edges) {
     });
 
     d3.select("#reset").on("click", function(){
+        nodes = [];
         GraphCreator.prototype.svgKeyDown = svgKeyD;
         GraphCreator.prototype.svgMouseUp = svgMouseU;
         GraphCreator.prototype.circleMouseDown = circleMouseD;
