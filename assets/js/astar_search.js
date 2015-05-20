@@ -249,7 +249,7 @@ var d3endNode = null;
 var nodes = [];
 var search = null;
 
-//graphType = GraphType.depth_first;
+graphType = GraphType.astar;
 
 var docEl = document.documentElement,
     bodyEl = document.getElementsByTagName('body')[0];
@@ -359,8 +359,6 @@ document.getElementById("startgame").addEventListener("click", function() {
     document.getElementById("selectend").setAttribute("disabled", "");
 
     search = new AStarSearch(startNode, endNode);
-    console.log("heuristike");
-    console.log(heuristics);
 });
 
 document.getElementById("enddrawing").addEventListener("click", function() {
@@ -388,8 +386,7 @@ document.getElementById("enddrawing").addEventListener("click", function() {
     columnLabel: ['Heuristic values'],
     value: [["-"], ["-"], ["-"], ["-"], ["-"], ["-"], ["-"], ["-"], ["-"], ["-"], ["-"]]
     };*/
-
-    var dataset = [];
+    
     dataset.rowLabel = ["Nodes"];
     dataset.columnLabel = ['Heuristic values'];
     dataset.value = [];
@@ -401,21 +398,7 @@ document.getElementById("enddrawing").addEventListener("click", function() {
     }
     
     nodeTitles = dataset.rowLabel;
-                        
-    var width = 250;
-    var height = dataset.rowLabel.length * 30;
-
-    var table = Table().width(width).height(height);
-
-    d3.select('svg')
-        .datum(dataset)
-        .call(table);
-
-        d3.select(".vis-group").on("mousedown", function() {alert("aaaa")});
-    
-    var counter = 0;
-    var d3cell;1
-    graph.changeTableData();
+    graph.createTable();
 });
 
 document.getElementById("graph1").addEventListener("click",

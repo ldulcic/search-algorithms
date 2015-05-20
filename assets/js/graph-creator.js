@@ -2,6 +2,13 @@ var saveAs = window.saveAs;
 var d3 = window.d3;
 var Blob = window.Blob;
 
+//used for creating table in astar search
+var dataset = [];
+var table;
+var heuristics = [];
+var nodeTitles;
+var tableEditing = false;
+
 "use strict";
 
 // TODO add user settings
@@ -11,6 +18,7 @@ var GraphType = Object.freeze(
         breadth_first : "BreadthFirst",
         depth_first : "DepthFirst",
         iterative_depth_first: "IterativeDepthFirst",
+        astar: "AStar",
         none : "none"
     });
 
@@ -127,12 +135,28 @@ var GraphCreator = function(svg, nodes, edges) {
                 weight: val.weight
             });
         });
-        var blob = new Blob([window.JSON.stringify({
-            "nodes": thisGraph.nodes,
-            "edges": saveEdges
-        })], {
-            type: "text/plain;charset=utf-8"
-        });
+
+        var blob;
+        if(graphType = GraphType.astar) {
+            blob = new Blob([window.JSON.stringify({
+                "nodes": thisGraph.nodes,
+                "edges": saveEdges,
+                "table": {
+                    "rowLabel": dataset.rowLabel,
+                    "columnLabel": dataset.columnLabel,
+                    "value": dataset.value
+                }
+            })], {
+                type: "text/plain;charset=utf-8"
+            });
+        } else {
+            blob = new Blob([window.JSON.stringify({
+                "nodes": thisGraph.nodes,
+                "edges": saveEdges 
+            })], {
+                type: "text/plain;charset=utf-8"
+            });
+        }
         saveAs(blob, "mygraph.json");
     });
 
@@ -158,6 +182,27 @@ var GraphCreator = function(svg, nodes, edges) {
             titleFound = false;
         }
     }
+
+    GraphCreator.prototype.createTable = function (upload) {
+        var width = 250;
+        var height = dataset.rowLabel.length * 30;
+
+        table = Table().width(width).height(height);
+
+        d3.select('svg')
+            .datum(dataset)
+            .call(table);
+
+        if(upload === undefined) {
+            thisGraph.changeTableData();
+        } else {
+            for (var i = 1; i < dataset.rowLabel.length; i++) {
+                heuristics[dataset.rowLabel[i]] = dataset.value[i-1][0];
+            }
+            tableEditing = true;
+            d3.selectAll(".cell").on("mousedown", function () {alert("aaa")});
+        }
+    };
 
     // handle uploaded data
     d3.select("#upload-input").on("click", function() {
@@ -191,10 +236,17 @@ var GraphCreator = function(svg, nodes, edges) {
                     });
                     thisGraph.edges = newEdges;
                     counter = thisGraph.edges.length;
+
+                    if(graphType = GraphType.astar) {
+                        dataset = jsonObj.table;
+                        nodeTitles = dataset.rowLabel;
+                        thisGraph.createTable(true);
+                    }
+
                     thisGraph.updateGraph();
                     adjustTitle(thisGraph);
 
-                    if(graphType == GraphType.depth_first || graphType == GraphType.breadth_first) {
+                    if(graphType == GraphType.depth_first || graphType == GraphType.breadth_first || graphType == GraphType.iterative_depth_first) {
                         d3.select("#paths").selectAll("text").attr("visibility", "hidden");
                     }
                 } catch (err) {
@@ -447,8 +499,6 @@ GraphCreator.prototype.changeWeightOfLink = function(d3edge, d) {
 };
 
 var currentId = 0;
-var heuristics = [];
-var nodeTitles;
 GraphCreator.prototype.changeTableData = function(d) {
     var d3cell = d3.select("#tableData" + currentId);
     var thisGraph = this,
@@ -487,6 +537,7 @@ GraphCreator.prototype.changeTableData = function(d) {
                     value = 1;
                 }
                 heuristics[nodeTitles[currentId + 1]] = value;
+                dataset.value[currentId] = [value];
                 d3.select("#tableData" + currentId++).text(value);
                 d3.select(this.parentElement).remove();
                 thisGraph.changeTableData();
@@ -500,6 +551,60 @@ GraphCreator.prototype.changeTableData = function(d) {
         var txtNode = d3txt.node();
         thisGraph.selectElementContents(txtNode);
         txtNode.focus();
+    return d3txt;
+};
+
+GraphCreator.prototype.changeCellData = function(d3cell, d) {
+    var thisGraph = this,
+        consts = thisGraph.consts,
+        htmlEl = d3cell.node();
+
+    if(htmlEl == null) return;
+
+    var nodeBCR = htmlEl.getBoundingClientRect(),
+        curScale = nodeBCR.width / consts.nodeRadius,
+        placePad = 5 * curScale,
+        useHW = curScale > 1 ? nodeBCR.width * 0.71 : consts.nodeRadius * 1.42;
+
+    // replace with editableconent text
+    var d3txt = thisGraph.svg.selectAll("foreignObject")
+        .data([d])
+        .enter()
+        .append("foreignObject")
+        .attr("x", nodeBCR.left - 6)
+        .attr("y", nodeBCR.top - 20)
+        .attr("height", 2 * useHW)
+        .attr("width", 20)
+        .append("xhtml:p")
+        .attr("id", consts.activeEditId)
+        .attr("contentEditable", "true")
+        .text(htmlEl.value)
+        .style("opacity", "10%")
+        .on("mousedown", function(d) {
+            d3.event.stopPropagation();
+        })
+        .on("keyup", function(d) {
+            d3.event.stopPropagation();
+            if (d3.event.keyCode == consts.ENTER_KEY) {
+                var value = parseInt(this.textContent);
+                if(isNaN(value) || value < 0) {
+                    value = 1;
+                }
+                heuristics[nodeTitles[currentId + 1]] = value;
+                dataset.value[currentId] = [value];
+                d3.select("#tableData" + currentId++).text(value);
+                d3.select(this.parentElement).remove();
+                thisGraph.changeTableData();
+            }
+        })
+        .on("blur", function(d) {
+            this.focus();
+        });
+
+        /*d3cell.text("");
+        var txtNode = d3txt.node();
+        thisGraph.selectElementContents(txtNode);
+        txtNode.focus();*/
     return d3txt;
 };
 
