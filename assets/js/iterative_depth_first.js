@@ -250,6 +250,7 @@ var d3endNode = null;
 var nodes = [];
 var search = null;
 var currentIter = [];
+var currentPaths = [];
 
 graphType = GraphType.depth_first;
 
@@ -355,17 +356,24 @@ document.getElementById("startgame").addEventListener("click", function() {
                 }
                 document.getElementById(edg.id).style.stroke = "#9bafd7";
             }
-            var clickedCirc = d3node.select("circle");
+            var clickedCirc = d3node.select("circle"); 
             clickedCirc[0][0].style.fill = "#9bafd7";        
             
-            var clickedCirc = d3node.select("circle");
             if(currentIter[clickedNode.depth] == undefined){
                 currentIter[clickedNode.depth] = []
             }
-            currentIter[clickedNode.depth].push(clickedCirc);
+            currentIter[clickedNode.depth].push(d3node); // end animation circle select
+            //console.log(currentIter)
 
+            if( l != undefined ){
+                var selectedPath = d3.select("#"+edg.id);
+                if(currentPaths[clickedNode.depth - 1] == undefined){
+                    currentPaths[clickedNode.depth - 1] = [];
+                }
+                currentPaths[clickedNode.depth - 1].push(selectedPath);
+            }
+            //console.log(currentPaths);
 
-            console.log(currentIter);
 
             if(search.pathDoesntExist){
                 window.alert("put ne postoji");
@@ -375,8 +383,9 @@ document.getElementById("startgame").addEventListener("click", function() {
             if(search.nextIteration) {
                 console.log(currentIter.length);
                 fadeOut();
-                d3.selectAll("path").style("stroke","#333");
+                //d3.selectAll("path").style("stroke","#333");
                 currentIter = [];
+                currentPaths = [];
             }
         } else {
             var color;
@@ -421,6 +430,7 @@ document.getElementById("enddrawing").addEventListener("click", function() {
     document.getElementById("selectstart").style.display = "inline-block";
     document.getElementById("selectend").style.display = "inline-block";
     document.getElementById("startgame").style.display = "inline-block";
+    document.getElementById("startgame").setAttribute("disabled", "");
 
     var dataset = {
     rowLabel: ['Heuristic values', 'A', 'B', 'C', 'D'],
@@ -530,6 +540,7 @@ function wrongAnimation(node,color){
         myCol = color;
     }
     node
+    .attr("pointer-events", "none")
     .transition()
     .style("fill","red")
     .duration(125)
@@ -541,16 +552,51 @@ function wrongAnimation(node,color){
     .duration(125)
     .transition()
     .style("fill",myCol)
-    .duration(125);
+    .duration(125)
+    .each("end", function() { d3.select(this).attr("pointer-events", null); });
 }
 
 function fadeOut(){
     for(var i = currentIter.length -1 ; i>=0 ; i--){
         for(var j = currentIter[i].length -1; j>=0; j--){
-            currentIter[i][j].transition()
+            currentIter[i][j].select("circle").transition()
             .delay(500*(currentIter.length -(i+1)))
             .style("fill","#F6FBFF")
             .duration(500);
+            if(i > 0){
+                var dimentions = currentPaths[i-1][j].attr("d");
+                var temp = currentIter[i][j].attr("transform").split("(");
+                var endPoint = temp[1].substring(0, temp[1].length - 1)
+                console.log(dimentions +"--"+ endPoint);
+                
+                var parts = dimentions.split("L");
+                
+                currentPaths[i-1][j][0][0].style.stroke = "#333";
+
+                if( endPoint == parts[1]){
+                    var newPath = d3.select("#paths")
+                    .append("path")
+                    .classed("link", true)
+                    .attr("d", dimentions);
+                    newPath[0][0].style.stroke = "#9bafd7";
+                    dimentions = "M"+parts[0].substr(1)+"L"+parts[0].substr(1)
+                } else if( endPoint == parts[0].substr(1) ){
+                    dimentions = "M"+parts[1]+"L"+endPoint;
+                    var newPath = d3.select("#paths")
+                    .append("path")
+                    .classed("link", true)
+                    .attr("d", dimentions);
+                    newPath[0][0].style.stroke = "#9bafd7";
+                    dimentions = "M"+parts[1]+"L"+parts[1];
+
+                }  
+
+                newPath.transition().delay(500*(currentIter.length -(i+1)))
+                .attr("d",dimentions)
+                .duration(500)
+                .ease("linear")
+                .remove();             
+            }
         }
     }
 
