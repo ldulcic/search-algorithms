@@ -278,7 +278,8 @@ document.getElementById("drawing").addEventListener("click", function(){
     graph.deleteGraph(true);
     graphType = GraphType.iterative_depth_first;
     graph.setIdCt(2);
-    graph.updateGraph();    
+    graph.updateGraph();
+    document.getElementById("check-form").style.display = "none";
     document.getElementById("startgame").style.display = "none";
     document.getElementById("selectstart").style.display = "none";
     document.getElementById("selectend").style.display = "none";
@@ -402,7 +403,6 @@ document.getElementById("startgame").addEventListener("click", function() {
 });
 
 document.getElementById("enddrawing").addEventListener("click", function() {
-
     var n;
     disableDrawing();
     for (var i = graph.nodes.length - 1; i >= 0; i--) {
@@ -419,6 +419,7 @@ document.getElementById("enddrawing").addEventListener("click", function() {
         target.addLink(new Link(source, e.weight));
     }
 
+    document.getElementById("check-form").style.display = "inline-block";
     document.getElementById("enddrawing").style.display = "none";
     document.getElementById("selectstart").style.display = "inline-block";
     document.getElementById("selectend").style.display = "inline-block";
