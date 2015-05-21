@@ -239,7 +239,7 @@ document.getElementById("drawing").addEventListener("click", function(){
 	graphType = GraphType.depth_first;
 	graph.setIdCt(2);
 	graph.updateGraph();
-    	
+
     GraphCreator.prototype.svgKeyDown = svgKeyD;
     GraphCreator.prototype.svgMouseUp = svgMouseU;
     GraphCreator.prototype.circleMouseDown = circleMouseD;
@@ -499,3 +499,8 @@ function disableDrawing(){
     GraphCreator.prototype.pathMouseDown = function() {}
     GraphCreator.prototype.circleMouseUp = function() {}
 }
+
+document.getElementById("delete-graph").addEventListener("click", function() {
+   nodes = [];
+   startNode = endNode = null;
+});

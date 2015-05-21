@@ -543,3 +543,8 @@ function disableDrawing(){
     GraphCreator.prototype.pathMouseDown = function() {}
     GraphCreator.prototype.circleMouseUp = function() {}
 }
+
+document.getElementById("delete-graph").addEventListener("click", function() {
+   nodes = [];
+   startNode = endNode = null;
+});
