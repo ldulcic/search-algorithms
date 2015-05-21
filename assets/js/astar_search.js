@@ -273,11 +273,6 @@ document.getElementById("drawing").addEventListener("click", function(){
     graph.deleteGraph(true);
     graph.setIdCt(2);
     graph.updateGraph();
-    document.getElementById("check-form").style.display = "none";
-    document.getElementById("startgame").style.display = "none";
-    document.getElementById("selectstart").style.display = "none";
-    document.getElementById("selectend").style.display = "none";
-    document.getElementById("enddrawing").style.display = "inline-block";
     
     GraphCreator.prototype.svgKeyDown = svgKeyD;
     GraphCreator.prototype.svgMouseUp = svgMouseU;

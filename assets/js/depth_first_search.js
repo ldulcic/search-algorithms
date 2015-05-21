@@ -238,12 +238,8 @@ document.getElementById("drawing").addEventListener("click", function(){
 	graph.deleteGraph(true);
 	graphType = GraphType.depth_first;
 	graph.setIdCt(2);
-	graph.updateGraph();	
-   	document.getElementById("startgame").style.display = "none";
-    document.getElementById("selectstart").style.display = "none";
-    document.getElementById("selectend").style.display = "none";
-	document.getElementById("enddrawing").style.display = "inline-block";
-	
+	graph.updateGraph();
+    	
     GraphCreator.prototype.svgKeyDown = svgKeyD;
     GraphCreator.prototype.svgMouseUp = svgMouseU;
     GraphCreator.prototype.circleMouseDown = circleMouseD;
