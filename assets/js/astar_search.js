@@ -271,8 +271,6 @@ document.getElementById("drawing").addEventListener("click", function(){
     nodes = [];
     startNode = endNode = null;
     graph.deleteGraph(true);
-    graphType = GraphType.iterative_depth_first;
-    graph.setIdCt(2);
     graph.updateGraph();    
     document.getElementById("startgame").style.display = "none";
     document.getElementById("selectstart").style.display = "none";

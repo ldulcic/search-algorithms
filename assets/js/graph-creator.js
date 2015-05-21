@@ -137,7 +137,7 @@ var GraphCreator = function(svg, nodes, edges) {
         });
 
         var blob;
-        if(graphType = GraphType.astar && table !== undefined) {
+        if(graphType == GraphType.astar && table !== undefined) {
             blob = new Blob([window.JSON.stringify({
                 "nodes": thisGraph.nodes,
                 "edges": saveEdges,
@@ -246,7 +246,7 @@ var GraphCreator = function(svg, nodes, edges) {
                     thisGraph.edges = newEdges;
                     counter = thisGraph.edges.length;
 
-                    if(graphType = GraphType.astar && jsonObj.table !== undefined) {
+                    if(graphType == GraphType.astar && jsonObj.table !== undefined) {
                         dataset = jsonObj.table;
                         nodeTitles = dataset.rowLabel;
                         thisGraph.createTable(true);
