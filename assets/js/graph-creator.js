@@ -276,16 +276,6 @@ var GraphCreator = function(svg, nodes, edges) {
                 }
             };
             console.log(filereader.readAsText(uploadFile));
-            GraphCreator.prototype.svgKeyDown = svgKeyD;
-            GraphCreator.prototype.svgMouseUp = svgMouseU;
-            GraphCreator.prototype.circleMouseDown = circleMouseD;
-            GraphCreator.prototype.dragmove = dragmov;
-            GraphCreator.prototype.pathMouseDown = pathMouseD;
-            GraphCreator.prototype.circleMouseUp = circleMouseU;
-            document.getElementById("enddrawing").style.display = "inline-block";
-            document.getElementById("selectstart").style.display = "none";
-            document.getElementById("selectend").style.display = "none";
-            document.getElementById("startgame").style.display = "none";
 
 
         } else {
