@@ -208,9 +208,20 @@ var GraphCreator = function(svg, nodes, edges) {
     // handle uploaded data
     d3.select("#upload-input").on("click", function() {
         document.getElementById("hidden-file-upload").click();
+        GraphCreator.prototype.svgKeyDown = svgKeyD;
+        GraphCreator.prototype.svgMouseUp = svgMouseU;
+        GraphCreator.prototype.circleMouseDown = circleMouseD;
+        GraphCreator.prototype.dragmove = dragmov;
+        GraphCreator.prototype.pathMouseDown = pathMouseD;
+        GraphCreator.prototype.circleMouseUp = circleMouseU;
+        document.getElementById("enddrawing").style.display = "inline-block";
+        document.getElementById("selectstart").style.display = "none";
+        document.getElementById("selectend").style.display = "none";
+        document.getElementById("startgame").style.display = "none";
     });
     d3.select("#hidden-file-upload").on("change", function() {
         if (window.File && window.FileReader && window.FileList && window.Blob) {
+            console.log("aaaaaaaaaa");
             var uploadFile = this.files[0];
             var filereader = new window.FileReader();
 
@@ -224,6 +235,7 @@ var GraphCreator = function(svg, nodes, edges) {
 
             filereader.onload = function() {
                 var txtRes = filereader.result;
+                console.log(txtRes);
                 // TODO better error handling
                 try {
                     var jsonObj = JSON.parse(txtRes);
@@ -263,7 +275,18 @@ var GraphCreator = function(svg, nodes, edges) {
                     return;
                 }
             };
-            filereader.readAsText(uploadFile);
+            console.log(filereader.readAsText(uploadFile));
+            GraphCreator.prototype.svgKeyDown = svgKeyD;
+            GraphCreator.prototype.svgMouseUp = svgMouseU;
+            GraphCreator.prototype.circleMouseDown = circleMouseD;
+            GraphCreator.prototype.dragmove = dragmov;
+            GraphCreator.prototype.pathMouseDown = pathMouseD;
+            GraphCreator.prototype.circleMouseUp = circleMouseU;
+            document.getElementById("enddrawing").style.display = "inline-block";
+            document.getElementById("selectstart").style.display = "none";
+            document.getElementById("selectend").style.display = "none";
+            document.getElementById("startgame").style.display = "none";
+
 
         } else {
             alert("Your browser won't let you save this graph -- try upgrading your browser to IE 10+ or Chrome or Firefox.");
@@ -276,19 +299,6 @@ var GraphCreator = function(svg, nodes, edges) {
         thisGraph.deleteGraph(false);
     });
 
-    d3.select("#reset").on("click", function(){
-        GraphCreator.prototype.svgKeyDown = svgKeyD;
-        GraphCreator.prototype.svgMouseUp = svgMouseU;
-        GraphCreator.prototype.circleMouseDown = circleMouseD;
-        GraphCreator.prototype.dragmove = dragmov;
-        GraphCreator.prototype.pathMouseDown = pathMouseD;
-        GraphCreator.prototype.circleMouseUp = circleMouseU;
-        document.getElementById("enddrawing").style.display = "inline-block";
-        document.getElementById("selectstart").style.display = "none";
-        document.getElementById("selectend").style.display = "none";
-        document.getElementById("startgame").style.display = "none";
-        thisGraph.deleteGraph(false);
-    });
 };
 
 GraphCreator.prototype.setIdCt = function(idct) {
@@ -344,6 +354,16 @@ GraphCreator.prototype.deleteGraph = function(skipPrompt) {
         consts.numOfLettersInTitle = 1;
         this.setIdCt(1);
         thisGraph.updateGraph();
+        GraphCreator.prototype.svgKeyDown = svgKeyD;
+        GraphCreator.prototype.svgMouseUp = svgMouseU;
+        GraphCreator.prototype.circleMouseDown = circleMouseD;
+        GraphCreator.prototype.dragmove = dragmov;
+        GraphCreator.prototype.pathMouseDown = pathMouseD;
+        GraphCreator.prototype.circleMouseUp = circleMouseU;
+        document.getElementById("enddrawing").style.display = "inline-block";
+        document.getElementById("selectstart").style.display = "none";
+        document.getElementById("selectend").style.display = "none";
+        document.getElementById("startgame").style.display = "none";
     }
 };
 
