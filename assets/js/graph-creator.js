@@ -202,7 +202,7 @@ var GraphCreator = function(svg, nodes, edges) {
         }
 
         tableEditing = true;
-        d3.selectAll(".cell.row").on("mouseup", function (d) {thisGraph.cellMouseDown.call(thisGraph);});
+        d3.selectAll(".cell.row").on("mouseup", function (d) {thisGraph.cellMouseDown.call(this, d);});
     };
 
     // handle uploaded data
@@ -571,8 +571,9 @@ GraphCreator.prototype.changeTableData = function(d) {
     return d3txt;
 };
 
-GraphCreator.prototype.changeCellData = function(thisGraph, d3cell, d) {
-    var consts = thisGraph.consts,
+GraphCreator.prototype.changeCellData = function(d3cell, d) {
+    var thisGraph = graph,
+        consts = thisGraph.consts,
         htmlEl = d3cell.node();
 
     if(htmlEl == null) return;
@@ -588,13 +589,14 @@ GraphCreator.prototype.changeCellData = function(thisGraph, d3cell, d) {
         .enter()
         .append("foreignObject")
         .attr("x", nodeBCR.left - 6)
-        .attr("y", nodeBCR.top - 20)
+        .attr("y", nodeBCR.top - 35)
         .attr("height", 2 * useHW)
         .attr("width", 20)
         .append("xhtml:p")
         .attr("id", consts.activeEditId)
         .attr("contentEditable", "true")
-        .text(htmlEl.value)
+        .attr("class", htmlEl.getAttribute("id"))
+        .text(htmlEl.innerHTML)
         .style("opacity", "10%")
         .on("mousedown", function(d) {
             d3.event.stopPropagation();
@@ -602,27 +604,33 @@ GraphCreator.prototype.changeCellData = function(thisGraph, d3cell, d) {
         .on("keyup", function(d) {
             d3.event.stopPropagation();
             if (d3.event.keyCode == consts.ENTER_KEY) {
-                /*var value = parseInt(this.textContent);
+                var value = parseInt(this.textContent);
                 if(isNaN(value) || value < 0) {
                     value = 1;
                 }
-                heuristics[nodeTitles[currentId + 1]] = value;
-                dataset.value[currentId] = [value];
-                d3.select("#tableData" + currentId++).text(value);
+                var cellId = this.getAttribute("class");
+                var id = parseInt(cellId.substring(9, cellId.length));
+                heuristics[nodeTitles[id + 1]] = value;
+                dataset.value[id] = [value];
+                d3.select("#" + cellId).text(value);
                 d3.select(this.parentElement).remove();
-                thisGraph.changeTableData();*/
-                alert("yea men");
+                console.log(heuristics);
             }
         })
         .on("blur", function(d) {
             this.focus();
         });
+
+    d3cell.text("");
     return d3txt;
 };
 
-GraphCreator.prototype.cellMouseDown = function (thisGraph) {
-    if(tableEditing) {
-        thisGraph.changeCellData(thisGraph, d3.select(this));
+GraphCreator.prototype.cellMouseDown = function () {
+    if(tableEditing && d3.event.shiftKey) {
+        var d3text = graph.changeCellData(d3.select(this).select("text"));
+        var txtNode = d3text.node();
+        graph.selectElementContents(txtNode);
+        txtNode.focus();
     }
 };
 
