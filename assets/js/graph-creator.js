@@ -199,9 +199,10 @@ var GraphCreator = function(svg, nodes, edges) {
             for (var i = 1; i < dataset.rowLabel.length; i++) {
                 heuristics[dataset.rowLabel[i]] = dataset.value[i-1][0];
             }
-            tableEditing = true;
-            d3.selectAll(".cell").on("mouseup", function (d) {thisGraph.cellMouseDown.call(this);});
         }
+
+        tableEditing = true;
+        d3.selectAll(".cell.row").on("mouseup", function (d) {thisGraph.cellMouseDown.call(thisGraph);});
     };
 
     // handle uploaded data
@@ -534,7 +535,7 @@ GraphCreator.prototype.changeTableData = function(d) {
         .enter()
         .append("foreignObject")
         .attr("x", nodeBCR.left - 6)
-        .attr("y", nodeBCR.top - 20)
+        .attr("y", nodeBCR.top - 35)
         .attr("height", 2 * useHW)
         .attr("width", 20)
         .append("xhtml:p")
@@ -570,11 +571,8 @@ GraphCreator.prototype.changeTableData = function(d) {
     return d3txt;
 };
 
-GraphCreator.prototype.changeCellData = function(d3cell, d) {
-    console.log(d3cell);
-    return;
-    var thisGraph = this,
-        consts = thisGraph.consts,
+GraphCreator.prototype.changeCellData = function(thisGraph, d3cell, d) {
+    var consts = thisGraph.consts,
         htmlEl = d3cell.node();
 
     if(htmlEl == null) return;
@@ -604,7 +602,7 @@ GraphCreator.prototype.changeCellData = function(d3cell, d) {
         .on("keyup", function(d) {
             d3.event.stopPropagation();
             if (d3.event.keyCode == consts.ENTER_KEY) {
-                var value = parseInt(this.textContent);
+                /*var value = parseInt(this.textContent);
                 if(isNaN(value) || value < 0) {
                     value = 1;
                 }
@@ -612,7 +610,8 @@ GraphCreator.prototype.changeCellData = function(d3cell, d) {
                 dataset.value[currentId] = [value];
                 d3.select("#tableData" + currentId++).text(value);
                 d3.select(this.parentElement).remove();
-                thisGraph.changeTableData();
+                thisGraph.changeTableData();*/
+                alert("yea men");
             }
         })
         .on("blur", function(d) {
@@ -621,9 +620,10 @@ GraphCreator.prototype.changeCellData = function(d3cell, d) {
     return d3txt;
 };
 
-GraphCreator.prototype.cellMouseDown = function (arg) {
-    console.log(this);
-    console.log(arg);
+GraphCreator.prototype.cellMouseDown = function (thisGraph) {
+    if(tableEditing) {
+        thisGraph.changeCellData(thisGraph, d3.select(this));
+    }
 };
 
 /* place editable text on node in place of svg text */
@@ -699,7 +699,7 @@ GraphCreator.prototype.circleMouseUp = function(d3node, d) {
             thisGraph.edges.push(newEdge);
             thisGraph.updateGraph();
             
-            if(graphType != GraphType.depth_first && graphType != GraphType.breadth_first) {
+            if(graphType != GraphType.depth_first && graphType != GraphType.breadth_first && graphType != GraphType.iterative_depth_first) {
                 var d3text = this.changeWeightOfLink(d3.select("#pathId" + (counter - 1)), newEdge);
                 var txtNode = d3text.node();
                 thisGraph.selectElementContents(txtNode);
@@ -713,7 +713,7 @@ GraphCreator.prototype.circleMouseUp = function(d3node, d) {
             state.justDragged = false;
         } else {
             // clicked, not dragged
-            if (d3.event.shiftKey && graphType != GraphType.depth_first && graphType != GraphType.breadth_first) {
+            if (d3.event.shiftKey && graphType != GraphType.depth_first && graphType != GraphType.breadth_first && graphType != GraphType.iterative_depth_first) {
                 // shift-clicked node: edit text content
                 var d3txt = thisGraph.changeTextOfNode(d3node, d);
                 var txtNode = d3txt.node();
@@ -780,7 +780,7 @@ GraphCreator.prototype.svgMouseUp = function() {
         thisGraph.updateGraph();
         // make title of text immediently editable
         
-        if(graphType != GraphType.depth_first && graphType != GraphType.breadth_first) {
+        if(graphType != GraphType.depth_first && graphType != GraphType.breadth_first && graphType != GraphType.iterative_depth_first) {
             var d3txt = thisGraph.changeTextOfNode(thisGraph.circles.filter(function(dval) {
                     return dval.id === d.id;
                 }), d),
@@ -938,7 +938,7 @@ GraphCreator.prototype.updateGraph = function() {
     // remove old nodes
     thisGraph.circles.exit().remove();
 
-    if(graphType == GraphType.depth_first || graphType == GraphType.breadth_first) {
+    if(graphType == GraphType.depth_first || graphType == GraphType.breadth_first || graphType == GraphType.iterative_depth_first) {
         d3.select("#paths").selectAll("text").attr("visibility", "hidden");
     }
 };
