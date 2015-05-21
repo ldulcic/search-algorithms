@@ -125,12 +125,6 @@ iframe {
 	margin: 80px 0;
 }
 
-@media(min-width:960px) {
-	.sa-w {
-		width: 100%;
-	}
-}
-
 .sa-w {
 	margin: 0 auto;
 	width: 960px;
@@ -282,7 +276,6 @@ iframe {
 .footer .about {
 	margin-bottom: 0;
 }
-
 
 
 
