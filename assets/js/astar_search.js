@@ -271,7 +271,7 @@ document.getElementById("drawing").addEventListener("click", function(){
     nodes = [];
     startNode = endNode = null;
     graph.deleteGraph(true);
-    grpah.setIdCt(2);
+    graph.setIdCt(2);
     graph.updateGraph();
     document.getElementById("check-form").style.display = "none";
     document.getElementById("startgame").style.display = "none";
