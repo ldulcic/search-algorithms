@@ -278,11 +278,7 @@ document.getElementById("drawing").addEventListener("click", function(){
     startNode = endNode = null;
     graph.deleteGraph(true);
     graph.setIdCt(2);
-    graph.updateGraph();    
-    document.getElementById("startgame").style.display = "none";
-    document.getElementById("selectstart").style.display = "none";
-    document.getElementById("selectend").style.display = "none";
-    document.getElementById("enddrawing").style.display = "inline-block";
+    graph.updateGraph();
     
     GraphCreator.prototype.svgKeyDown = svgKeyD;
     GraphCreator.prototype.svgMouseUp = svgMouseU;
@@ -632,3 +628,8 @@ function disableDrawing(){
     GraphCreator.prototype.pathMouseDown = function() {}
     GraphCreator.prototype.circleMouseUp = function() {}
 }
+
+document.getElementById("delete-graph").addEventListener("click", function() {
+   nodes = [];
+   startNode = endNode = null;
+});

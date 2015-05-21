@@ -77,14 +77,9 @@ function AStarSearch(startNode, endNode) {
 
     this.expand(this.startNode);
     this.nextSteps = this.getNext();
-    console.log(this.nextSteps);
     if(this.nextSteps == null) {
         this.pathDoesntExist = true;
     }
-    /*console.log("open");
-    for (var i = this.openNodes.length - 1; i >= 0; i--) {
-        console.log(this.openNodes[i]);
-    }*/
 }
 
 AStarSearch.prototype = {
@@ -276,13 +271,8 @@ document.getElementById("drawing").addEventListener("click", function(){
     nodes = [];
     startNode = endNode = null;
     graph.deleteGraph(true);
-    graphType = GraphType.iterative_depth_first;
     graph.setIdCt(2);
-    graph.updateGraph();    
-    document.getElementById("startgame").style.display = "none";
-    document.getElementById("selectstart").style.display = "none";
-    document.getElementById("selectend").style.display = "none";
-    document.getElementById("enddrawing").style.display = "inline-block";
+    graph.updateGraph();
     
     GraphCreator.prototype.svgKeyDown = svgKeyD;
     GraphCreator.prototype.svgMouseUp = svgMouseU;
@@ -402,7 +392,6 @@ document.getElementById("startgame").addEventListener("click", function() {
 });
 
 document.getElementById("enddrawing").addEventListener("click", function() {
-
     var n;
     disableDrawing();
     for (var i = graph.nodes.length - 1; i >= 0; i--) {
@@ -419,6 +408,7 @@ document.getElementById("enddrawing").addEventListener("click", function() {
         target.addLink(new Link(source, e.weight));
     }
 
+    document.getElementById("check-form").style.display = "inline-block";
     document.getElementById("enddrawing").style.display = "none";
     document.getElementById("selectstart").style.display = "inline-block";
     document.getElementById("selectend").style.display = "inline-block";
@@ -553,3 +543,8 @@ function disableDrawing(){
     GraphCreator.prototype.pathMouseDown = function() {}
     GraphCreator.prototype.circleMouseUp = function() {}
 }
+
+document.getElementById("delete-graph").addEventListener("click", function() {
+   nodes = [];
+   startNode = endNode = null;
+});
