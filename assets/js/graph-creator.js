@@ -9,6 +9,8 @@ var heuristics = [];
 var nodeTitles;
 var tableEditing = false;
 
+var currentId = 0;
+
 "use strict";
 
 // TODO add user settings
@@ -194,19 +196,20 @@ var GraphCreator = function(svg, nodes, edges) {
             .call(table);
 
         if(upload === undefined) {
+            currentId = 0;
             thisGraph.changeTableData();
         } else {
             for (var i = 1; i < dataset.rowLabel.length; i++) {
                 heuristics[dataset.rowLabel[i]] = dataset.value[i-1][0];
             }
-        }
 
-        tableEditing = true;
-        d3.selectAll(".cell.row").on("mouseup", function (d) {thisGraph.cellMouseDown.call(this, d);});
+            tableEditing = true;
+            d3.selectAll(".cell.row").on("mouseup", function (d) {thisGraph.cellMouseDown.call(this, d);});
+        }
     };
 
     // handle uploaded data
-    d3.select("#upload-input").on("click", function() {
+       d3.select("#upload-input").on("click", function() {
         document.getElementById("hidden-file-upload").click();
         GraphCreator.prototype.svgKeyDown = svgKeyD;
         GraphCreator.prototype.svgMouseUp = svgMouseU;
@@ -224,7 +227,6 @@ var GraphCreator = function(svg, nodes, edges) {
             console.log("aaaaaaaaaa");
             var uploadFile = this.files[0];
             var filereader = new window.FileReader();
-
             //delete table if exists
             d3.selectAll(".vis-group").remove();
             table = null;
@@ -232,7 +234,6 @@ var GraphCreator = function(svg, nodes, edges) {
             heuristics = [];
             nodeTitles = [];
             tableEditing = false;
-
             filereader.onload = function() {
                 var txtRes = filereader.result;
                 console.log(txtRes);
@@ -257,16 +258,13 @@ var GraphCreator = function(svg, nodes, edges) {
                     });
                     thisGraph.edges = newEdges;
                     counter = thisGraph.edges.length;
-
                     if(graphType == GraphType.astar && jsonObj.table !== undefined) {
                         dataset = jsonObj.table;
                         nodeTitles = dataset.rowLabel;
                         thisGraph.createTable(true);
                     }
-
                     thisGraph.updateGraph();
                     adjustTitle(thisGraph);
-
                     if(graphType == GraphType.depth_first || graphType == GraphType.breadth_first || graphType == GraphType.iterative_depth_first) {
                         d3.select("#paths").selectAll("text").attr("visibility", "hidden");
                     }
@@ -276,12 +274,9 @@ var GraphCreator = function(svg, nodes, edges) {
                 }
             };
             console.log(filereader.readAsText(uploadFile));
-
-
         } else {
             alert("Your browser won't let you save this graph -- try upgrading your browser to IE 10+ or Chrome or Firefox.");
         }
-
     });
 
     // handle delete graph
@@ -525,14 +520,17 @@ GraphCreator.prototype.changeWeightOfLink = function(d3edge, d) {
     return d3txt;
 };
 
-var currentId = 0;
 GraphCreator.prototype.changeTableData = function(d) {
     var d3cell = d3.select("#tableData" + currentId);
     var thisGraph = this,
         consts = thisGraph.consts,
         htmlEl = d3cell.node();
 
-    if(htmlEl == null) return;
+    if(htmlEl == null) {
+        tableEditing = true;
+        d3.selectAll(".cell.row").on("mouseup", function (d) {thisGraph.cellMouseDown.call(this, d);});
+        return;
+    }
 
     var nodeBCR = htmlEl.getBoundingClientRect(),
         curScale = nodeBCR.width / consts.nodeRadius,
@@ -624,7 +622,6 @@ GraphCreator.prototype.changeCellData = function(d3cell, d) {
                 dataset.value[id] = [value];
                 d3.select("#" + cellId).text(value);
                 d3.select(this.parentElement).remove();
-                console.log(heuristics);
             }
         })
         .on("blur", function(d) {

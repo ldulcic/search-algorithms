@@ -65,7 +65,7 @@ Link.prototype = {
 };
 
 //------------------ASTAR-----------------
-function AStarSearch(startNode, endNode) {
+function AStarSearch(startNode, endNode, pathMax) {
     this.startNode = startNode;
     this.startNode.value = 0;
     this.startNode.heuristicValue = heuristics[this.startNode.title];
@@ -74,6 +74,10 @@ function AStarSearch(startNode, endNode) {
     this.openNodes = [];
     this.visited = [this.startNode];
     this.nextSteps = []
+
+    if(pathMax !== undefined) {
+        this.pathMax = true;
+    }
 
     this.expand(this.startNode);
     this.nextSteps = this.getNext();
@@ -116,7 +120,12 @@ AStarSearch.prototype = {
         var index = 0;
         for (var i = nodes.length - 1; i >= 0; i--) {
             if(this.indexOfNode(this.visited, nodes[i]) == -1) {
-                nodes[i].heuristicValue = nodes[i].value + heuristics[nodes[i].title];//heuristics is defined in graph-creator.js
+
+                if(this.pathMax === undefined) {
+                    nodes[i].heuristicValue = nodes[i].value + heuristics[nodes[i].title];//heuristics is defined in graph-creator.js
+                } else {
+                    nodes[i].heuristicValue = this.pathMaxCorrection(node.heuristicValue, nodes[i].value + heuristics[nodes[i].title]);
+                }
                 
                 index = this.indexOfNode(this.openNodes, nodes[i]);
                 if (index == -1) {
@@ -243,6 +252,7 @@ var d3startNode = null;
 var d3endNode = null;
 var nodes = [];
 var search = null;
+var pathMax = false;
 
 graphType = GraphType.astar;
 
@@ -268,6 +278,14 @@ createGraph({"nodes":[{"id":3,"title":"A","x":430,"y":86},{"id":4,"title":"B","x
 
 // LISTENERS
 document.getElementById("drawing").addEventListener("click", function(){
+    //clean table
+    d3.selectAll(".vis-group").remove();
+    table = null;
+    dataset = [];
+    heuristics = [];
+    nodeTitles = [];
+    tableEditing = false;
+
     nodes = [];
     startNode = endNode = null;
     graph.deleteGraph(true);
@@ -325,6 +343,7 @@ document.getElementById("selectend").addEventListener("click", function() {
 
 document.getElementById("startgame").addEventListener("click", function() {
     d3startNode.on("mouseup",null);
+    tableEditing = false;
     GraphCreator.prototype.circleMouseUp = function(d3node, d) {
         clickedNode = getNode(d.id);
         var edg;
@@ -382,7 +401,12 @@ document.getElementById("startgame").addEventListener("click", function() {
     document.getElementById("selectend").style.display = "none";
     document.getElementById("startgame").style.display = "none";
     
-    search = new AStarSearch(startNode, endNode);
+    if(pathMax) {
+        search = new AStarSearch(startNode, endNode, true);
+    } else {
+        search = new AStarSearch(startNode, endNode);
+    }
+
     if(search.pathDoesntExist){
         window.alert("There is no path between start and end nodes!\n\nTry starter graph if you are confused.");
         createGraph({"nodes":[{"id":2,"title":"A","x":161,"y":327},{"id":3,"title":"B","x":462,"y":131},{"id":4,"title":"C","x":470,"y":507},{"id":5,"title":"D","x":759,"y":311}],"edges":[{"source":2,"target":3,"id":"pathId4","weight":Math.floor((Math.random() * 10) + 1)},{"source":2,"target":4,"id":"pathId5","weight":Math.floor((Math.random() * 10) + 1)},{"source":4,"target":5,"id":"pathId6","weight":Math.floor((Math.random() * 10) + 1)},{"source":3,"target":5,"id":"pathId7","weight":Math.floor((Math.random() * 10) + 1)}]},2,5);
@@ -414,8 +438,15 @@ document.getElementById("enddrawing").addEventListener("click", function() {
     document.getElementById("selectend").style.display = "inline-block";
     document.getElementById("startgame").style.display = "inline-block";
     document.getElementById("startgame").setAttribute("disabled", "");
-    
-    
+
+    $("#pathMax").on("click", function () { 
+        if(this.checked) {
+            pathMax = true;
+        }
+
+    });
+
+    console.log(table);
     if(table === undefined || table == null) {
         dataset.rowLabel = ["Nodes"];
         dataset.columnLabel = ['Heuristic values'];
