@@ -67,14 +67,20 @@
         <p><b>How does it work?</b></p>
         <br><font color="gray">
         <p><b>RULE</b></p> 
-        
+        <p>You have to select the node adjacent to one of <b>open nodes</b> that has the least <b>total weight</b>.</p>
         <br>
         <p><b>EXPLANATION</b></p>
-        
+        <p><b>open node</b>
+		<br>any node that you have already selected plus start node<p>
+		<p><b>total weight</b>
+		<br>cummulative weight of connections from node to start plus heuristic prediction of distance from node to finish that is in the table</p>
         </font><br>
         <p><b>Still confused?</b></p>
         <font color="gray"><p><a href="http://en.wikipedia.org/wiki/A*_search_algorithm" target="_blank">Read more about it</a> and then return here to try out what you learned.</p></font>
-        </div>
+        <br><p><font color="red"><b>IMPORTANT: </b></font>
+		heuristic must be <b><a href="http://en.wikipedia.org/wiki/Admissible_heuristic" target="_blank">optimistic</a></b>
+		and <b><a href="http://en.wikipedia.org/wiki/Consistent_heuristic" target="_blank">consistent</a></b></p>
+		</div>
     </div>
 
     <!-- d3 -->

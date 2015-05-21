@@ -313,21 +313,6 @@ document.getElementById("selectstart").addEventListener("click", function() {
         document.getElementById("selectend").removeAttribute("disabled");
     }
 
-    GraphCreator.prototype.svgKeyDown = function() {
-
-    }
-    GraphCreator.prototype.svgMouseUp = function() {
-
-    }
-    GraphCreator.prototype.circleMouseDown = function() {
-
-    }
-    GraphCreator.prototype.dragmove = function(d) {
-
-    }
-    GraphCreator.prototype.pathMouseDown = function() {
-
-    }
 });
 
 document.getElementById("selectend").addEventListener("click", function() {
@@ -454,6 +439,7 @@ document.getElementById("startgame").addEventListener("click", function() {
 document.getElementById("enddrawing").addEventListener("click", function() {
 
     var n;
+    disableDrawing();
     for (var i = graph.nodes.length - 1; i >= 0; i--) {
         n = graph.nodes[i];
         nodes.push(new Node(n.x, n.y, n.id));
@@ -636,4 +622,13 @@ function fadeOut(){
         }
     }
 
+}
+
+function disableDrawing(){
+    GraphCreator.prototype.svgKeyDown = function() {}
+    GraphCreator.prototype.svgMouseUp = function() {}
+    GraphCreator.prototype.circleMouseDown = function() {}
+    GraphCreator.prototype.dragmove = function(d) {}
+    GraphCreator.prototype.pathMouseDown = function() {}
+    GraphCreator.prototype.circleMouseUp = function() {}
 }
