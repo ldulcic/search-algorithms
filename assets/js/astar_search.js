@@ -197,11 +197,7 @@ AStarSearch.prototype = {
         var tempnode;
         for (var i = aNode.links.length - 1; i >= 0; i--) {
             tempnode = aNode.links[i].node;
-<<<<<<< HEAD
-            if (  (this.visited.indexOf(tempnode) != -1) && ( tempnode == aNode.cameFrom)) {
-=======
             if (tempnode.id == aNode.cameFrom.id) {
->>>>>>> e394c1cd0c596b890692613d33f4593373e4d6ef
                 prevNode = aNode.links[i];
                 break;
             }
