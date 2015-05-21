@@ -77,14 +77,9 @@ function AStarSearch(startNode, endNode) {
 
     this.expand(this.startNode);
     this.nextSteps = this.getNext();
-    console.log(this.nextSteps);
     if(this.nextSteps == null) {
         this.pathDoesntExist = true;
     }
-    /*console.log("open");
-    for (var i = this.openNodes.length - 1; i >= 0; i--) {
-        console.log(this.openNodes[i]);
-    }*/
 }
 
 AStarSearch.prototype = {
