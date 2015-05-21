@@ -11,7 +11,7 @@ var xLoc = width / 2 - 25,
 var svg = d3.select(settings.appendElSpec).append("svg")
     .attr("width", width)
     .attr("height", height);
-
+	
 var graph = new GraphCreator(svg, [], []);
 graph.setIdCt(2);
 graph.updateGraph();

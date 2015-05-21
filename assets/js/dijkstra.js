@@ -392,15 +392,15 @@ document.getElementById("graph3").addEventListener("click",
 
 // FUNCTIONS
 function createGraph(json,start,end){
+	if(!this.graph.nodes === []){
+		return;
+	}
+    graph.deleteGraph(true);
     GraphCreator.prototype.svgKeyDown = function() {}
     GraphCreator.prototype.svgMouseUp = function() {}
     GraphCreator.prototype.circleMouseDown = function() {}
     GraphCreator.prototype.dragmove = function(d) {}
     GraphCreator.prototype.pathMouseDown = function() {}
-	if(!this.graph.nodes === []){
-		return;
-	}
-    graph.deleteGraph(true);
 		var jsonObj = json;
         graph.nodes = jsonObj.nodes;
         graph.setIdCt(jsonObj.nodes.length + 1);

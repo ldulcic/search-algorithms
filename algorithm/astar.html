@@ -14,6 +14,7 @@
     <!-- Main CSS and Font -->
     <link href="../assets/css/style.css" rel="stylesheet">
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700" rel="stylesheet" type="text/css">
+		<link rel="shortcut icon" href="../assets/img/Network.png">
 
     <!-- Bootstrap Core CSS -->
     <link href="../assets/css/bootstrap.css" rel="stylesheet">
@@ -21,6 +22,23 @@
 </head>
 
 <body>
+
+	<div class="modal fade" id="myModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 id="title" class="modal-title">What is love?</h4>
+          </div>
+          <div class="modal-body">
+            <p id="text">Baby don't hurt me, don't hurt me, no more!</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -80,6 +98,10 @@
         <br><p><font color="red"><b>IMPORTANT: </b></font>
 		heuristic must be <b><a href="http://en.wikipedia.org/wiki/Admissible_heuristic" target="_blank">optimistic</a></b>
 		and <b><a href="http://en.wikipedia.org/wiki/Consistent_heuristic" target="_blank">consistent</a></b></p>
+        <font color="gray">
+        <img src="../assets/img/start-node.png"> <b>Start node</b> 
+        <img src="../assets/img/end-node.png"> <b>End node</b>
+        </font>
 		</div>
     </div>
 
