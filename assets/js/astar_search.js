@@ -273,8 +273,7 @@ var svg = d3.select(settings.appendElSpec).append("svg")
 var graph = new GraphCreator(svg, [], []);
 graph.setIdCt(2);
 graph.updateGraph();
-createGraph({"nodes":[{"id":3,"title":"A","x":430,"y":86},{"id":4,"title":"B","x":209,"y":244},{"id":5,"title":"C","x":434,"y":246},{"id":6,"title":"D","x":648,"y":243},{"id":7,"title":"E","x":89,"y":402},{"id":8,"title":"F","x":287,"y":407}],"edges":[{"source":3,"target":5,"id":"pathId0","weight":""},{"source":3,"target":4,"id":"pathId1","weight":""},{"source":3,"target":6,"id":"pathId2","weight":""},{"source":4,"target":8,"id":"pathId3","weight":""},{"source":4,"target":7,"id":"pathId4","weight":""}]},3,8)
-
+createGraph({"nodes":[{"id":3,"title":"A","x":643,"y":47},{"id":4,"title":"B","x":433,"y":210},{"id":5,"title":"C","x":650,"y":221},{"id":6,"title":"D","x":886,"y":197},{"id":7,"title":"E","x":281,"y":377},{"id":8,"title":"F","x":511,"y":399}],"edges":[{"source":4,"target":3,"id":"pathId1","weight":2},{"source":3,"target":5,"id":"pathId2","weight":1},{"source":3,"target":6,"id":"pathId3","weight":3},{"source":4,"target":8,"id":"pathId5","weight":2},{"source":7,"target":4,"id":"pathId7","weight":2}],"table":{"rowLabel":["Nodes","A","B","C","D","E","F"],"columnLabel":["Heuristic values"],"value":[[3],[1],[4],[5],[3],[0]]}}, 3, 8);
 
 // LISTENERS
 document.getElementById("drawing").addEventListener("click", function(){
@@ -292,6 +291,7 @@ document.getElementById("drawing").addEventListener("click", function(){
     graph.setIdCt(2);
     graph.updateGraph();
     
+    document.getElementById("check-form").style.display = "none";
     GraphCreator.prototype.svgKeyDown = svgKeyD;
     GraphCreator.prototype.svgMouseUp = svgMouseU;
     GraphCreator.prototype.circleMouseDown = circleMouseD;
@@ -469,19 +469,22 @@ document.getElementById("enddrawing").addEventListener("click", function() {
 
 document.getElementById("graph1").addEventListener("click",
     function() {
-        createGraph({"nodes":[{"id":3,"title":"A","x":430,"y":86},{"id":4,"title":"B","x":209,"y":244},{"id":5,"title":"C","x":434,"y":246},{"id":6,"title":"D","x":648,"y":243},{"id":7,"title":"E","x":89,"y":402},{"id":8,"title":"F","x":287,"y":407}],"edges":[{"source":3,"target":5,"id":"pathId0","weight":""},{"source":3,"target":4,"id":"pathId1","weight":""},{"source":3,"target":6,"id":"pathId2","weight":""},{"source":4,"target":8,"id":"pathId3","weight":""},{"source":4,"target":7,"id":"pathId4","weight":""}]},3,8)
+        document.getElementById("check-form").style.display = "none";
+        createGraph({"nodes":[{"id":3,"title":"A","x":643,"y":47},{"id":4,"title":"B","x":433,"y":210},{"id":5,"title":"C","x":650,"y":221},{"id":6,"title":"D","x":886,"y":197},{"id":7,"title":"E","x":281,"y":377},{"id":8,"title":"F","x":511,"y":399}],"edges":[{"source":4,"target":3,"id":"pathId1","weight":2},{"source":3,"target":5,"id":"pathId2","weight":1},{"source":3,"target":6,"id":"pathId3","weight":3},{"source":4,"target":8,"id":"pathId5","weight":2},{"source":7,"target":4,"id":"pathId7","weight":2}],"table":{"rowLabel":["Nodes","A","B","C","D","E","F"],"columnLabel":["Heuristic values"],"value":[[3],[1],[4],[5],[3],[0]]}},3,8)
     }
 );
 
 document.getElementById("graph2").addEventListener("click",
     function(){
-        createGraph({"nodes":[{"id":3,"title":"A","x":98,"y":102},{"id":4,"title":"B","x":535,"y":306},{"id":5,"title":"C","x":311,"y":304},{"id":6,"title":"D","x":316,"y":103},{"id":7,"title":"E","x":647,"y":210},{"id":8,"title":"F","x":102,"y":304},{"id":9,"title":"G","x":533,"y":466},{"id":10,"title":"H","x":534,"y":101}],"edges":[{"source":3,"target":6,"id":"pathId0","weight":""},{"source":5,"target":10,"id":"pathId2","weight":""},{"source":6,"target":4,"id":"pathId4","weight":""},{"source":5,"target":9,"id":"pathId5","weight":""},{"source":10,"target":7,"id":"pathId6","weight":""},{"source":4,"target":7,"id":"pathId7","weight":""},{"source":3,"target":8,"id":"pathId8","weight":""},{"source":8,"target":5,"id":"pathId9","weight":""}]},3,7);
+        document.getElementById("check-form").style.display = "none";
+        createGraph({"nodes":[{"id":3,"title":"A","x":73.65416717529297,"y":84.72537994384766},{"id":4,"title":"B","x":650.6641540527344,"y":353.99671936035156},{"id":5,"title":"C","x":384.7378158569336,"y":355.6692199707031},{"id":6,"title":"D","x":369.68536376953125,"y":84.72537994384766},{"id":7,"title":"E","x":866.4156494140625,"y":223.54227447509766},{"id":8,"title":"F","x":83.68912506103516,"y":357.3416748046875},{"id":9,"title":"G","x":677.424072265625,"y":628.285530090332},{"id":10,"title":"H","x":714.2188720703125,"y":88.07036590576172}],"edges":[{"source":3,"target":6,"id":"pathId8","weight":3},{"source":3,"target":8,"id":"pathId9","weight":6},{"source":8,"target":5,"id":"pathId10","weight":2},{"source":5,"target":9,"id":"pathId11","weight":1},{"source":6,"target":4,"id":"pathId13","weight":1},{"source":4,"target":7,"id":"pathId14","weight":2},{"source":10,"target":7,"id":"pathId15","weight":2},{"source":10,"target":5,"id":"pathId16","weight":2}],"table":{"rowLabel":["Nodes","A","B","C","D","E","F","G","H"],"columnLabel":["Heuristic values"],"value":[[4],[1],[3],[3],[0],[5],[4],[1]]}}, 3, 7);
     }
 );
 
 document.getElementById("graph3").addEventListener("click",
     function(){
-        createGraph({"nodes":[{"id":3,"title":"A","x":730,"y":362},{"id":4,"title":"B","x":461,"y":77},{"id":5,"title":"C","x":371,"y":517},{"id":6,"title":"D","x":461,"y":302},{"id":7,"title":"E","x":144,"y":369},{"id":10,"title":"H","x":706,"y":517},{"id":11,"title":"I","x":199,"y":512},{"id":12,"title":"J","x":278,"y":173},{"id":13,"title":"K","x":634,"y":171},{"id":14,"title":"L","x":532,"y":520}],"edges":[{"source":6,"target":4,"id":"pathId0","weight":""},{"source":6,"target":10,"id":"pathId1","weight":""},{"source":6,"target":11,"id":"pathId2","weight":""},{"source":11,"target":7,"id":"pathId3","weight":""},{"source":11,"target":5,"id":"pathId4","weight":""},{"source":3,"target":10,"id":"pathId5","weight":""},{"source":4,"target":13,"id":"pathId11","weight":""},{"source":4,"target":12,"id":"pathId12","weight":""},{"source":14,"target":10,"id":"pathId13","weight":""}]},3,7);
+        document.getElementById("check-form").style.display = "none";
+        createGraph({"nodes":[{"id":3,"title":"A","x":456.00679779052734,"y":322.16986083984375},{"id":4,"title":"B","x":92.4189453125,"y":69.47229385375977},{"id":5,"title":"C","x":58.73765277862549,"y":473.78436279296875},{"id":6,"title":"D","x":93.93070220947266,"y":253.17173767089844},{"id":7,"title":"E","x":-243.70364379882812,"y":322.3388977050781},{"id":10,"title":"H","x":363.44482421875,"y":465.2266845703125},{"id":11,"title":"I","x":-124.15015411376953,"y":467.12164306640625},{"id":12,"title":"J","x":-97.68671417236328,"y":153.53990173339844},{"id":13,"title":"K","x":280.88604736328125,"y":155.05166625976562},{"id":14,"title":"L","x":193.52029418945312,"y":484.8343811035156}],"edges":[{"source":6,"target":4,"id":"pathId0","weight":1},{"source":12,"target":4,"id":"pathId1","weight":2},{"source":4,"target":13,"id":"pathId2","weight":3},{"source":11,"target":6,"id":"pathId3","weight":2},{"source":11,"target":5,"id":"pathId4","weight":3},{"source":7,"target":11,"id":"pathId5","weight":1},{"source":6,"target":10,"id":"pathId6","weight":6},{"source":14,"target":10,"id":"pathId7","weight":2},{"source":10,"target":3,"id":"pathId8","weight":3}],"table":{"rowLabel":["Nodes","A","B","C","D","E","H","I","J","K","L"],"columnLabel":["Heuristic values"],"value":[[10],[4],[3],[2],[0],[8],[1],[4],[6],[8]]}}, 3, 7);
     }
 );
 
@@ -514,6 +517,11 @@ function createGraph(json,start,end){
                 };
          });
          graph.edges = newEdges;
+
+        dataset = jsonObj.table;
+        nodeTitles = dataset.rowLabel;
+        graph.createTable(true);
+
          graph.updateGraph();
          this.nodes = [];
          
