@@ -273,6 +273,7 @@ createGraph({"nodes":[{"id":3,"title":"A","x":430,"y":86},{"id":4,"title":"B","x
 
 // LISTENERS
 document.getElementById("drawing").addEventListener("click", function(){
+    nodes = [];
     startNode = endNode = null;
     graph.deleteGraph(true);
     graphType = GraphType.iterative_depth_first;
@@ -437,7 +438,7 @@ document.getElementById("enddrawing").addEventListener("click", function() {
     document.getElementById("startgame").setAttribute("disabled", "");
     
     
-    if(table === undefined) {
+    if(table === undefined || table == null) {
         dataset.rowLabel = ["Nodes"];
         dataset.columnLabel = ['Heuristic values'];
         dataset.value = [];
