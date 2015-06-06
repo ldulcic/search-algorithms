@@ -305,7 +305,6 @@ document.getElementById("selectstart").addEventListener("click", function() {
         d3node.select("circle")[0][0].setAttribute("style", "stroke-width:5px");
         d3node.select("circle")[0][0].style.fill = "#9bafd7";
         d3startNode = d3node;
-        console.log(d3startNode);
         document.getElementById("selectend").removeAttribute("disabled");
     }
 
@@ -340,7 +339,6 @@ document.getElementById("startgame").addEventListener("click", function() {
         var l2;
         var e;
         var result = search.isNextStep(clickedNode);
-        console.log(result);
         if (result instanceof Array) {
             for(var j = result.length -1; j > 0; j--){
                 l1 = result[j];
@@ -383,7 +381,6 @@ document.getElementById("startgame").addEventListener("click", function() {
                 currentIter[clickedNode.depth] = []
             }
             currentIter[clickedNode.depth].push(d3node); // end animation circle select
-            //console.log(currentIter)
 
             if( l != undefined ){
                 var selectedPath = d3.select("#"+edg.id);
@@ -392,7 +389,6 @@ document.getElementById("startgame").addEventListener("click", function() {
                 }
                 currentPaths[clickedNode.depth - 1].push(selectedPath);
             }
-            //console.log(currentPaths);
 
 
             if(search.pathDoesntExist){
@@ -402,7 +398,6 @@ document.getElementById("startgame").addEventListener("click", function() {
                 GraphCreator.prototype.circleMouseUp = function() {}
             }
             if(search.nextIteration) {
-                console.log(currentIter.length);
                 fadeOut();
                 //d3.selectAll("path").style("stroke","#333");
                 currentIter = [];
@@ -411,9 +406,7 @@ document.getElementById("startgame").addEventListener("click", function() {
         } else {
             var color;
             var clickedCircle = d3node.select("circle");
-            console.log(clickedCircle[0][0]);
             color = clickedCircle[0][0].style.getPropertyValue("fill");
-            console.log(color);
             wrongAnimation(d3node.select("circle"),color);
 
         }
@@ -582,8 +575,7 @@ function fadeOut(){
             if(i > 0){
                 var dimentions = currentPaths[i-1][j].attr("d");
                 var temp = currentIter[i][j].attr("transform").split("(");
-                var endPoint = temp[1].substring(0, temp[1].length - 1)
-                console.log(dimentions +"--"+ endPoint);
+                var endPoint = temp[1].substring(0, temp[1].length - 1);
                 
                 var parts = dimentions.split("L");
                 

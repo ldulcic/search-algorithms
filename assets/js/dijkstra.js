@@ -251,7 +251,6 @@ document.getElementById("selectstart").addEventListener("click", function() {
         d3node.select("circle")[0][0].setAttribute("style", "stroke-width:5px");
         d3node.select("circle")[0][0].style.fill = "#9bafd7";
         d3startNode = d3node;
-		console.log(d3startNode);
         if (endNode != null) {
         	document.getElementById("startgame").removeAttribute("disabled");
         }
@@ -451,7 +450,6 @@ function createGraph(json,start,end){
 }
 
 function getNode(id) {
-	console.log(nodes);
     for (var i = nodes.length - 1; i >= 0; i--) {
 		if (nodes[i].id == id) {
             return nodes[i];

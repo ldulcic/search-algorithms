@@ -224,7 +224,6 @@ var GraphCreator = function(svg, nodes, edges) {
     });
     d3.select("#hidden-file-upload").on("change", function() {
         if (window.File && window.FileReader && window.FileList && window.Blob) {
-            console.log("aaaaaaaaaa");
             var uploadFile = this.files[0];
             var filereader = new window.FileReader();
             //delete table if exists
@@ -236,7 +235,6 @@ var GraphCreator = function(svg, nodes, edges) {
             tableEditing = false;
             filereader.onload = function() {
                 var txtRes = filereader.result;
-                console.log(txtRes);
                 // TODO better error handling
                 try {
                     var jsonObj = JSON.parse(txtRes);
@@ -273,7 +271,6 @@ var GraphCreator = function(svg, nodes, edges) {
                     return;
                 }
             };
-            console.log(filereader.readAsText(uploadFile));
         } else {
             alert("Your browser won't let you save this graph -- try upgrading your browser to IE 10+ or Chrome or Firefox.");
         }

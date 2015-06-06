@@ -257,7 +257,6 @@ document.getElementById("startgame").addEventListener("click", function() {
         var result = search.isNextStep(clickedNode);
 
         if (result instanceof Array) {
-            console.log("uso u kraj");
             for(var j = result.length -1; j > 0; j--){
                 l1 = result[j];
                 document.getElementById("c"+l1.id).getElementsByTagName("circle")[0].style.fill = "#83d675";

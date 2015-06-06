@@ -317,7 +317,6 @@ document.getElementById("selectstart").addEventListener("click", function() {
         d3node.select("circle")[0][0].setAttribute("style", "stroke-width:5px");
         d3node.select("circle")[0][0].style.fill = "#9bafd7";
         d3startNode = d3node;
-        console.log(d3startNode);
         document.getElementById("selectend").removeAttribute("disabled");
     }
 
@@ -357,7 +356,6 @@ document.getElementById("startgame").addEventListener("click", function() {
         var result = search.isNextStep(clickedNode);
 
         if (result instanceof Array) {
-            console.log(result);
             for(var j = result.length -1; j > 0; j--){
                 l1 = result[j];
                 document.getElementById("c"+l1.id).getElementsByTagName("circle")[0].style.fill = "#83d675";
@@ -451,7 +449,6 @@ document.getElementById("enddrawing").addEventListener("click", function() {
 
     });
 
-    console.log(table);
     if(table === undefined || table == null) {
         dataset.rowLabel = ["Nodes"];
         dataset.columnLabel = ['Heuristic values'];
