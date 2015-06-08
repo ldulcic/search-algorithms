@@ -271,6 +271,7 @@ var GraphCreator = function(svg, nodes, edges) {
                     return;
                 }
             };
+            filereader.readAsText(uploadFile);
         } else {
             alert("Your browser won't let you save this graph -- try upgrading your browser to IE 10+ or Chrome or Firefox.");
         }
